@@ -1,0 +1,261 @@
+*******************************************OpportunityViewDetails vf page **********************************************
+<!-- author name: Indresh /* TO DISPLAY THE OPPORTUNITY DETAILS and its related products*/
+    Created Date: 13/11/2018
+--->
+
+<apex:page controller="OpportunityViewDetails_Controller" standardStylesheets="false" showHeader="false" sidebar="false" docType="html-5.0">
+<apex:form >
+<c:head_include ></c:head_include>
+
+<style>
+.download-center{
+    background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/demo-redquest-banner.jpg')}');
+    height:250px; 
+    min-height:250px; 
+    width:100%; 
+    margin:0; 
+    padding:0;     
+    background-size: cover;
+}
+/* FILE INPUT */
+
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+    cursor: pointer;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    width:50px;
+}
+
+.cursor a{
+    cursor:pointer;
+    font-size:14px;
+}
+
+.dataTables_filter input[type=search] {
+    border: 1px solid #c7c6c6;
+    height: 30px;
+    border-radius: 3px;
+    width: 250px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.dataTables_filter optgroup, select{
+    border: 1px solid #c7c6c6;
+    height: 30px;
+    border-radius: 3px;
+   /* margin-bottom: 10px;
+    margin-top: 10px;/*
+    width:70px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+    padding: 0.2em 0.6em !important;
+}
+    
+</style>
+
+<body>
+<script>
+$(window).scroll(function() {
+    if($(this).scrollTop()>0) {
+        $( ".navbar-me" ).addClass("fixed-me");
+    } else {
+        $( ".navbar-me" ).removeClass("fixed-me");
+    }
+});
+</script>
+<!--navbar menu-->
+<section>
+    <!-- dealer sidebar component --->
+    <c:DealerSideMenu ></c:DealerSideMenu>
+</section>
+
+<div id="main">
+    <div style="width:90%; margin:0 auto;">
+        <div class="row" style="min-height:350px;">
+            <div class="row">
+            <div class="title-grid">
+                <h3>My Opportunity</h3>
+              <p class="forgotten" style="text-align:right;"><apex:commandLink action="{!RedirectOpp}"><span style="margin-right:5px;"><i class="fa fa-file-text-o"></i></span> Create a new request</apex:commandLink>
+            <span style="margin-left:10px; margin-right:10px; color:#333;">| </span><span class="cursor"><apex:commandLink action="{!RedirectDetailOpp}"><span  style="margin-right:5px;"></span>Go to My Opportunity</apex:commandLink></span>
+            <span style="margin-left:10px; margin-right:10px; color:#333;">| </span><apex:commandLink action="{!editmode}">Edit  <i class="fa fa-edit"></i></apex:commandLink> 
+            </p>
+            </div>
+            </div>
+            <div class="row">
+                  <div  id="accordion">
+                        <table id="demoRequestTable" class="display table table-bordered" cellspacing="0" style="width:100%; ">
+                                    <tr>
+                                        <td colspan="8"><div id="case-title"><h5>Details</h5></div> </td>
+                                    </tr>                                      
+                                    <apex:repeat value="{!oppList}" var="olist" >                                   
+                                    <tr><td><b>Account Name</b></td><td>{!olist.name}</td>
+                                    <td><b>Stage</b></td><td><apex:outputPanel id="editStage"><!--- to make editable stage  ----->
+                                                                <apex:inputfield value="{!olist.StageName}" style="width:180px;margin-top:0" rendered="{!editString}"/>
+                                                                <apex:outputfield value="{!olist.StageName}" rendered="{!editString=false}"/>                                                              
+                                                            </apex:outputPanel>
+                                    </td>
+                                    <td><b>Probability</b></td><td>{!olist.Probability}</td>
+                                     <td><b>Currency Type</b></td><td>{!olist.CurrencyIsoCode}</td>
+                                                            </tr><tr>
+                                    <td><b>Amount</b></td><td>{!olist.Amount}</td>
+                                    <td><b>Type</b></td><td>{!olist.Type}</td>
+                                    <td><b>Expected Close date</b></td><td colspan="3"><apex:outputText value="{0,date,yyyy-MM-dd HH:mm:ss }">
+                                                                  <apex:param value="{!olist.CloseDate}" />
+                                                            </apex:outputText></td>
+                                    </tr>  
+                                    <tr>
+                                        <td colspan="8"><div id="case-title"><h5>Contact Details</h5></div></td>
+                                    </tr>
+                                     <tr><td><b> Name</b></td><td>{!con.FirstName} &nbsp;{!con.lastname}</td>
+                                    <td><b>Email</b></td><td>{!con.Email}</td>
+                                    <td><b>Phone</b></td><td>{!con.Phone }</td>
+                                    <td><b>Mobile</b></td><td>{!con.MobilePhone }</td>
+                                    </tr>
+                                    <tr><td><b> Address</b></td><td colspan="7">{!con.MailingStreet} &nbsp;{!con.MailingCity} &nbsp; {!con.MailingState} &nbsp; {!con.MailingCountry } &nbsp; {!con.MailingPostalCode } </td>
+                                     </tr>
+                                        <tr>
+                                            <td colspan="8">
+                                                <div id="case-title"><h5>Product Details</h5>                                              
+                                                </div>                                                                                                      
+                                                <apex:outputPanel id="prodid">
+                                                <!------- non-edit products section starts------>                                             
+                                                    <apex:outputPanel id="prodTab" rendered="{!editString==false}">
+                                                        <table class="table table-responsive table-bordered  case-summary-table" style="margin-bottom:0px;">                                                       
+                                                            <th class="col-md-1">S.No.</th>                                         
+                                                            <th class="col-md-4">Product Type</th>
+                                                            <th class="col-md-4">Product Name </th>
+                                                            <th class="col-md-3">Quantity</th>
+                                                            <apex:variable var="countt" value="{!0}"   />   
+                                                            <apex:repeat value="{!olist.OpportunityLineItems}" var="drp" >
+                                                                <apex:variable value="{!countt+1}" var="countt"/> 
+                                                                <tr style="height:30px;font-size:14px;">
+                                                                    <td class="col-md-1">{!countt}</td>
+                                                                    <td class="col-md-4">{!drp.PricebookEntry.Product2.Family}</td> 
+                                                                    <td class="col-md-4">{!drp.PricebookEntry.Name}</td>
+                                                                    <td class="col-md-4">{!drp.Quantity}</td>
+                                                                </tr>                                                                      
+                                                            </apex:repeat>
+                                                         </table>
+                                                     </apex:outputPanel> 
+                                                      <!------- non-edit products section ends------>   
+                                                       <!------- edit products section starts------>           
+                                                     <apex:outputPanel id="edittablemy">
+                                                     <apex:outputPanel rendered="{!editString==true}"> 
+                                                          <table class="table table-responsive table-bordered  case-summary-table" >                                                                                                
+                                                                <th class="col-md-1"></th>      
+                                                                <th class="col-md-4">Product Type</th>
+                                                                <th class="col-md-4">Product Name </th>
+                                                                <th class="col-md-3">Quantity</th>
+                                                                <apex:variable var="count" value="{!0}"   />                                                                                                                          
+                                                                    <apex:repeat value="{!ALLprdlist}" var="apList" >
+                                                                        <tr >
+                                                                            <td class="col-md-1">
+                                                                                <apex:inputCheckbox id="myCheck"  style="margin: 11px 0px 0px 15px;">
+                                                                                    <apex:actionSupport reRender="none" event="onclick" action="{!checkFunction}">
+                                                                                        <apex:param name="checkboxcheck" value="{!count}"/>
+                                                                                        <apex:param name="opLineitemid" value="{!apList.OppLineItemId}"/>
+                                                                                    </apex:actionSupport>
+                                                                                </apex:inputCheckbox>
+                                                                            </td>
+                                                                            <td class="col-md-4">
+                                                                                <apex:selectList value="{!apList.selectedproductFamily}" size="1" multiselect="false" styleClass="form-control" id="hav7"  >
+                                                                                    <apex:selectOptions value="{!apList.productFamily}"  ></apex:selectOptions>
+                                                                                    <apex:actionSupport event="onchange" action="{!WrapProductlist}" reRender="i12">
+                                                                                        <apex:param name="windex" value="{!count}" assignTo="{!wrapIndex}"/>
+                                                                                    </apex:actionSupport>
+                                                                                </apex:selectList>
+                                                                            </td>
+                                                                            <td class="col-md-3">
+                                                                                <apex:outputPanel id="i12">
+                                                                                    <apex:selectList value="{!apList.selectedProd}" size="1" multiselect="false" styleClass="form-control">
+                                                                                        <apex:selectOptions id="oppid" value="{!apList.product}"  /></apex:selectList>
+                                                                                    </apex:outputPanel>
+                                                                            </td>
+                                                                            <td class="col-md-4">
+                                                                                <apex:input type="text" styleClass="form-control" value="{!apList.productInfoquantity}" html-placeholder="Qty."/>
+                                                                            </td>                                                   
+                                                                         </tr>  <apex:variable value="{!count+1}" var="count"/>                                  
+                                                                    </apex:repeat>
+                                                                    
+                                                            </table> </apex:outputPanel>  </apex:outputPanel>
+                                                            <apex:outputPanel rendered="{!editString==true}"> 
+                                                            <div class="row" > 
+                                                                <apex:outputPanel style="text-align:right;margin-left: 15px; float:left;"><span  class="cursor"><i class="fa fa-plus-circle" style="font-size:25px;color:#0565cc;" title="Add Product"></i> </span><apex:actionSupport event="onclick" action="{!addproductrow}" reRender="edittablemy"/></apex:outputPanel>
+                                                                <apex:outputPanel style="text-align:right; margin-left: 3px;float:left;"><span  class="cursor"><i class="fa fa-times-circle" style="font-size:25px;color:#d81712;" title="Delete Product"></i></span><apex:actionSupport event="onclick" action="{!DelProductRow}" reRender="edittablemy"/></apex:outputPanel>
+                                                                <apex:outputPanel style="text-align:right; margin-right: 15px;float:right;"><apex:commandButton value="Save" action="{!SaveProduct}" styleClass="action-button btn-info btn-padding" reRender="prodid,editStage"/></apex:outputPanel>
+                                                            </div> 
+                                                     </apex:outputPanel>   <!------- edit products section ends------>                                                                                              
+                                                </apex:outputPanel>
+                                              </td>
+                                        </tr>                 
+                                   </apex:repeat>                                                           
+                        </table>
+                    </div>  
+                   
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<a id="back2Top" href="#" title="Go to Top">&#10148;</a>
+
+<!--#############################FOOTER SECTION################################--->
+        <section>
+            <c:portal_footer />
+        </section>
+        <!--#############################################################--->
+<!-- end of navbar-->
+<script>
+/*Scroll to top when arrow up clicked BEGIN*/
+$(window).scroll(function() {
+    var height = $(window).scrollTop();
+    if (height > 100) {
+        $('#back2Top').fadeIn();
+    } else {
+        $('#back2Top').fadeOut();
+    }
+});
+$(document).ready(function() {
+    $("#back2Top").click(function(event) {
+        event.preventDefault();
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+        return false;
+    });
+
+});
+ /*Scroll to top when arrow up clicked END*/
+</script>
+ 
+
+<script>
+/* Nav bar Open Left to Right */
+function openNav() {
+    document.getElementById("mySidenav").style.width = "350px";
+    document.getElementById("main").style.marginRight = "350px";
+    document.body.style.backgroundColor = "rgba(230,230,230,0.4)";
+}
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginRight= "0";
+    document.body.style.backgroundColor = "white";
+}
+</script>
+
+</body>
+</apex:form>
+</apex:page>
