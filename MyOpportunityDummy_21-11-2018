@@ -9,7 +9,7 @@
 <apex:page standardStylesheets="false" showHeader="false" sidebar="false" docType="html-5.0" controller="MyOpportunityDummyController">
 <apex:form >
 <c:head_include ></c:head_include>
-
+<c:portal_Script ></c:portal_Script>
 <style>
 .download-center{
     background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/demo-redquest-banner.jpg')}');  //background image 
@@ -147,41 +147,6 @@ $(window).scroll(function() {
         </section>
         <!--#############################################################--->
 <!-- end of navbar-->
-<script>
-/*Scroll to top when arrow up clicked BEGIN*/
-$(window).scroll(function() {
-    var height = $(window).scrollTop();
-    if (height > 100) {
-        $('#back2Top').fadeIn();
-    } else {
-        $('#back2Top').fadeOut();
-    }
-});
-$(document).ready(function() {
-    $("#back2Top").click(function(event) {
-        event.preventDefault();
-        $("html, body").animate({ scrollTop: 0 }, "slow");
-        return false;
-    });
-
-});
- /*Scroll to top when arrow up clicked END*/
-</script>
- 
-
-<script>
-/* Nav bar Open Left to Right */
-function openNav() {
-    document.getElementById("mySidenav").style.width = "350px";
-    document.getElementById("main").style.marginRight = "350px";
-    document.body.style.backgroundColor = "rgba(230,230,230,0.4)";
-}
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-    document.getElementById("main").style.marginRight= "0";
-    document.body.style.backgroundColor = "white";
-}
-</script>
 
 </body>
 </apex:form>
