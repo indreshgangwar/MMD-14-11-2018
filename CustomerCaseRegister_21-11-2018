@@ -1,0 +1,538 @@
+*************************vf page**************************************
+<!----
+/*
+        ** COnverted the code in apex **
+        Author: Indresh
+        Created Date: 31/10/2018
+        Created For: This vf page is implemented to register a case on customer  portal.
+*/
+---->
+
+<apex:page controller="CustomerCaseRegisterCntlr" standardStylesheets="false" showHeader="false" sidebar="false" id="pgid" docType="html-5.0">
+   <c:head_include ></c:head_include>
+   <c:portal_Script ></c:portal_Script>
+   <meta name="viewport" content="width=device-width" />
+   <apex:form id="ni">
+      <style>
+        @media all and (min-width: 960px) {
+                body{
+                    font-size: 14px;
+                }
+            }
+             
+            @media all and (max-width: 959px) and (min-width: 600px) {
+                body{
+                    font-size: 15px;
+                }
+                .site-logo {
+                padding: 0px 31px !important;
+                margin: 0px 0px;
+                }
+            }
+             
+            @media all and (max-width: 599px) and (min-width: 320px) {
+                body{
+                    font-size: 17px;
+                }
+                .site-logo {
+                padding: 0px 14px !important;
+                margin: 0px 0px;
+                }
+            }
+         .download-center{
+         background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/footer-bg.jpg')}');
+         height:200px; 
+         min-height:250px; 
+         width:100%; 
+         margin:0; 
+         padding:0;     
+         background-size: cover;
+         }
+         /* FILE INPUT */
+         .fileUpload {
+         position: relative;
+         overflow: hidden;
+         margin: 10px;
+         cursor: pointer;
+         }
+         .fileUpload input.upload {
+         position: absolute;
+         top: 0;
+         right: 0;
+         margin: 0;
+         padding: 0;
+         font-size: 20px;
+         cursor: pointer;
+         opacity: 0;
+         filter: alpha(opacity=0);
+         width:50px;
+         }
+         .cursor a{
+         cursor:pointer;
+         font-size:14px;
+         }
+         .dataTables_filter input[type=search] {
+         border: 1px solid #c7c6c6;
+         height: 30px;
+         border-radius: 3px;
+         width: 250px;
+         margin-bottom: 10px;
+         margin-top: 10px;
+         }
+         .dataTables_filter optgroup, select{
+         border: 1px solid #c7c6c6;
+         height: 30px;
+         border-radius: 3px;
+         margin-bottom: 10px;
+         margin-top: 10px;
+         width:70px;
+         }
+         .dataTables_wrapper .dataTables_paginate .paginate_button{
+         padding: 0.2em 0.6em !important;
+         }
+         .dataTables_filter optgroup, select {
+         margin-top:0 !important;
+         }
+         .welcome-user{
+         background: none;
+         border: none;
+         font-size: 14px;
+         }
+         .url-cursor{
+         cursor:pointer;
+         }
+      </style>
+      <body>
+         <script>
+            $(window).scroll(function() {
+            if($(this).scrollTop()>0) {
+                $( ".navbar-me" ).addClass("fixed-me");
+            } else {
+                $( ".navbar-me" ).removeClass("fixed-me");
+            }
+            });
+         </script>
+         <!--navbar menu-->
+         <section class="navbar-info">
+            <div class="download-center">
+               <c:CustomerSideMenu ></c:CustomerSideMenu>
+            </div>
+         </section>
+         <!---end navbar --->
+         <div id="main">
+            <div style="width:90%; margin:0 auto;">
+               <div class="row" style="min-height:350px;">
+                  <div class="title-grid">
+                     <h3>Create a Case</h3>
+                     <p class="forgotten" style="text-align:right;">
+                        <apex:outputLink value="/apex/Customercaseview_MMD?id={!con.id}" styleClass="url-cursor"><span style="margin-right:5px;"><i class="fa fa-file-text-o"></i></span>  Go to Case Details View</apex:outputLink>
+                     </p>
+                  </div>
+                  <div class="panel panel-default">
+                     <div class="panel-body" id="case-title">
+                        <!--//////////////////////////CASE Register Form Start///////////////////--->
+                        <h5>Case Information</h5>
+                        <div class="row form-row form-group ">
+                           <div class="col-md-4">
+                              <label for="Status">Status</label>
+                              <select class="form-control"  disabled="disabled">
+                                 <option value="New">New</option>
+                                 <option value="Closed">Closed</option>
+                                 <option value="On Hold">On Hold</option>
+                                 <option value="Escalated">Escalated</option>
+                                 <option value="Resolved by FAQ">Resolved by FAQ</option>
+                              </select>
+                           </div>
+                           <div class="col-md-4">
+                              <label for="Case Type">Case Type</label>
+                              <apex:selectList value="{!caseType}" size="1" multiselect="false" styleClass="form-control" id="hav2" tabindex="1" >
+                                 <apex:selectOptions value="{!caseTypeList}">
+                                 </apex:selectOptions>
+                              </apex:selectList>
+                           </div>
+                           <div class="col-md-4">
+                              <label for="Complaint Type">Complaint Type</label><br/>
+                              <apex:selectList value="{!ComplaintType}" size="1" multiselect="false" styleClass="form-control" id="hav1" tabindex="2">
+                                 <apex:selectOptions value="{!ComplaintTypeList}">
+                                 </apex:selectOptions>
+                              </apex:selectList>
+                           </div>
+                        </div>
+                        <div class="row form-row">
+                           <div class="form-group col-md-3">
+                              <label for="CaseReason">Case Reason</label>
+                              <apex:selectList value="{!CaseReasonType}" size="1" multiselect="false" styleClass="form-control" id="hav3" tabindex="3">
+                                 <apex:selectOptions value="{!CaseReasonTypeList}">
+                                 </apex:selectOptions>
+                              </apex:selectList>
+                           </div>
+                           <div class="form-group col-md-3">
+                              <label for="PurchaseDate">Purchase Date</label>
+                              <apex:input type="date" value="{!PurchaseDate}" styleClass="form-control" tabindex="4"/>
+                           </div>
+                           <div class="form-group col-md-3">
+                              <label for="ExtendedWarrantyTaken">Extended Warranty Taken</label>
+                              <apex:selectList value="{!WarrantyTaken}" size="1" multiselect="false" styleClass="form-control" id="hav5" tabindex="5">
+                                 <apex:selectOptions value="{!WarrantyTakenList}">
+                                 </apex:selectOptions>
+                              </apex:selectList>
+                           </div>
+                          <div class="form-group col-md-3">
+                             <label for="gdpr">How can we contact you?</label>
+                             <apex:selectList value="{!gdpr}" size="1" multiselect="false" styleClass="form-control apex-height" id="hav11">
+                               <apex:selectOptions value="{!gdprList}">
+                               </apex:selectOptions>
+                             </apex:selectList>    
+                        </div>
+                        </div>
+                        <div class="row form-row">
+                           <div class="col-md-3">
+                              <label for="ExtendedWarrantyDuration">Extended Warranty Duration</label>
+                              <apex:selectList value="{!WarrantyDuration}" size="1" multiselect="false" styleClass="form-control" id="hav6" tabindex="6">
+                                 <apex:selectOptions value="{!WarrantyDurationList}">
+                                 </apex:selectOptions>
+                              </apex:selectList>
+                           </div>
+                           <div class="form-group col-md-3">
+                              <label for="BillNo">Bill No.</label>
+                              <apex:inputText value="{!BillNo}" styleClass="form-control" html-placeholder="Just one . ie. Bill No." style="height:33px;font-size:15px" tabindex="7"/>
+                           </div>
+                           <div class="form-group col-md-3">
+                              <label for="ModelNo">Model No.</label>
+                              <apex:inputText value="{!ModalNo}" styleClass="form-control" html-placeholder="Just one . ie. Model No." style="height:33px;font-size:15px" tabindex="8"/>
+                           </div>
+                           <div class="form-group col-md-3">
+                              <label for="SerialNo">Serial No.</label>
+                              <apex:inputText value="{!SerialNo}" styleClass="form-control" html-placeholder="Just one . ie. Serial No." style="height:33px;font-size:15px" tabindex="9"/>
+                           </div>
+                        </div>
+                        <h5>Description Information</h5>
+                        <div class="row form-row" >
+                           <div class="form-group col-md-3">
+                              <label for="IfcustomerhasTeamviewer">Do you have Team viewer?</label>                     
+                              <apex:selectList value="{!TeamViewer}" size="1" multiselect="false" styleClass="form-control apex-height" id="TeamViewer5" tabindex="10">
+                                 <apex:selectOptions value="{!TeamViewerList}">
+                                 </apex:selectOptions>
+                              </apex:selectList>
+                           </div>
+                           <div class="form-group col-md-3">
+                              <label for="ProductFamily">Product Type</label>
+                              <apex:actionRegion >
+                                 <apex:selectList value="{!ProductFamily}" size="1" multiselect="false" styleClass="form-control" id="hav7" tabindex="11" >
+                                    <apex:selectOptions value="{!ProductFamilyList}"  >
+                                    </apex:selectOptions>
+                                    <apex:actionSupport event="onchange" action="{!ChangeProductlist}" reRender="i12">
+                                    </apex:actionSupport>
+                                 </apex:selectList>
+                              </apex:actionRegion>
+                           </div>
+                           <div class="form-group col-md-3">
+                              <label for="Product List">Select Your Product</label>
+                              <div class="input-group col-md-4">
+                                 <apex:outputPanel id="i12">
+                                    <apex:selectList value="{!ProductName}" size="1" multiselect="false" styleClass="form-control"  style="width:280px; height:33px; border-radius: 4px;" tabindex="12">
+                                       <apex:selectOptions value="{!selectProdList}"  >
+                                       </apex:selectOptions>
+                                    </apex:selectList>
+                                 </apex:outputPanel>
+                              </div>
+                           </div>
+                           <!--- to attach a file---->
+                           <div class="form-group col-md-3">
+                              <label for="Product List">Attach Your File</label>
+                              <apex:inputFile id="file_File" value="{!fileBody}" filename="{!fileName}" styleclass="form-control" tabindex="13" />
+                           </div>
+                        </div>
+                        <div class="row form-row">
+                           <div class="form-group col-md-12">
+                              <label for="Description">Description</label>
+                              <apex:inputTextarea value="{!descc}" styleClass="form-control" style="height:80px;" html-placeholder="Description" tabindex="14" />
+                           </div>
+                        </div>
+                        <!---  button to save in database--->
+                        <div class="row form-row">
+                           <div class="col-md-6 col-sm-12 col-xs-12">
+                              <apex:commandButton value="Submit Case" styleclass="action-button btn-info"    action="{!DDCaseRegister}" tabindex="15" />
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <a id="back2Top" href="#" title="Go to Top">&#10148;</a>
+         <!--#############################FOOTER SECTION################################--->
+         <section>
+            <c:portal_footer />
+         </section>
+         <!--#############################################################--->
+         <!-- end of navbar-->                              
+      </body>
+   </apex:form>
+</apex:page>
+*******************************apex class***********************************
+/*
+        ** Converted the code in apex **
+        Author: Indresh
+        Created Date: 31/10/2018
+        Created For: This apex class is implemented to register a case on customer  portal.
+*/
+public  class CustomerCaseRegisterCntlr {
+    
+    public Contact con{get;set;}
+    public list<selectOption> caseTypeList {get;set;}
+    public string caseType{get;set;}
+    public list<selectOption> ComplaintTypeList {get;set;}
+    public string ComplaintType{get;set;}
+    public list<selectOption> CaseReasonTypeList {get;set;}
+    public string CaseReasonType{get;set;}
+    public list<selectOption> PriorityList {get;set;}
+    public string Priority{get;set;}
+    public list<selectOption> WarrantyTakenList {get;set;}
+    public string WarrantyTaken{get;set;}
+    public list<selectOption> WarrantyDurationList {get;set;}
+    public list<selectOption> gdprList {get;set;}
+    public string gdpr{get;set;}
+    public string WarrantyDuration{get;set;}
+    public list<selectOption> ProductFamilyList {get;set;}
+    public string ProductFamily{get;set;}
+    public list<selectOption> TeamViewerList {get;set;}
+    public string TeamViewer{get;set;}
+    
+    //Intilization of variables  to get the values from page
+    public list<selectOption> ProductList {get;set;}
+    public list<selectOption> selectProdList {get;set;}
+    Public date PurchaseDate{get;set;}
+    Public string BillNo{get;set;}
+    Public string ModalNo{get;set;}
+    Public string SerialNo{get;set;}
+    Public string ProductName{get;set;}
+    Public String descc{get;set;}
+    //variables for attachment
+    Public static  blob filebody{get;set;}     
+    public static String fileName {get;set;}
+    public static String caseId{get;set;}
+    
+    // cntroller method
+    public CustomerCaseRegisterCntlr(){
+            selectProdList = new List<selectOption>();
+        con=new Contact();
+        string idd=ApexPages.currentPage().getParameters().get('id');
+        con=[select id,Name,Company__c,User_Name__c,Email from contact where id =: idd];
+        system.debug('con---'+con);
+        //to get the picklist value from database
+                caseTypeList = new List<selectOption>();
+
+        Schema.DescribeFieldResult fieldResult11 = case.Type.getDescribe();
+        List<Schema.PicklistEntry> cou21 = fieldResult11.getPicklistValues();
+        for( Schema.PicklistEntry f : cou21)
+        {
+          caseTypeList.add(new SelectOption(f.getLabel(), f.getValue()));
+        }  
+        
+          //to get the picklist value from database
+        ComplaintTypeList = new List<selectOption>();
+
+        Schema.DescribeFieldResult fieldResult1 = case.Complaint_Type__c.getDescribe();
+        List<Schema.PicklistEntry> cou2 = fieldResult1.getPicklistValues();
+        for( Schema.PicklistEntry f : cou2)
+        {
+          ComplaintTypeList.add(new SelectOption(f.getLabel(), f.getValue()));
+        }  
+        
+         //to get the picklist value from database 
+        CaseReasonTypeList = new List<selectOption>();
+
+        Schema.DescribeFieldResult fieldResult2 = case.Reason.getDescribe();
+        List<Schema.PicklistEntry> cou3 = fieldResult2.getPicklistValues();
+        for( Schema.PicklistEntry f : cou3)
+        {
+          CaseReasonTypeList.add(new SelectOption(f.getLabel(), f.getValue()));
+        }  
+        
+        PriorityList = new List<selectOption>();
+
+        Schema.DescribeFieldResult fieldResult3 = case.Priority.getDescribe();
+        List<Schema.PicklistEntry> cou4 = fieldResult3.getPicklistValues();
+        for( Schema.PicklistEntry f : cou4)
+        {
+          PriorityList.add(new SelectOption(f.getLabel(), f.getValue()));
+        }  
+
+        WarrantyTakenList = new List<selectOption>();
+
+        Schema.DescribeFieldResult fieldResult31 = case.Extended_Warranty_Taken__c.getDescribe();
+        List<Schema.PicklistEntry> cou41 = fieldResult31.getPicklistValues();
+        for( Schema.PicklistEntry f : cou41)
+        {
+          WarrantyTakenList.add(new SelectOption(f.getLabel(), f.getValue()));
+        } 
+        
+        gdprList = new List<selectOption>();
+
+        Schema.DescribeFieldResult fieldResult01 = case.GDPR__c.getDescribe();
+        gdprList.add(new SelectOption('–None–','–None–'));
+        List<Schema.PicklistEntry> cou01 = fieldResult01.getPicklistValues();
+        for( Schema.PicklistEntry f : cou01)
+        {
+          gdprList.add(new SelectOption(f.getLabel(), f.getValue()));
+        }   
+        
+        WarrantyDurationList = new List<selectOption>();
+
+        Schema.DescribeFieldResult fieldResult311 = case.Extended_Warranty_Duration__c.getDescribe();
+        List<Schema.PicklistEntry> cou311 = fieldResult311.getPicklistValues();
+        for( Schema.PicklistEntry f : cou311)
+        {
+          WarrantyDurationList.add(new SelectOption(f.getLabel(), f.getValue()));
+        }  
+        
+        ProductFamilyList = new List<selectOption>();
+
+        Schema.DescribeFieldResult fieldResult3111 = case.Product_Family__c.getDescribe();
+        List<Schema.PicklistEntry> cou3111 = fieldResult3111.getPicklistValues();
+        for( Schema.PicklistEntry f : cou3111)
+        {
+          ProductFamilyList.add(new SelectOption(f.getLabel(), f.getValue()));
+        } 
+        
+        TeamViewerList = new List<selectOption>();
+
+        Schema.DescribeFieldResult fieldResult31p = case.If_customer_has_Team_viewer__c.getDescribe();
+        List<Schema.PicklistEntry> cou41p = fieldResult31p.getPicklistValues();
+        for( Schema.PicklistEntry f : cou41p)
+        {
+          TeamViewerList.add(new SelectOption(f.getLabel(), f.getValue()));
+        }  
+    }
+
+   // to populate the product list based on product type
+    Public void ChangeProductlist(){
+        selectProdList =getproduct();
+    }
+   
+   //return list of products based on product type
+   Public list<SelectOption> getproduct(){  
+       list<SelectOption> options= new List<selectOption>();
+       list <product2> prolist=new list <product2>();
+       if(ProductFamily!=''){
+           system.debug('product family'+ProductFamily);
+           for(Product2 p2:[select id ,Name,Family,Active__c from Product2 where Family =:ProductFamily and Active__c != False]){
+               options.add(new SelectOption(p2.name, p2.name));
+           }
+       }
+      return options;
+   }
+   // to save the changes in database
+    public Pagereference DDCaseRegister(){
+       string conid= ApexPages.currentPage().getParameters().get('id');   
+       boolean checkInsert=True;
+       List<Case> mycase = new List<Case>();
+       List<Case> cc = new List<Case>();
+       for(case cases :[select Id,Model_Number__c ,Serial_Number__c ,Bill_Number__c,Purchase_Date__c,ContactId,Complaint_Type__c from Case where ContactId=:conid]){  
+           if(ComplaintType=='Repeat' && cases.Model_Number__c ==ModalNo && cases.Serial_Number__c == SerialNo && cases.Purchase_Date__c == PurchaseDate && cases.Bill_Number__c==BillNo){
+                  cases.status ='Reopen';
+                  system.debug('cases'+cases);
+                  mycase.add(cases);
+                  checkInsert=false;
+          }else{
+               checkInsert=true;
+          }
+       }
+          if(mycase.size()>0){
+            update mycase ;
+             PageReference pr= new PageReference('/apex/customercaseview?id='+conid);
+                  pr.setRedirect(true);
+                  return pr;
+         } 
+         if(checkInsert==true){ 
+               list<Product2> prod =[select id,name from Product2 where name=:ProductName limit 1];
+               id pid=null;
+               if(prod.size()>0){
+                pid = prod[0].id; 
+               case cs = new case();
+              
+              cs.Bill_Number__c = BillNo;
+              system.debug('Bill_Number__c====>'+ cs.Bill_Number__c);
+              cs.Model_Number__c = ModalNo;
+              system.debug('Model_Number__c ====>'+ cs.Model_Number__c );
+              cs.Serial_Number__c = SerialNo;
+              cs.Purchase_Date__c = date.valueOf(PurchaseDate);
+              system.debug('Purchase_Date__c ====>'+ cs.Purchase_Date__c);
+              cs.Origin = 'Web';
+              cs.Description = descc;
+              cs.status = 'NEW';
+              //
+              cs.ContactId =conid;
+              cs.type = caseType;
+              cs.Complaint_Type__c = ComplaintType;
+              cs.Reason = CaseReasonType;
+              cs.Extended_Warranty_Taken__c = WarrantyTaken;
+              cs.GDPR__c = gdpr;
+              cs.Extended_Warranty_Duration__c = WarrantyDuration;
+              cs.Product_Family__c = ProductFamily;
+              cs.If_customer_has_Team_viewer__c = TeamViewer;
+              cs.Product__c = pid;
+              insert cs;
+              caseId=cs.id;
+          
+          if( filebody !=null && fileName != ''){
+              getAttachment();
+          }
+          if(cs!=null){
+            emailTocustomer();
+            PageReference pr=new pagereference('/apex/CustomerCaseview?id='+conid); 
+            pr.seTRedirect(true);
+            return pr;
+          }
+        }
+       }
+      return null;
+      
+    }
+    // to save the attached file in database
+     public static  PageReference  getAttachment()
+           {       
+           system.debug('filebody====== '+filebody) ; 
+           system.debug('caseId====== '+caseId) ;
+           list<case>   casee   = [select id from case where id=:caseId]; //order by CreatedDate DESC limit 1];
+           system.debug('size---------'+casee.size());
+           if(casee.size()>0 && filebody !=null && fileName != ''){                                                      
+               Attachment myAttachment = new Attachment();
+               myAttachment.Body = filebody ;  
+               system.debug('filebody======'+myAttachment.Body) ;                         
+               myAttachment.Name = fileName ;
+               myAttachment.ParentId = casee[0].id;          
+               system.debug('attachment called');
+               insert myAttachment;     
+           }
+          
+         return null;                   
+                     
+     }
+     
+     // to send the customer that his case is registered
+     public void emailTocustomer(){
+         
+          string conid= ApexPages.currentPage().getParameters().get('id'); 
+          contact con=new Contact();
+          con=[select id,name,email,lastname,User_Name__c,Password__c from contact where id=:conid];
+          
+           if(con!=null)
+             {
+                Messaging.SingleEmailMessage email= new Messaging.SingleEmailMessage();
+                list<string> toSent=new list<string>();
+                toSent.add(con.email);
+                email.setToaddresses(toSent);  
+                email.setTargetObjectId (con.id);          
+                //string bodym='Dear '+con.name+',<br/><br />Your Case has been succesufully Submitted<br/><br/>Thanks and Regards,<br/>' ;  
+                EmailTemplate ev=[select id,name,Subject,Body from EmailTemplate where name='Case submission confirmation'];
+                email.setTemplateID(ev.Id);
+                //email.setSubject(ev.Subject);  
+                 //email.setSubject(ev.Subject);  
+                system.debug('++++++++++++++++++++++'+ev.id);
+                Messaging.SendEmailResult [] r =Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email});
+                
+                }
+     }
+}
