@@ -6,7 +6,7 @@
 <apex:page controller="OpportunityViewDetails_Controller" standardStylesheets="false" showHeader="false" sidebar="false" docType="html-5.0">
 <apex:form >
 <c:head_include ></c:head_include>
-
+<c:portal_Script ></c:portal_Script>
 <style>
 .download-center{
     background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/demo-redquest-banner.jpg')}');
@@ -220,42 +220,250 @@ $(window).scroll(function() {
         </section>
         <!--#############################################################--->
 <!-- end of navbar-->
-<script>
-/*Scroll to top when arrow up clicked BEGIN*/
-$(window).scroll(function() {
-    var height = $(window).scrollTop();
-    if (height > 100) {
-        $('#back2Top').fadeIn();
-    } else {
-        $('#back2Top').fadeOut();
-    }
-});
-$(document).ready(function() {
-    $("#back2Top").click(function(event) {
-        event.preventDefault();
-        $("html, body").animate({ scrollTop: 0 }, "slow");
-        return false;
-    });
-
-});
- /*Scroll to top when arrow up clicked END*/
-</script>
- 
-
-<script>
-/* Nav bar Open Left to Right */
-function openNav() {
-    document.getElementById("mySidenav").style.width = "350px";
-    document.getElementById("main").style.marginRight = "350px";
-    document.body.style.backgroundColor = "rgba(230,230,230,0.4)";
-}
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-    document.getElementById("main").style.marginRight= "0";
-    document.body.style.backgroundColor = "white";
-}
-</script>
 
 </body>
 </apex:form>
 </apex:page>
+*****************************************apex class****************************************
+/*
+    Author: Indresh
+    Created Date: 13/11/2018
+    Created For: This apex class is implemented to show the detail of opportunity ,
+                 contact and its related product details. One can add or delete the product according to their requirement
+*/
+
+public class OpportunityViewDetails_Controller {
+  public contact con{get;set;}
+  public boolean editString{get;set;}
+  public Integer editAddrow{get;set;}
+  public list<opportunity > oppList{get;set;}
+  public integer olineitemsize;
+  //variable declaration to edit Prouct Info
+  public list<selectOption> selectProductList {get;set;}
+  public string selectProduct{get;set;}
+  public list<selectOption> selectProdList {get;set;}
+  public string selectedProd{get;set;}
+  public list<selectOption> ProductFamilyList {get;set;}
+  public string ProductFamily{get;set;}
+  public Integer wrapIndex{get;set;}
+  public list<allProducts> allProductList{get;set;}
+  public Integer wquant2{get;set;}
+  public Set<Integer> selectcheckbox;
+  public Set<string> selectIdset;
+  public string currencycode;
+
+  public OpportunityViewDetails_Controller(){
+     editString=false;
+     editAddrow=0;
+     selectcheckbox = new Set<Integer>();
+     selectIdset= new Set<string>();
+     oppList=new list<opportunity >();     
+     allProductList=new list<allProducts>();
+     oppListMethod();
+}
+ 
+  //to show opportunity details on page load
+   public  void oppListMethod(){
+        string idd=ApexPages.currentPage().getParameters().get('id');
+        string opid=ApexPages.currentPage().getParameters().get('opid');
+        oppList=[select id , Name,CurrencyIsoCode,Type,CloseDate,AccountId,Account.name,StageName ,Probability,Amount,(SELECT Quantity, UnitPrice, TotalPrice,PricebookEntry.Name, PricebookEntry.Product2.Family FROM OpportunityLineItems) FROM Opportunity where Contact__c=:idd and id=:opid];      
+        contact conl=new contact();
+        conl=[select LastName,firstName,Email ,Phone ,MobilePhone ,MailingPostalCode ,MailingStreet,MailingCity,MailingState,MailingCountry from contact where AccountId =:oppList[0].AccountId limit 1];
+        if(conl!=null)
+            con=conl;          
+            integer i=0;
+          for(opportunity opp:oppList){    
+              currencycode=opp.CurrencyIsoCode;   
+              olineitemsize=opp.OpportunityLineItems.size();
+                for(OpportunityLineItem ol:opp.OpportunityLineItems){
+                    wrapIndex=i;
+                    allProducts ap= new allProducts();
+                    allProductList.add(ap); 
+                    allProductList[wrapIndex].WrapperIndex=i;
+                    allProductList[wrapIndex].selectedproductFamily=ol.PricebookEntry.Product2.Family; 
+                    allProductList[wrapIndex].selectedProd=ol.PricebookEntry.Name;
+                    allProductList[wrapIndex].productFamily=ProdFamilyList();  
+                    allProductList[wrapIndex].productInfoquantity=string.valueof(ol.Quantity);
+                    allProductList[wrapIndex].product=getListProduct();
+                    allProductList[wrapIndex].OppLineItemId=ol.id;
+                    //allProductList.add(ap); 
+                    i++;
+                }
+                }
+    }
+    
+    //method to link page to create new opportunity
+   public PageReference RedirectOpp(){
+        string idd=ApexPages.currentPage().getParameters().get('id');
+        PageReference pr=new PageReference('/apex/OpportunityDummy?id='+idd);
+        pr.setRedirect(True);
+        return pr;
+   }
+   
+   //method to link page to view all the opportunities related to dealer/Distributor/Sub-dealer on portal.
+   public PageReference RedirectDetailOpp(){
+        string idd=ApexPages.currentPage().getParameters().get('id');
+        PageReference pr=new PageReference('/apex/MyOpportunityDummy?id='+idd);
+        pr.setRedirect(True);
+        return pr;
+   }
+   
+    
+     
+// code for edit product deatil or opprtunity stage 
+   // method to on edit mode  
+   public void editmode(){
+      editString=true; 
+      editAddrow=1;        
+   }
+  
+   //Use of Wrapper class to link product to opportuntiy 
+   public class allProducts {
+      public list<selectOption> productFamily{get;set;}
+      public list<selectOption> product{get;set;}
+      public Integer quantity{get;set;}
+      public String selectedproductFamily{get;set;}
+      public String selectedProd{get;set;}
+      public integer WrapperIndex{get;set;}
+      public string productInfoquantity{get;set;}
+      public Boolean checkvalue{get;set;}
+      public id OppLineItemId{get;set;}
+   }
+   // to save the added or deleted product and opportunity stage field in database
+   public PageReference SaveProduct(){    
+        update oppList;// to update opporutniy
+        editString=false;   
+        string idd=ApexPages.currentPage().getParameters().get('id');
+        string opid=ApexPages.currentPage().getParameters().get('opid');
+        pricebook2 pb = [select Id from pricebook2 where IsStandard = TRUE][0];
+        Id pricebookId = pb.Id;
+        Map<PricebookEntry,Integer> map1 =new Map<PricebookEntry,Integer>();
+        List<OpportunityLineItem> oli = new List<OpportunityLineItem>();
+        integer k=0;
+        for(allProducts allp : allProductList){ 
+          if(k>olineitemsize-1) {   
+             for(Product2 p2 : [select id ,Name,Family,Active__c from Product2 where Name =:allp.selectedProd]){
+                 for(PricebookEntry pb1:[Select id, Product2Id,Pricebook2Id ,UnitPrice from PricebookEntry where Pricebook2Id =:pricebookId and Product2Id=:p2.id and CurrencyIsoCode =: currencycode] ){
+                map1.put(pb1,Integer.valueof(allp.productInfoquantity));
+                }
+             
+              } 
+             
+              system.debug(' map1.keyset=='+ map1.keyset());    
+              for(PricebookEntry ppe : map1.keyset()){         
+              OpportunityLineItem oppli = new OpportunityLineItem();
+              oppli.OpportunityId = opid;
+              oppli.PricebookEntryId = ppe.id;
+              oppli.Quantity = map1.get(ppe);
+              oppli.TotalPrice=ppe.UnitPrice*oppli.Quantity;
+              oli.add(oppli);
+              
+              }
+              
+              if(oli.size()>0){
+               upsert oli;
+              
+              }
+        }
+        k++;
+        }
+        updateOpportunityLineItem();
+      
+        PageReference pr=new PageReference('/apex/OpportunityViewDetails?id='+idd);
+        pr.getParameters().put('opid', opid);
+        pr.setRedirect(True);
+        return pr;
+    }
+    
+    //to updated the quantity of already added products
+   public void updateOpportunityLineItem(){           
+      integer k=0;
+      List<OpportunityLineItem> oli = new List<OpportunityLineItem>();
+     for(opportunity opp:oppList){      
+         for(OpportunityLineItem oppli:opp.OpportunityLineItems){
+                      oppli.Quantity = Decimal.valueof(allProductList[k].productInfoquantity);
+                      oli.add(oppli); 
+                       k++;            
+                   }
+                   
+                } 
+               
+            
+                         
+      if(oli.size()>0){
+       update oli;
+      
+      }
+   }
+    
+   //list type method to make dpendent picklist(product name is dependent on product family)
+   Public list<SelectOption> getListProduct(){  
+     selectProductList= new List<selectOption>();
+     if(allProductList[wrapIndex].selectedproductFamily!=''){
+         system.debug('productstrin family'+allProductList[wrapIndex].selectedproductFamily);
+         for(Product2 p2 : [select id ,Name,Family,Active__c,CurrencyIsoCode from Product2 where Family =:allProductList[wrapIndex].selectedproductFamily and Active__c != False ])
+         {
+              selectProductList.add(new SelectOption(p2.name, p2.name));
+         }
+     }
+     return selectProductList;
+   }
+   
+   // to populate product type field from database
+   public list<SelectOption> ProdFamilyList(){
+      ProductFamilyList = new List<selectOption>();
+      ProductFamilyList.add(new SelectOption('', 'Please Select'));
+      Schema.DescribeFieldResult fieldResult3111 = Product2.Family.getDescribe();
+      List<Schema.PicklistEntry> cou3111 = fieldResult3111.getPicklistValues();
+     for( Schema.PicklistEntry f : cou3111){
+        ProductFamilyList.add(new SelectOption(f.getLabel(), f.getValue()));
+     } 
+     return ProductFamilyList;
+   }
+   
+   // to get the row value and id's of record need to be deleted  
+   public void checkFunction(){
+      string pp=apexpages.currentpage().getparameters().get('checkboxcheck');
+      selectcheckbox.add( Integer.valueof(pp));
+      string opLid=apexpages.currentpage().getparameters().get('opLineitemid');
+      selectIdset.add(opLid);
+         
+   }   
+  // to populate product on basis of product type
+   public void WrapProductlist(){
+     string pp=apexpages.currentpage().getparameters().get('windex');
+     system.debug('wrapIndex======'+wrapIndex);
+     allProductList[wrapIndex].product=getListProduct();
+   }
+  
+  // to delete product from database and also from page   
+   public void DelProductRow(){
+      Integer k = allProductList.size();                      
+      for(Integer i=k-1;i>=0;i--){
+        if(selectcheckbox.contains(i)){
+           allProductList.remove(i);
+           selectcheckbox.remove(i);
+          }                      
+        }  
+    if(selectIdset.size()>0)
+          delete [SELECT id, Quantity FROM OpportunityLineItem where id IN:selectIdset];      
+  }
+  
+  //to show products on page
+  public list<allProducts> getALLprdlist(){
+    list<allProducts> newwraplist=new  list<allProducts>();
+    for(allProducts a:allProductList){                 
+         newwraplist.add(a); 
+    }   
+    return newwraplist;
+  }
+
+ //to add new row to fill product information
+  public void addproductrow(){  
+    editString=true; 
+    allProducts ap= new allProducts();
+    ap.productFamily=ProdFamilyList();
+    allProductList.add(ap); 
+    
+  }   
+}
