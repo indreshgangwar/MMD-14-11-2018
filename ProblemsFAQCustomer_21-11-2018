@@ -1,0 +1,230 @@
+**************************vf page***********************
+<!-- 
+/*
+        
+        Author: Indresh
+        Created Date: 12/11/2018
+        Created For: This vf page is implemented for search customer  portal.
+*/
+-->
+<apex:page standardStylesheets="false" showHeader="false" docType="html" controller="ProblemsFAQCustomer_Controller">
+  <apex:form >
+      <c:head_include ></c:head_include>
+      <c:portal_Script ></c:portal_Script>
+      <meta name="viewport" content="width=device-width" />
+      <style>
+            @media all and (min-width: 960px) {
+                body{
+                    font-size: 14px;
+                }
+            }
+             
+            @media all and (max-width: 959px) and (min-width: 600px) {
+                body{
+                    font-size: 15px;
+                }
+                .site-logo {
+                padding: 0px 31px !important;
+                margin: 0px 0px;
+                }
+            }
+             
+            @media all and (max-width: 599px) and (min-width: 320px) {
+                body{
+                    font-size: 17px;
+                }
+                .site-logo {
+                padding: 0px 14px !important;
+                margin: 0px 0px;
+                }
+            }
+         .download-center{
+         background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/faq-banner.jpg')}');
+         height:200px; 
+         min-height:218px; 
+         width:100%; 
+         margin:0; 
+         padding:0;     
+         background-size: cover;
+         }
+      </style>
+      <body>
+         <script>
+            $(window).scroll(function() {
+                if($(this).scrollTop()>0) {
+                    $( ".navbar-me" ).addClass("fixed-me");
+                } else {
+                    $( ".navbar-me" ).removeClass("fixed-me");
+                }
+            });
+         </script>
+         <!--navbar menu-->
+         <section class="navbar-info">
+            <div class="download-center">
+                  <c:CustomerSideMenu ></c:CustomerSideMenu>
+            </div>
+         </section>
+         
+         <div id="main">
+            <div style="width:90%; margin:0 auto;">
+               <div class="title-grid">
+                  <h3>Always here to help</h3>
+                  <p class="forgotten"><a href="#">Need Help?</a> <span style="color:#000;">/</span> <apex:outputLink value="/apex/CustomerCaseRegister?id={!con.id}">Register a Case <span><i class="fa fa-caret-right" aria-hidden="true"></i></span></apex:outputLink></p>
+               </div>
+               <div class="row">
+                  <div id="case-title" style="margin-bottom:25px;">
+                     <div class="col-xs-12" style="margin-bottom: 20px; margin-top: 5px;">
+                        <div class="input-group">
+                           <div class="input-group-btn search-panel">
+                              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                              <span id="search_concept">Filter by - Select Your Product Family</span> <span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu" role="menu">
+                                 <li><a href="#All">All </a></li>
+                                 <li><a href="#AOCMonitors">AOC Monitors </a></li>
+                                 <li><a href="#PhilipsMonitors ">Philips Monitors </a></li>
+                                 <li><a href="#HospitalityTV ">Hospitality TV</a></li>
+                                 <li><a href="#Monitors">Monitors</a></li>
+                                 <li><a href="#Signage">Signage</a></li>
+                                 <li><a href="#Blank">Blank</a></li>
+                              </ul>
+                           </div>
+                           <apex:actionFunction name="Search" action="{!search}"/>
+                           <!-- <input type="hidden" name="search_param" value="all" id="search_param" /> --->
+                           <apex:inputText value="{!searchText}" styleClass="form-control" html-placeholder="Type your Product name..."/>   
+                           <span class="input-group-btn">
+                              <button class="btn btn-default" id="buttonId" type="button" onclick="Search();"><span class="glyphicon glyphicon-search"></span></button>                             
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+               </div>             
+               <div id="serId" style="margin-bottom:20px;">
+                  <apex:outputPanel rendered="{!Showtable=true}"><div id="case-title" >
+                     <h5>Search Result</h5>
+                  </div>
+                  <table class="table table-bordered">
+                     <thead>
+                        <tr>
+                           <th>FAQ Name</th>
+                           <th>FAQ</th>
+                           <th>Attachment</th>
+                           <th>Case</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <apex:repeat value="{!faqList1}" var="a" id="faqList11">
+                           <tr>
+                              <td>{!a.name}</td>
+                              <td>{!a.FAQ__c}</td>
+                              <td><apex:outputtext value="{!a.Attachment__c}"  escape="false"/></td>
+                              <td>{!a.Case__c}</td>
+                           </tr>
+                        </apex:repeat>
+                     </tbody>
+                  </table></apex:outputPanel>
+               </div>
+  
+      
+               <!--FAQ END --->
+               <div class="row">
+                  <div class="col-md-12" id="search_param">
+                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <apex:repeat value="{!faqList}" var="faq" >
+                           <div class="panel panel-default">
+                              <div class="panel-heading" role="tab" id="headingOne">
+                                 <h4 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#{!faq.Id}" aria-expanded="true" aria-controls="collapseOne">
+                                    {!faq.Name}  
+                                    </a>    
+                                 </h4>
+                              </div>
+                              <div id="{!faq.Id}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                 <div class="panel-body">
+                                    <apex:outputText value="{!faq.FAQ__c}" >
+                                      
+                                    </apex:outputText>
+                                    <br/><br/>
+                                    <apex:outputText value="{!faq.Attachment__c}" escape="false">
+                                       
+                                    </apex:outputText>
+                                 </div>
+                              </div>
+                           </div>
+                        </apex:repeat>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <a id="back2Top" href="#" title="Go to Top">&#10148;</a>
+         <!--#############################FOOTER SECTION################################--->
+         <section>
+            <c:portal_footer />
+         </section>
+         <!--#############################################################--->
+         <!-- end of navbar-->
+          <script>
+            $(document).ready(function(e){
+            $('.search-panel .dropdown-menu').find('a').click(function(e) {
+            e.preventDefault();
+                var param = $(this).attr("href").replace("#","");
+                var concept = $(this).text();
+                $('.search-panel span#search_concept').text(concept);
+                $('.input-group #search_param').val(param);
+            });
+            });
+         </script>         
+      </body>
+   </apex:form>
+</apex:page>
+************************************apex class*************************
+/*
+        
+        Author: Indresh
+        Created Date: 12/11/2018
+        Created For: This apex class is implemented for search customer  portal.
+*/
+public class ProblemsFAQCustomer_Controller {
+
+    public List<FAQ__c> faqList {get;set;}
+    public boolean Showtable {get;set;}
+    public contact con{get;set;}
+    List<FAQ__c> faqList1;
+    string searchText;
+ 
+ 
+ Public ProblemsFAQCustomer_Controller (){
+         string conid=apexpages.currentpage().getparameters().get('id');
+    con=new contact();
+    con=[select id,name from contact where id=:conid];
+       Showtable=false; 
+       if(faqList == null)
+          faqList = new List<FAQ__c>();
+       system.debug('faqList=====>'+faqList);
+       faqList = [Select Id, Name,FAQ__c,Attachment__c,Case__c From FAQ__c LIMIT 1000];
+       system.debug('faqList=====>'+faqList);
+  }
+  //to get the string to be searched from vf page
+ public String getSearchText() {
+      return searchText;
+   }
+   public void setSearchText(String s) {
+      searchText = s;
+   }
+   // to show the searched list on vf page
+   public List<FAQ__c> getfaqList1() {
+      return faqList1;
+   }
+
+    //to search string
+   public PageReference Search() {
+       Showtable=true;
+      faqList1  = (List<FAQ__c>)[FIND :searchText RETURNING FAQ__c(Name, FAQ__c, Attachment__c, Case__c)][0];
+      return null;
+   }
+   
+   
+  
+ 
+}
