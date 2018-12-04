@@ -1,0 +1,271 @@
+<apex:page standardStylesheets="false" showHeader="false" sidebar="false" docType="html-5.0" controller="MyRMARequestCntrl">
+   <apex:form >
+      <c:head_include ></c:head_include>
+      <style>
+       /* == Custom Style for page layout== */
+         .download-center{
+         background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/demo-redquest-banner.jpg')}');
+         height:250px; 
+         min-height:250px; 
+         width:100%; 
+         margin:0; 
+         padding:0;     
+         background-size: cover;
+         }
+         /* FILE INPUT */
+         .fileUpload {
+         position: relative;
+         overflow: hidden;
+         margin: 10px;
+         cursor: pointer;
+         }
+         .fileUpload input.upload {
+         position: absolute;
+         top: 0;
+         right: 0;
+         margin: 0;
+         padding: 0;
+         font-size: 20px;
+         cursor: pointer;
+         opacity: 0;
+         filter: alpha(opacity=0);
+         width:50px;
+         }
+         .cursor a{
+         cursor:pointer;
+         font-size:14px;
+         }
+         .dataTables_filter input[type=search] {
+         border: 1px solid #c7c6c6;
+         height: 30px;
+         border-radius: 3px;
+         width: 250px;
+         margin-bottom: 10px;
+         margin-top: 10px;
+         }
+         .dataTables_filter optgroup, select{
+         border: 1px solid #c7c6c6;
+         height: 30px;
+         border-radius: 3px;
+         margin-bottom: 10px;
+         margin-top: 10px;
+         width:70px;
+         }
+         .dataTables_wrapper .dataTables_paginate .paginate_button{
+         padding: 0.2em 0.6em !important;
+         }
+      </style>
+      <body>
+        <!--===Script for fix the head nav on page scroll===-->
+
+        <script>
+            $(window).scroll(function() {
+                if($(this).scrollTop()>0) {
+                    $( ".navbar-me" ).addClass("fixed-me");
+                } else {
+                    $( ".navbar-me" ).removeClass("fixed-me");
+                }
+            });
+        </script>
+         <!--===End=--> 
+          <!--navbar menu-->
+         <section>
+      <div class="download-center">
+         <c:DealerSideMenu rendered="{!showinteger=2}"></c:DealerSideMenu>
+     <c:CustomerSideMenu rendered="{!showinteger=1}"></c:CustomerSideMenu>
+     </div>
+      </section>
+         <div id="main">
+            <div style="width:90%; margin:0 auto;">
+               <div class="row" style="min-height:350px;">
+                  <div class="row">
+                     <div class="title-grid">
+                        <h3>My RMA Requests</h3>
+                        <p class="forgotten" style="text-align:right;">
+                         <apex:commandLink action="{!RedirectRmaRequest}"><span style="margin-right:5px;"><i class="fa fa-file-text-o"></i></span> Create a new request </apex:commandLink> 
+                        </p>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="table-responsive" id="accordion">
+                        <!---TABLE start to view all DOA Requests for Partner added by krrish------>
+                        <table id="demoRequestTable" class="display table table-bordered" cellspacing="0" style="width:100%; ">
+                        <thead>
+                              <tr style="background: #eee; text-align: left;  font-weight: bold;">
+                                 <td class="col-md-1">S.No</td>
+                                 <td class="col-md-2">Company</td>
+                                 <td class="col-md-2">Customer Name</td>
+                                 <td class="col-md-2">Email Address</td>
+                                 <td class="col-md-1">Mobile Phone</td>
+                                 <td class="col-md-2">Address</td>
+                                 <td class="col-md-3">&nbsp;</td>
+                              </tr>
+                              <apex:variable value="{!0}" var="count"/>
+                              <apex:repeat value="{!RMAList}" var="rmlist">
+                                 <apex:variable value="{!count+1}" var="count"/>
+                                 <tr>
+                                    <td style="text-align: left;" ><span>{!count}</span></td>
+                                    <td style="text-align: left;" ><span>{!rmlist.Company__c}</span></td>
+                                    <td style="text-align: left;" ><span>{!rmlist.First_Name__c} &nbsp; {!rmlist.Last_Name__c}</span></td>
+                                    <td style="text-align: left;"><span>{!rmlist.Email__c}</span></td>
+                                    <td>{!rmlist.Telephone__c}</td>
+                                    <td>{!rmlist.city__c} &nbsp;{!rmlist.Country__c} &nbsp;{!rmlist.Zip__c}</td>
+                                    <td style="text-align: right; margin-right:10px;" >
+                                       <a data-toggle="collapse" data-parent="#accordion" href="#collapsethree{!rmlist.Id}">
+                                         <apex:commandLink action="{!RedirectRma}">
+                                             <apex:param name="rmid" value="{!rmlist.id}"/>
+                                             <span>View Details</span>
+                                             <i class="fa fa-chevron-circle-down" style="font-size:16px; margin-left:10px;"> </i>
+                                          </apex:commandLink> 
+                                       </a>
+                                    </td>
+                                 </tr>
+                              </apex:repeat>
+                           </thead>
+                           <tbody>
+                           </tbody>
+                        </table>
+                        <!-----TABLE End------------>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <a id="back2Top" href="#" title="Go to Top">&#10148;</a>
+         <!--#############################FOOTER SECTION################################--->
+         <section>
+            <c:portal_footer />
+         </section>
+         <!--#############################################################--->
+         <!-- end of navbar-->
+          <script>
+            /*Scroll to top when arrow up clicked BEGIN*/
+            $(window).scroll(function() {
+                var height = $(window).scrollTop();
+                if (height > 100) {
+                    $('#back2Top').fadeIn();
+                } else {
+                    $('#back2Top').fadeOut();
+                }
+            });
+            $(document).ready(function() {
+                $("#back2Top").click(function(event) {
+                    event.preventDefault();
+                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                    return false;
+                });
+            
+            });
+             /*Scroll to top when arrow up clicked END*/
+         </script>
+         <script>
+            /* Nav bar Open Left to Right */
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "350px";
+                document.getElementById("main").style.marginRight = "350px";
+                document.body.style.backgroundColor = "rgba(230,230,230,0.4)";
+            }
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+                document.getElementById("main").style.marginRight= "0";
+                document.body.style.backgroundColor = "white";
+            }
+         </script>
+         <script>
+            var conid = '{!$CurrentPage.parameters.id}';
+            
+            function gotomyDOARequest(){
+             window.location.href =  '/apex/RMARequest?id='+conid;
+            
+            
+            }
+            
+         </script>
+         <script>
+            $(document).ready(function() {
+                $("div.bhoechie-tab-menu>div.list-group>a").click(function(e) {
+                    e.preventDefault();
+                    $(this).siblings('a.active').removeClass("active");
+                    $(this).addClass("active");
+                    var index = $(this).index();
+                    $("div.bhoechie-tab>div.bhoechie-tab-content").removeClass("active");
+                    $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
+                    
+                });
+                
+            });
+            
+         </script>
+         <script>
+            $(document).ready(function() {
+            
+                var idfield = '{!$CurrentPage.parameters.id}';
+                console.log('idfield========='+idfield);
+                       
+                    });          
+         </script>
+         </body>
+   </apex:form>
+</apex:page>
+
+***********************************apex class***********************************
+public class MyRMARequestCntrl {
+
+
+public integer showinteger{get;set;}
+public id currentRecordId{get;set;}
+
+   public MyRMARequestCntrl(){
+   currentRecordId  = ApexPages.CurrentPage().getparameters().get('id');
+  contact con =[select id,Name,RecordTypeId  from contact where id=:currentRecordId ];
+  Id DealerShowId = Schema.SObjectType.Contact.RecordTypeInfosByName.get('Customer').RecordTypeId;
+ // Id DealerShowId = Schema.SObjectType.Contact.RecordTypeInfosByName.get('Dealer').RecordTypeId;
+  if(con.RecordTypeId == DealerShowId )
+  {
+  system.debug('showinteger==='+showinteger);
+  showinteger=1;
+  }
+  else 
+  {
+   system.debug('showinteger-------'+showinteger);
+  showinteger=2;
+  }
+    
+    }
+    //This method is used to get the list of RMA__c's records.
+public list<RMA__c> getRMAList(){
+
+    String doacurrentid = ApexPages.currentPage().getParameters().get('id');
+    system.debug('doacurrentid ================'+doacurrentid );
+        string idd=ApexPages.currentPage().getParameters().get('id');
+        system.debug('id=========='+idd);
+        list<RMA__c> rma=new list<RMA__c>();
+        rma=[Select id,Company__c,First_Name__c,Last_Name__c,Email__c,Telephone__c,ZIP__c,City__c,Country__c,Address__c,Owner.Name from RMA__c where Contact__c=:doacurrentid order by createddate DESC];
+        return rma;
+    }
+    
+     //Method for Redirecting to RMARequest Page for Create a new request.
+    public pageReference RedirectRmaRequest(){
+    
+       string idd=ApexPages.currentPage().getParameters().get('id');
+       PageReference pr=new PageReference('/apex/RMARequest?id='+idd);    
+       pr.setRedirect(True);
+       return pr;
+    
+    }
+  
+
+
+//For redirecting to another "RMA Detail" page through "View Details" link.
+    public pageReference RedirectRma(){
+    
+       string idd=ApexPages.currentPage().getParameters().get('id');
+       id rmaid=ApexPages.currentPage().getParameters().get('rmid');
+       PageReference pr=new PageReference('/apex/ViewRMARequest?id='+idd);
+       pr.getParameters().put('rmid', rmaid);
+       pr.setRedirect(True);
+       return pr;
+    
+    }
+
+}
