@@ -1,0 +1,234 @@
+<apex:page standardStylesheets="false" showHeader="false" sidebar="false" docType="html-5.0" controller="Clone_DemoRequestListCtrl">
+<apex:form >
+<c:head_include ></c:head_include>
+<c:portal_Script ></c:portal_Script>
+<style>
+.download-center{
+    background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/demo-redquest-banner.jpg')}');
+    height:250px; 
+    min-height:250px; 
+    width:100%; 
+    margin:0; 
+    padding:0;     
+    background-size: cover;
+}
+/* FILE INPUT */
+
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+    cursor: pointer;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    width:50px;
+}
+
+.cursor a{
+    cursor:pointer;
+    font-size:14px;
+}
+
+.dataTables_filter input[type=search] {
+    border: 1px solid #c7c6c6;
+    height: 30px;
+    border-radius: 3px;
+    width: 250px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.dataTables_filter optgroup, select{
+    border: 1px solid #c7c6c6;
+    height: 30px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    width:70px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button{
+    padding: 0.2em 0.6em !important;
+}
+    
+</style>
+
+<body>
+<script>
+$(window).scroll(function() {
+    if($(this).scrollTop()>0) {
+        $( ".navbar-me" ).addClass("fixed-me");
+    } else {
+        $( ".navbar-me" ).removeClass("fixed-me");
+    }
+});
+</script>
+<!--navbar menu-->
+<section>
+    <c:DealerSideMenu ></c:DealerSideMenu>
+</section>
+
+<div id="main">
+    <div style="width:90%; margin:0 auto;">
+        <div class="row" style="min-height:350px;">
+            <div class="row">
+            <div class="title-grid">
+                <h3>My Demo Requests</h3>
+                <p class="forgotten" style="text-align:right;"><apex:commandLink action="{!RedirectDetailDemo}"><span style="margin-right:5px;"><i class="fa fa-file-text-o"></i></span> Create a new request </apex:commandLink>
+            <span style="margin-left:10px; margin-right:10px; color:#333;">| </span><span class="cursor"><a onclick="printData()"><span  style="margin-right:5px;"><i class="fa fa-print" aria-hidden="true"></i></span>Print</a></span></p>
+            </div>
+            </div>
+            <div class="row">
+                  <div class="table-responsive" id="accordion">
+                        <table id="demoRequestTable" class="display table table-bordered" cellspacing="0" style="width:100%; ">
+                         
+                                <thead>
+                                    <tr style="background: #eee; text-align: left;  font-weight: bold;">
+                                        <td >S.No.</td>
+                                        <td class="col-md-2">Request No.</td>
+                                        <td class="col-md-2">Request Date</td>
+                                        <td class="col-md-2">Point of Contact</td>
+                                        <td class="col-md-3">Demo Location</td>
+                                        <td class="col-md-1">Status</td>
+                                        <td class="col-md-2">&nbsp;</td>
+                                    </tr>
+                                     <apex:variable value="{!0}" var="count"/>
+                                    <apex:repeat value="{!caseviewList}" var="clist">
+                                     <apex:variable value="{!count+1}" var="count"/>
+                                        <tr>
+                                         <td ><span>{!count}</span></td>
+                                        <td style="text-align: left;" ><span>{!clist.Name}</span></td>
+                                        <td style="text-align: left;"><span><apex:outputText value="{0,date,yyyy-MM-dd HH:mm:ss }">
+                                                                            <apex:param value="{!clist.CreatedDate}" />
+                                                                            </apex:outputText>
+                                        </span></td>
+                                        <td style="text-align: left;" ><span>{!clist.Contact__c}</span></td>
+                                        <td style="text-align: left;"><span>{!clist.Address_Formula__c}</span></td>
+                                        <td>{!clist.Status__c}</td>
+                                        <td style="text-align: right; margin-right:10px;" >
+                                 <apex:outputLink value="/apex/DemoRequestView?id={!con.id}&DemoReqid={!clist.id}">View Details<i class="fa fa-chevron-circle-right" style="font-size:16px; margin-left:10px;"></i></apex:outputLink>
+                              </td>
+                                        </tr>
+                                   <!--    <tr class="panel-collapse collapse" id="collapsethree{!clist.Id}">
+                                            <td colspan="9" style="text-align: left;  font-size:13px;">
+                                                <div id="case-title"><h5>Demo Request Summary</h5></div>
+                                                <table class="table table-responsive table-bordered  case-summary-table" style="margin-bottom:0px;">    
+                                                    <tr>
+                                                        <th>Point of Contact:</th>
+                                                        <td>{!clist.Contact__c}</td>
+                                                        <th>Demo Start Date Time:</th>
+                                                        <td><apex:outputText value="{0,date,yyyy-MM-dd HH:mm:ss }">
+                                                                  <apex:param value="{!clist.Demo_Start_Date_Time__c}" />
+                                                            </apex:outputText>
+                                                        </td>
+                                                        <th>Demo End Date Time:</th>
+                                                        <td><apex:outputText value="{0,date,yyyy-MM-dd HH:mm:ss }">
+                                                                <apex:param value="{!clist.Demo_End_Date_Time__c}" />
+                                                            </apex:outputText>
+                                                         </td>
+                                                        <th>Installation Required:</th>
+                                                        <td><apex:outputtext value="{!if(clist.Installation_required__c==true,'Yes','No') }"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Remarks (if any)</th>
+                                                        <td colspan="7">{!clist.Remarks__c}</td>
+                                                    </tr>
+                                                </table><br/>
+                                                <div id="case-title"><h5>Product Details</h5></div>
+                                                <table class="table table-responsive table-bordered  case-summary-table" style="margin-bottom:0px;"> 
+                                                    <th>Demo Request Name</th>                                                    
+                                                    <th>Product Name</th>
+                                                    <th>Product Family</th>
+                                                    <th>Quantity</th>                                                
+                                                    <apex:repeat value="{!clist.Demo_Request_products__r}" var="drp" >
+                                                    <tr>  
+                                                        <td width="25%">{!drp.Demo_Request__r.name}</td>                                                       
+                                                        <td width="25%">{!drp.Product__r.name}</td>
+                                                        <td width="25%">{!drp.Product_Family__c}</td>
+                                                        <td width="25%">{!drp.Quantity__c}</td>
+                                                    </tr>                                   
+                                                    </apex:repeat>                                                    
+                                                </table>
+                                            </td>
+                                        </tr>    -->               
+                                    </apex:repeat>
+                                </thead>
+                             
+                                <tbody>
+                                    
+                                </tbody>  
+                        </table>
+                    </div>  
+                   
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<a id="back2Top" href="#" title="Go to Top">&#10148;</a>
+
+<!--#############################FOOTER SECTION################################--->
+        <section>
+            <c:portal_footer />
+        </section>
+        <!--#############################################################--->
+<!-- end of navbar-->
+
+
+<!--Table print FUnction -->
+<script>
+function printData()
+{
+   var divToPrint=document.getElementById("demoRequestTable");
+   newWin= window.open("");
+   newWin.document.write(divToPrint.outerHTML);
+   newWin.print();
+   newWin.close();
+}
+
+$('button').on('click',function(){
+printData();
+})
+
+</script>
+
+</body>
+</apex:form>
+</apex:page>
+
+***************************************apex class********************************************************
+global class Clone_DemoRequestListCtrl  {
+
+ public contact con{get;set;}
+ global Clone_DemoRequestListCtrl(){
+  string conid=apexpages.currentpage().getparameters().get('id');
+        con=new contact();
+        con=[select id,name from contact where id=:conid];
+        }
+        
+    public  list<Demo_Request__c> getcaseviewList(){
+      string conid=apexpages.currentpage().getparameters().get('id');
+        
+        list<Demo_Request__c> cas = new list<Demo_Request__c>();        
+         cas = [select id,Name,Contact__c,createdDate__c,Status__c,Remarks__c,Demo_Start_Date_Time__c,DemoEndDate__c,DemoStartDate__c ,Demo_End_Date_Time__c,Approved__c,Installation_required__c,Mail_address_contact_person__c,CreatedDate,Model__c,Address_Formula__c,(select id,name,Demo_Request__r.name,Product__r.name,Product_Family__c,Quantity__c from Demo_Request_products__r) from Demo_Request__c where Contact_del__c=:conid ORDER BY CreatedDate desc limit 50000];
+        // system.debug('cas==========='+cas[0].Demo_Request_products__r); 
+        //system.debug('productfamily'+cas[0].Demo_Request_product__c.Product_Family__c);
+        return cas;
+    }
+    public PageReference RedirectDetailDemo(){
+      string conid=apexpages.currentpage().getparameters().get('id');
+        PageReference pr=new PageReference('/apex/DemoRequest_Apex?id='+conid);
+        pr.setRedirect(True);
+        return pr;
+    }
+}
