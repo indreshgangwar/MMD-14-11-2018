@@ -1,0 +1,150 @@
+<apex:page standardStylesheets="false" showHeader="false" sidebar="false" docType="html-5.0" controller="DemoRequestViewCtrl">
+<apex:form >
+<c:head_include ></c:head_include>
+<c:portal_Script ></c:portal_Script>
+<style>
+.download-center{
+    background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/demo-redquest-banner.jpg')}');
+    height:250px; 
+    min-height:250px; 
+    width:100%; 
+    margin:0; 
+    padding:0;     
+    background-size: cover;
+}
+</style>
+<!--navbar menu-->
+
+<body>
+<section>
+    <c:DealerSideMenu ></c:DealerSideMenu>
+</section>
+
+ <div id="main">
+            <div style="width:90%; margin:0 auto;">
+               <div class="row" style="min-height:350px;">
+                  <div class="row">
+                     <div class="title-grid">
+                        <h3>Demo Request Details</h3>
+                        <p class="forgotten" style="text-align:right;">
+                           <apex:commandLink action="{!createDemoReq}"><span style="margin-right:5px;"><i class="fa fa-file-text-o"></i></span> Create a new Demo Request </apex:commandLink>
+                           <span style="margin-left:10px; margin-right:10px; color:#333;">| </span>
+                           <span class="cursor">
+                              <apex:commandLink action="{!RedirectMyDemoRequest}"><span  style="margin-right:5px;"></span>Go to My Demo Requests</apex:commandLink>
+                           </span>
+                        </p>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="table-responsive" id="accordion">
+                        <!--////////////////TABLE start to view all the Details for a specific DOA Requests for Partner added by krrish//////////////////////////////////-->
+                        <table id="demoRequestTable" class="display table table-bordered" cellspacing="0" style="width:100%; ">
+                     
+                                 <div id="case-title">
+                                    <h5>Demo Request Number:- <span style="border: none; color: #5d5d5d;">{!demoReqlist.Name}</span></h5>
+                                 </div>
+                  
+                              <tr >
+                                 <th class="col-md-2 col-lg-2">Point of Contact:</th>
+                                 <td class="col-md-1 col-lg-1">{!demoReqlist.Contact__c}</td>  
+                                 <th class="col-md-2 col-lg-2">Demo Start Date Time:</th>
+                                 <td class="col-md-2 col-lg-2"><apex:outputText value="{0,date,yyyy-MM-dd HH:mm:ss }">
+                                     <apex:param value="{!demoReqlist.Demo_Start_Date_Time__c}" />
+                                     </apex:outputText>
+                                  </td>
+                                 <th class="col-md-2 col-lg-2">Demo End Date Time:</th>
+                                 <td colspan="6"><apex:outputText value="{0,date,yyyy-MM-dd HH:mm:ss }">
+                                                                <apex:param value="{!demoReqlist.Demo_End_Date_Time__c}" />
+                                                            </apex:outputText>
+                                                         </td>
+                                 
+                                  </tr>
+                                  <tr>
+                                  <th class="col-md-2 col-lg-2">Installation Required:</th>
+                                  <td ><apex:outputtext value="{!if(demoReqlist.Installation_required__c==true,'Yes','No') }"/></td>
+                                 <th>Remarks (if any)</th>
+                                 <td colspan="10">{!demoReqlist.Remarks__c}</td>
+                              </tr>
+                               
+                              <tr>
+                                 <td colspan="12">
+                                    <div id="case-title">
+                                       <h5>Product Details</h5>
+                                    </div>
+                                 </td>
+                              </tr>
+                               
+                             <th class="col-md-1">S.No</th>
+                              <th colspan="2">Product Name</th>
+                              <th colspan="2">Product Family</th>
+                              <th colspan="2">Quantity</th>
+                                <apex:variable value="{!0}" var="count"/>
+                              <apex:repeat value="{!demoReqlist.Demo_Request_products__r}" var="demoReql">
+                                <apex:variable value="{!count+1}" var="count"/>
+                                 <tr>
+                                    <td>{!count}</td>
+                                     <td colspan="2">{!demoReql.Product__r.name}</td>
+                                    <td colspan="2">{!demoReql.Product_Family__c}</td>
+                                    <td colspan="2">{!demoReql.Quantity__c}</td> 
+                                 </tr>
+                                                                                       
+                         </apex:repeat>  
+                           <tbody>
+                           </tbody>
+                        </table>
+                        <!--///////////TABLE End/////////////////--->
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         
+          <a id="back2Top" href="#" title="Go to Top">&#10148;</a>
+         <!--#############################FOOTER SECTION################################--->
+         <section>
+            <c:portal_footer />
+         </section>
+         <!--#############################################################--->
+         <!-- end of navbar-->
+        
+      </body>
+
+
+
+</apex:form>
+</apex:page>
+
+***********************************************************apex class******************************************************
+public class DemoRequestViewCtrl {
+public contact Con {get;set;}
+public string DemoReqid;
+
+    public DemoRequestViewCtrl(){
+        string conid=apexpages.currentpage().getparameters().get('id');
+        DemoReqid=ApexPages.currentPage().getParameters().get('DemoId');       
+        con=new contact();
+        con=[select id,name from contact where id=:conid];
+    }
+    
+   public Demo_Request__c getdemoReqlist(){
+   string Conid=ApexPages.currentPage().getParameters().get('id');
+   DemoReqid=ApexPages.currentPage().getParameters().get('DemoReqid');     
+   Demo_Request__c DemReq = new Demo_Request__c();        
+   DemReq = [select id,Name,Contact__c,createdDate__c,Status__c,Remarks__c,Demo_Start_Date_Time__c,DemoEndDate__c,DemoStartDate__c ,Demo_End_Date_Time__c,Installation_required__c,Model__c,(select id,name,Demo_Request__r.name,Product__r.name,Product_Family__c,Quantity__c,Demo_Request__c,Product__c from Demo_Request_products__r) from Demo_Request__c where  id=:DemoReqid ];
+       return DemReq;
+    }
+    
+     public PageReference createDemoReq(){
+        string Conid=ApexPages.currentPage().getParameters().get('id');
+        PageReference pr=new PageReference('/apex/DemoRequest_Apex?id='+Conid);
+        pr.setRedirect(True);
+        return pr;
+    }
+    
+     public PageReference RedirectMyDemoRequest(){
+        string Conid=ApexPages.currentPage().getParameters().get('id');
+        PageReference pr=new PageReference('/apex/DemoRequestList?id='+Conid);
+        pr.setRedirect(True);
+        return pr;
+    }
+ }
