@@ -1,0 +1,313 @@
+<apex:page standardStylesheets="false" showHeader="false" sidebar="false" docType="html-5.0" controller="ViewDOARequestCntrl">
+   <apex:form >
+      <c:head_include ></c:head_include>
+      <c:portal_Script ></c:portal_Script>
+      <meta name="viewport" content="width=device-width" />
+      <style>
+       @media all and (min-width: 960px) {
+         body{
+         font-size: 14px;
+         }
+         }
+         @media all and (max-width: 959px) and (min-width: 600px) {
+         body{
+         font-size: 15px;
+         }
+         .site-logo {
+         padding: 0px 31px !important;
+         margin: 0px 0px;
+         }
+         }
+         @media all and (max-width: 599px) and (min-width: 320px) {
+         body{
+         font-size: 17px;
+         }
+         .site-logo {
+         padding: 0px 14px !important;
+         margin: 0px 0px;
+         }
+         }
+         .download-center{
+         background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/demo-redquest-banner.jpg')}');
+         height:250px; 
+         min-height:250px; 
+         width:100%; 
+         margin:0; 
+         padding:0;     
+         background-size: cover;
+         }
+         /* FILE INPUT */
+         .fileUpload {
+         position: relative;
+         overflow: hidden;
+         margin: 10px;
+         cursor: pointer;
+         }
+         .fileUpload input.upload {
+         position: absolute;
+         top: 0;
+         right: 0;
+         margin: 0;
+         padding: 0;
+         font-size: 20px;
+         cursor: pointer;
+         opacity: 0;
+         filter: alpha(opacity=0);
+         width:50px;
+         }
+         .cursor a{
+         cursor:pointer;
+         font-size:14px;
+         }
+         .dataTables_filter input[type=search] {
+         border: 1px solid #c7c6c6;
+         height: 30px;
+         border-radius: 3px;
+         width: 250px;
+         margin-bottom: 10px;
+         margin-top: 10px;
+         }
+         .dataTables_filter optgroup, select{
+         border: 1px solid #c7c6c6;
+         height: 30px;
+         border-radius: 3px;
+         margin-bottom: 10px;
+         margin-top: 10px;
+         width:70px;
+         }
+         .dataTables_wrapper .dataTables_paginate .paginate_button{
+         padding: 0.2em 0.6em !important;
+         }
+      </style>
+      <body>
+         <script>
+            $(window).scroll(function() {
+                if($(this).scrollTop()>0) {
+                    $( ".navbar-me" ).addClass("fixed-me");
+                } else {
+                    $( ".navbar-me" ).removeClass("fixed-me");
+                }
+            });
+         </script>
+         <!--navbar menu-->
+         <section>
+            <div class="download-center">
+               <c:DealerSideMenu rendered="{!showinteger=2}"></c:DealerSideMenu>
+               <c:CustomerSideMenu rendered="{!showinteger=1}"></c:CustomerSideMenu>
+            </div>
+         </section>
+         <div id="main">
+            <div style="width:90%; margin:0 auto;">
+               <div class="row" style="min-height:350px;">
+                 
+                     <div class="title-grid">
+                        <h3>My DOA Details</h3>
+                        <p class="forgotten" style="text-align:right;">
+                           <apex:outputLink value="/apex/DOARequest?id={!currentRecordId }"><span style="margin-right:5px;"><i class="fa fa-file-text-o"></i></span> Create a new request </apex:outputLink>
+                           <span style="margin-left:10px; margin-right:10px; color:#333;">| </span>
+                           <span class="cursor">
+                               <apex:outputLink value="/apex/MyDOARequest?id={!currentRecordId }"><span  style="margin-right:5px;"></span>Go to My DOA</apex:outputLink>
+                           </span>
+                        </p>
+                     </div>
+                 
+                  
+                     <div class="table-responsive" id="accordion">
+                        <!--////////////////TABLE start to view all the Details for a specific DOA Requests for Partner added by krrish//////////////////////////////////-->
+                        <table id="demoRequestTable" class="display table table-bordered" cellspacing="0" style="width:100%; ">
+                           <tr >
+                              <td colspan="10" style="text-align: left;  font-size:13px;">
+                                 <div id="case-title">
+                                    <h5>Customer Details</h5>
+                                 </div>
+                              </td>
+                           </tr>
+                           <apex:repeat value="{!doaList}" var="dlist">
+                              <tr>
+                                 <th>Name:</th>
+                                 <td><span>{!dlist.Contact_Person_First_Name__c} &nbsp;{!dlist.Last_Name__c}</span></td>
+                                 <th>Company:</th>
+                                 <td>{!dlist.Company__c}</td>
+                                 <th>Email Address:</th>
+                                 <td>{!dlist.Email_Address__c}</td>
+                                 <th>Telephone:</th>
+                                 <td>{!dlist.Country_Code__c}-{!dlist.Telephone__c}</td>
+                                
+                              </tr>
+                              <tr>
+                               <th>Mobile Phone:</th>
+                                 <td>{!dlist.Country_Code__c}-{!dlist.Mobile_Phone__c}</td>
+                                 <th>Address</th>
+                                 <td colspan="9">{!dlist.Street__c} &nbsp;{!dlist.city__c} &nbsp;{!dlist.State_County__c} &nbsp;{!dlist.Country__c} &nbsp;{!dlist.Zip__c}</td>
+                              </tr>
+                              <!-- <tr>
+                                 <td colspan="10">
+                                    <div id="case-title">
+                                       <h5>Pickup Details</h5>
+                                    </div>
+                                 </td>
+                                 </tr>
+                                 <tr>
+                                 <th>Name:</th>
+                                 <td>{!dlist.Contact_person_First_Namep__c} &nbsp; {!dlist.Last_Namep__c}</td>
+                                 <th>Company:</th>
+                                 <td>{!dlist.Companyp__c}</td>
+                                 <th>Email Address:</th>
+                                 <td>{!dlist.Email_Addressp__c}</td>
+                                 <th>Telephone:</th>
+                                 <td>{!dlist.Telephonep__c}</td>
+                                 <th>Mobile Phone:</th>
+                                 <td>{!dlist.Mobile_Phonep__c}</td>
+                                 </tr>
+                                 <tr>
+                                 <th>Address</th>
+                                 <td colspan="9">{!dlist.Streetp__c} &nbsp;{!dlist.Cityp__c} &nbsp;{!dlist.Countryp__c} &nbsp;{!dlist.Zipp__c}</td>
+                                 </tr>-->
+                              <tr>
+                                 <td colspan="10">
+                                    <div id="case-title">
+                                       <h5>Delivery Details</h5>
+                                    </div>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <th>Name:</th>
+                                 <td ><span>{!dlist.Contact_person_First_Named__c} &nbsp;{!dlist.Last_Named__c}</span></td>
+                                 <th>Company:</th>
+                                 <td>{!dlist.Companyd__c}</td>
+                                 <th>Email Address:</th>
+                                 <td>{!dlist.Email_Addressd__c}</td>
+                                 <th>Telephone:</th>
+                                 <td>{!dlist.Country_Coded__c}-{!dlist.Telephoned__c}</td>
+                                
+                              </tr>
+                              <tr>
+                               <th>Mobile Phone:</th>
+                                 <td>{!dlist.Country_Coded__c}-{!dlist.Mobile_Phoned__c}</td>
+                                 <th>Address</th>
+                                 <td colspan="9">{!dlist.Streetd__c} &nbsp;{!dlist.Cityd__c}&nbsp;{!dlist.State_Countyd__c} &nbsp;{!dlist.Countryd__c} &nbsp;{!dlist.Zipd__c}</td>
+                              </tr>
+                              <tr>
+                                 <td colspan="10">
+                                    <div id="case-title">
+                                       <h5>Product Details</h5>
+                                    </div>
+                                 </td>
+                              </tr>
+                              <th colspan="2">Product Name</th>
+                              <th colspan="2">Product Family</th>
+                              <th colspan="2">Purchase Date and Time</th>
+                               <th colspan="2">Delivery Date and Time</th>
+                              <apex:repeat value="{!dlist.DOA_Products__r}" var="drp">
+                                 <tr>
+                                    <td colspan="2">{!drp.Product__r.name}</td>
+                                    <td colspan="2">{!drp.Product_Family__c}</td>
+                                    <td colspan="2">
+                                       <apex:outputText value="{0,date,yyyy-MM-dd HH:mm:ss }">
+                                          <apex:param value="{!drp.Date_Time__c}"/>
+                                       </apex:outputText>
+                                    </td>
+                                    <td colspan="2">
+                                       <apex:outputText value="{0,date,yyyy-MM-dd HH:mm:ss }">
+                                          <apex:param value="{!drp.Delivery_Date_Time__c}"/>
+                                       </apex:outputText>
+                                    </td>
+                                 </tr>                                 
+                              </apex:repeat>
+                           </apex:repeat>
+                           <tr>
+                                 <td colspan="10">
+                                    <div id="case-title">
+                                       <h5>Fault Description</h5>
+                                    </div>
+                                 </td>
+                              </tr>
+                              <tr><td colspan="10">{!description}</td></tr>
+                        </table>
+                        <!--///////////TABLE End/////////////////--->
+                     </div>
+                  
+               </div>
+            </div>
+         </div>
+         
+         <!--#############################FOOTER SECTION################################--->
+         <section>
+            <c:portal_footer />
+         </section>
+         <a id="back2Top" href="#" title="Go to Top">&#10148;</a>
+         <!--#############################################################--->
+      </body>
+   </apex:form>
+</apex:page>
+********************************************************apex class ********************************************
+/*
+       author:krrish
+       createdDate:14-11-2018
+       created for: This apex class implemented for view the Details of specific DOA.
+
+*/
+
+global class ViewDOARequestCntrl {
+public id currentRecordId{get;set;} 
+public integer showinteger{get;set;} 
+public string description{get;set;}
+public ViewDOARequestCntrl()
+{
+currentRecordId  = ApexPages.CurrentPage().getparameters().get('id');
+  contact con =[select id,Name,RecordTypeId  from contact where id=:currentRecordId ];
+  Id DealerShowId = Schema.SObjectType.Contact.RecordTypeInfosByName.get('Customer').RecordTypeId;
+ // Id DealerShowId = Schema.SObjectType.Contact.RecordTypeInfosByName.get('Dealer').RecordTypeId;
+  if(con.RecordTypeId == DealerShowId )
+  {
+  system.debug('showinteger==='+showinteger);
+  showinteger=1;
+  }
+  else 
+  {
+   system.debug('showinteger-------'+showinteger);
+  showinteger=2;
+  }try{
+  String doaid = ApexPages.currentPage().getParameters().get('doid');
+  for(DOA__c dd:[SELECT Id,(select id,Description__c from DOA_Products__r limit 1) from DOA__c where Contact__c=:currentRecordId  AND Id=:doaid]){
+      description=dd.DOA_Products__r[0].Description__c ;
+  }
+  }catch(exception e){}
+}
+   // this method return the specific DOA data having append id i.e 'doid' related to the contact whose 'id' passed into the url. 
+   public List<DOA__c> getdoaList(){
+    
+  
+    String doacurrentid = ApexPages.currentPage().getParameters().get('id');
+    String doaid = ApexPages.currentPage().getParameters().get('doid');
+    system.debug('doacurrentid ================'+doacurrentid );
+    system.debug('doaid============'+doaid);
+    List<DOA__c> doa = new List<DOA__c>();
+    try{
+   doa = [SELECT Id,Name,Company__c,Companyd__c,Companyp__c,Contact_Person_First_Name__c,Contact_person_First_Named__c,Contact_person_First_Namep__c,Last_Name__c,Last_Named__c,Last_Namep__c,Country_Code__c,State_Countyd__c,Country_Coded__c,Telephoned__c,Telephonep__c,Telephone__c,Email_Addressp__c,Email_Addressd__c,Email_Address__c,Mobile_Phoned__c,Mobile_Phonep__c,Mobile_Phone__c,Cityp__c,Cityd__c,city__c,Streetd__c,Streetp__c,Street__c,Zipp__c,State_County__c,Zipd__c,Zip__c,Countryp__c,Countryd__c,Country__c,(select id,Name,DOA__r.name,Product__r.name,Product_Family__c,Date_Time__c,Description__c,Delivery_Date_Time__c from DOA_Products__r) from DOA__c where Contact__c=:doacurrentid AND Id=:doaid];
+    system.debug('====doa========'+doa);
+    }catch(exception e){}
+    return doa;
+    
+    }
+     //Method for Redirecting to DOARequest Page for Create a new request.
+     public pageReference RedirectDoa(){
+    
+       string idd=ApexPages.currentPage().getParameters().get('id');
+       PageReference pr=new PageReference('/apex/DOARequest?id='+idd);
+       pr.setRedirect(True);
+       return pr;
+    
+    }
+    
+    //Method for Redirecting to MyDOARequest Page to show all DOA Request related to current id.
+    public PageReference RedirectDetaildoa(){
+        string idd=ApexPages.currentPage().getParameters().get('id');
+        PageReference pr=new PageReference('/apex/MyDOARequest?id='+idd);
+        pr.setRedirect(True);
+        return pr;
+    }
+
+
+
+}
