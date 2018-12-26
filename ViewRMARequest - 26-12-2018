@@ -1,0 +1,255 @@
+<apex:page standardStylesheets="false" showHeader="false" sidebar="false" docType="html-5.0" controller="ViewRMARequestCntrl">
+  <apex:form >
+      <c:head_include ></c:head_include>
+      <c:portal_Script ></c:portal_Script>
+      <style>
+         .download-center{
+         background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/demo-redquest-banner.jpg')}');
+         height:250px; 
+         min-height:250px; 
+         width:100%; 
+         margin:0; 
+         padding:0;     
+         background-size: cover;
+         }
+         /* FILE INPUT */
+         .fileUpload {
+         position: relative;
+         overflow: hidden;
+         margin: 10px;
+         cursor: pointer;
+         }
+         .fileUpload input.upload {
+         position: absolute;
+         top: 0;
+         right: 0;
+         margin: 0;
+         padding: 0;
+         font-size: 20px;
+         cursor: pointer;
+         opacity: 0;
+         filter: alpha(opacity=0);
+         width:50px;
+         }
+         .cursor a{
+         cursor:pointer;
+         font-size:14px;
+         }
+         .dataTables_filter input[type=search] {
+         border: 1px solid #c7c6c6;
+         height: 30px;
+         border-radius: 3px;
+         width: 250px;
+         margin-bottom: 10px;
+         margin-top: 10px;
+         }
+         .dataTables_filter optgroup, select{
+         border: 1px solid #c7c6c6;
+         height: 30px;
+         border-radius: 3px;
+         margin-bottom: 10px;
+         margin-top: 10px;
+         width:70px;
+         }
+         .dataTables_wrapper .dataTables_paginate .paginate_button{
+         padding: 0.2em 0.6em !important;
+         }
+      </style>
+      <body>
+         <script>
+            $(window).scroll(function() {
+                if($(this).scrollTop()>0) {
+                    $( ".navbar-me" ).addClass("fixed-me");
+                } else {
+                    $( ".navbar-me" ).removeClass("fixed-me");
+                }
+            });
+         </script>
+         <!--navbar menu-->
+         <section>
+      <div class="download-center">
+         <c:DealerSideMenu rendered="{!showinteger=2}"></c:DealerSideMenu>
+     <c:CustomerSideMenu rendered="{!showinteger=1}"></c:CustomerSideMenu>
+     </div>
+      </section>
+      <div id="main">
+            <div style="width:90%; margin:0 auto;">
+               <div class="row" style="min-height:350px;">
+                  <div class="row">
+                     <div class="title-grid">
+                        <h3>My RMA Details</h3>
+                        <p class="forgotten" style="text-align:right;">
+                         <!--  <apex:commandLink action="{!RedirectRma}"><span style="margin-right:5px;"><i class="fa fa-file-text-o"></i></span> Create a new request </apex:commandLink> -->
+                            <apex:outputLink value="/apex/RMARequest?id={!currentRecordId}"><span style="margin-right:5px;"><i class="fa fa-file-text-o"></i></span> Create New RMA Request </apex:outputLink>
+                           <span style="margin-left:10px; margin-right:10px; color:#333;">| </span>
+                           <span class="cursor">
+                          <!--    <apex:commandLink action="{!RedirectDetailRma}"><span  style="margin-right:5px;"></span>Go to My RMA</apex:commandLink> -->
+                              <apex:outputLink value="/apex/MyRMARequest?id={!currentRecordId}"><span style="margin-right:5px;"><i class="fa fa-file-text-o"></i></span> Go to My RMA </apex:outputLink>
+                           </span>
+                        </p>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="table-responsive" id="accordion">
+                        <!--////////////////TABLE start to view all the Details for a specific DOA Requests for Partner added by krrish//////////////////////////////////-->
+                        <table id="demoRequestTable" class="display table table-bordered" cellspacing="0" style="width:100%; ">
+                           <tr >
+                              <td colspan="10" style="text-align: left;  font-size:13px;">
+                                 <div id="case-title">
+                                    <h5>Customer Details</h5>
+                                 </div>
+                              </td>
+                           </tr>
+                           <apex:repeat value="{!rmaList}" var="rmlist">
+                              <tr>
+                                 <th>Name:</th>
+                                 <td>{!rmlist.First_Name__c} {!rmlist.Last_Name__c}</td>
+                                 <th>Company:</th>
+                                 <td>{!rmlist.Company__c}</td>
+                                 <th>Email Address:</th>
+                                 <td>{!rmlist.Email__c}</td>
+                                 <th>Telephone:</th>
+                                 <td>{!rmlist.Country_Code__c}-{!rmlist.Telephone__c}</td>
+                                 <th>Opening Hour:</th>
+                                 <td >
+                                 <apex:outputField value="{!rmlist.Opening_Hour__c}"/>
+                                 
+                                      <!--  <apex:outputText value="{0,date,yyyy-MM-dd HH:mm:ss }">
+                                   <apex:param value="{!rmlist.Opening_Hour__c}"/>
+                                     <apex:param value="{! NOW() }" />
+
+                                       </apex:outputText> -->
+                                    </td> 
+                              </tr>
+                               <tr>
+                               
+                                 <th>Address:</th>
+                                 <td colspan="9">{!rmlist.Street__c} {!rmlist.City__c} {!rmlist.State_County__c} {!rmlist.Country__c} {!rmlist.ZIP__c}</td>
+                              </tr>
+                              <tr>
+                                 <td colspan="10">
+                                    <div id="case-title">
+                                       <h5>Delivery Details</h5>
+                                    </div>
+                                 </td>
+                              </tr>
+                              <tr>
+                                 <th>Name:</th>
+                                 <td>{!rmlist.First_Named__c} {!rmlist.Last_Named__c}</td>
+                                 <th>Company:</th>
+                                 <td>{!rmlist.Companyd__c}</td>
+                                 <th>Email Address:</th>
+                                 <td>{!rmlist.Emaild__c}</td>
+                                 <th>Telephone:</th>
+                                 <td>{!rmlist.Country_Coded__c}-{!rmlist.Telephoned__c}</td>
+                                 <th>Opening Hour:</th>
+                                <td><apex:outputField value="{!rmlist.Opening_Hourd__c}"/></td>
+                               <!--  <td>{!rmlist.Opening_Hourd__c}</td> -->
+                              </tr>
+                              <tr>
+                                 <th>Address:</th>
+                                 <td colspan="9">{!rmlist.Streetd__c} {!rmlist.Cityd__c} {!rmlist.State_Countyd__c} {!rmlist.Countryd__c} {!rmlist.ZIPd__c}</td>
+                              </tr>
+                                 
+                                 <tr>
+                                 <td colspan="10">
+                                    <div id="case-title">
+                                       <h5>Product Details</h5>
+                                    </div>
+                                 </td>
+                              </tr>
+                              <th colspan="3">Product Name</th>
+                              <th colspan="3">Product Family</th>
+                              <th colspan="3">Purchase Date and Time</th>
+                              <th colspan="3">Installation Date and Time</th>
+                              <apex:repeat value="{!rmlist.RMA_Products__r}" var="rma">
+                                 <tr>
+                                    <td colspan="3">{!rma.Product__r.name}</td>
+                                    <td colspan="3">{!rma.Product_Family__c}</td>
+                                    <td colspan="3"><apex:outputText value="{0,date,yyyy-MM-dd HH:mm:ss a }">
+                                                                    <apex:param value="{!rma.Purchase_Date__c}"/>
+                                                                  </apex:outputText></td>
+                                   <td colspan="3"><apex:outputText value="{0,date,yyyy-MM-dd HH:mm:ss a}">
+                                                                    <apex:param value="{!rma.Installation_Date__c}"/>
+                                                                  </apex:outputText></td>
+                                 </tr>
+                              </apex:repeat> 
+                                 
+                                  
+                           </apex:repeat>
+                           <tbody>
+                           </tbody>
+                        </table>
+                        <!--///////////TABLE End/////////////////--->
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <a id="back2Top" href="#" title="Go to Top">&#10148;</a>
+         <!--#############################FOOTER SECTION################################--->
+         <section>
+            <c:portal_footer />
+         </section>
+         <!--#############################################################--->
+         <!-- end of navbar-->
+        
+      </body>
+   </apex:form>
+</apex:page>
+******************************************************************apex classes **************************************
+global class ViewRMARequestCntrl  {
+public id currentRecordId{get;set;} 
+public integer showinteger{get;set;} 
+public ViewRMARequestCntrl ()
+{
+currentRecordId  = ApexPages.CurrentPage().getparameters().get('id');
+  contact con =[select id,Name,RecordTypeId  from contact where id=:currentRecordId ];
+  Id DealerShowId = Schema.SObjectType.Contact.RecordTypeInfosByName.get('Customer').RecordTypeId;
+ // Id DealerShowId = Schema.SObjectType.Contact.RecordTypeInfosByName.get('Dealer').RecordTypeId;
+  if(con.RecordTypeId == DealerShowId )
+  {
+  system.debug('showinteger==='+showinteger);
+  showinteger=1;
+  }
+  else 
+  {
+   system.debug('showinteger-------'+showinteger);
+  showinteger=2;
+  }
+}
+   // this method return the specific RMA data having append id i.e 'rmaid' related to the contact whose 'id' passed into the url. 
+   public List<RMA__c> getrmaList(){
+    
+    
+    String doacurrentid = ApexPages.currentPage().getParameters().get('id');
+    String rmpid = ApexPages.currentPage().getParameters().get('rmid');
+    system.debug('doacurrentid ================'+doacurrentid );
+    system.debug('rmpid ============>'+rmpid);
+    List<RMA__c> rm = new List<RMA__c>();
+   rm = [SELECT Id,First_Name__c,Last_Name__c,Opening_Hour__c,Street__c,Country_Code__c,Country_Coded__c,Telephone__c,ZIP__c,Email__c,Country__c,State_County__c,State_Countyd__c,Company__c,City__c,Cityd__c,companyd__c,Countryd__c,Emaild__c,First_Named__c,Last_Named__c,Opening_Hourd__c,Streetd__c,Telephoned__c,ZIPd__c,(select id,Name,RMA__r.name,Product__r.name,Product_Family__c,Installation_Date__c,Purchase_Date__c from RMA_Products__r) from RMA__c where Contact__c=:doacurrentid AND Id=:rmpid];
+    system.debug('====rm========'+rm);
+    return rm;
+    
+    }
+     //Method for Redirecting to RMARequest Page for Create a new request.
+     public pageReference RedirectRma(){
+    
+       string idd=ApexPages.currentPage().getParameters().get('id');
+       PageReference pr=new PageReference('/apex/RMARequest?id='+idd);
+       pr.setRedirect(True);
+       return pr;
+    
+    }
+    
+    //Method for Redirecting to MyRMARequest Page to show all RMA Request related to current id.
+    public PageReference RedirectDetailRma(){
+        string idd=ApexPages.currentPage().getParameters().get('id');
+        PageReference pr=new PageReference('/apex/MyRMARequest?id='+idd);
+        pr.setRedirect(True);
+        return pr;
+    }
+
+
+
+}
