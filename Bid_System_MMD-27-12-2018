@@ -1,0 +1,950 @@
+<!----------------
+   Author: Anita
+           Created Date: 20/11/2018
+           Created For: This apex class is implemented for "RFQ's"object to request a quotation by Dealer/Distributor/Sub-dealer/retailer on portal.
+   ------------------------>
+<apex:page standardStylesheets="false" showHeader="false" sidebar="false" docType="html-5.0" controller="BidController_clone" id="pgid">
+   <c:head_include ></c:head_include>
+   <c:portal_Script ></c:portal_Script>
+   <meta name="viewport" content="width=device-width" />
+   <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet" />
+   <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+   <style>
+      @media all and (min-width: 960px) {
+      body{
+      font-size: 14px;
+      }
+      }
+      @media all and (max-width: 959px) and (min-width: 600px) {
+      body{
+      font-size: 15px;
+      }
+      .site-logo {
+      padding: 0px 31px !important;
+      margin: 0px 0px;
+      }
+      }
+      @media all and (max-width: 599px) and (min-width: 320px) {
+      body{
+      font-size: 17px;
+      }
+      .site-logo {
+      padding: 0px 14px !important;
+      margin: 0px 0px;
+      }
+      }
+      .download-center{
+      background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/profile-banner.jpg')}');
+      height:200px; 
+      min-height:250px; 
+      width:100%; 
+      margin:0; 
+      padding:0;     
+      background-size: cover;
+      }
+      /* FILE INPUT */
+      .fileUpload {
+      position: relative;
+      overflow: hidden;
+      margin: 10px;
+      cursor: pointer;
+      }
+      .fileUpload input.upload {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+      padding: 0;
+      font-size: 20px;
+      cursor: pointer;
+      opacity: 0;
+      filter: alpha(opacity=0);
+      width:50px;
+      }
+      .cursor a{
+      cursor:pointer;
+      font-size:14px;
+      position:right;
+      }
+      .switch-button{ 
+      padding: 3px 12px!important;
+      height:30px!important;
+      }
+      .btn-width
+      {
+      width: 150px;
+      }
+      .form-control{
+      height:34px !important;
+      padding: 0 15px !important;
+      }
+      .textarea-height{
+      height:80px !important;
+      }
+       .error-msg{
+                 color: red;
+                list-style-type: none;
+                padding: 0px 0 0 0;
+                font-size: 11px;
+                line-height: 8px;
+
+         }
+      .error-msg-output {
+             color: red;
+             list-style-type: none;
+             font-size: 11px;
+             position: absolute;
+         }
+         .req-mark{
+            color: red;
+            font-size: 17px;
+            line-height: 16px;
+         }
+        .apex-button{
+         height: 28px; 
+         width: 130px;  
+         margin: 0;  
+         padding: 5px 0px;
+         vertical-align: middle;  
+         border: 0;  
+         font-size: 13px;  
+         font-weight: 400;  
+         line-height: 18px;  
+         float: left; 
+         margin: 4px 10px 8px 0px;
+         text-align:center;
+         border-radius:3px;
+         cursor:pointer;
+         }
+   </style>
+   <body>
+      <script>
+         $(window).scroll(function() {
+             if($(this).scrollTop()>0) {
+                 $( ".navbar-me" ).addClass("fixed-me");
+             } else {
+                 $( ".navbar-me" ).removeClass("fixed-me");
+             }
+         });
+      </script>
+      <!--   <script type="text/javascript">
+         $(function () {
+         $("#chkPassport").click(function () {
+          if ($(this).is(":checked")) {
+              $("#dvPassport").show();
+              $("#AddPassport").hide();
+          } else {
+              $("#dvPassport").hide();
+              $("#AddPassport").show();
+          }
+         });
+         });
+         </script>  -->
+      <!--navbar menu-->
+      <section>
+         <c:DealerSideMenu ></c:DealerSideMenu>
+      </section>
+      <div id="main">
+         <apex:form id="frmid" >
+            <div style="width:90%; margin:0 auto;">
+               <div class="row" style="min-height:350px;">
+                  <div class="title-grid">
+                     <h3>New Quote Request</h3>
+                     <p class="forgotten" style="text-align:right;">
+                     <apex:outputLink value="/apex/MyRfq_MMD?id={!contactId }">
+                                 <span style="margin-right:5px;"><i class="fa fa-file-text-o"></i></span> View Quote Request List</apex:outputLink>
+                     </p>
+                  </div>
+                  <span Class="error-msg">Items marked with (*) are required.</span>
+                  <div class="row">
+                  <div class="col-md-12" style="height:10px;">
+                    <apex:outputText value="{!errormsg}" styleClass="error-msg-output"></apex:outputText>
+                    <apex:outputText value="{!errormsgDate}" styleClass="error-msg-output"></apex:outputText>
+                </div>
+                </div>
+                  <!--Request form start -->
+                  <div class="panel panel-default" style="margin-top:10px;">
+                     <div class="panel-body" id="case-title">
+                       
+                        <div class="row">
+                           <div class="form-row form-group " style="margin-right:0; margin-left: 0px;">
+                              <div class="form-group col-md-3 col-sm-6">
+                                 <label for="Request for"> Request for<span class="req-mark">*</span></label>
+                                 <apex:selectList value="{!Requestfor}" size="1" multiselect="false"  styleClass="form-control" id="req1">
+                                   <apex:actionSupport event="onchange" action="{!ClienttypeValue}" reRender="ClientDetails"/>
+                                    <apex:selectOptions value="{!RequestforList}">
+                                    </apex:selectOptions>
+                                 </apex:selectList>
+                                 <!-- <select class="form-control">
+                                    <option value="individual">Individual</option>
+                                    <option value="commercial">Commercial</option>
+                                    </select>-->
+                              </div>
+                              <div class="form-group col-md-3 col-sm-6">
+                                 <label for="Priority"> Priority<span class="req-mark">*</span> </label>
+                                 <apex:selectList value="{!Priority}" size="1" multiselect="false"  styleClass="form-control" id="pr1">
+                                    <apex:selectOptions value="{!PriorityList}">
+                                    </apex:selectOptions>
+                                 </apex:selectList>
+                                 <!--<select class="form-control">
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                    </select>-->
+                              </div>
+                              <div class="form-group col-md-3 col-sm-6">
+                                 <label for="client">Client<span class="req-mark">*</span></label>
+                                 <apex:selectList value="{!Client}" size="1" multiselect="false"  styleClass="form-control" id="cl1">
+                                    <apex:selectOptions value="{!ClientList}">
+                                    </apex:selectOptions>
+                                 </apex:selectList>
+                                 <!--<select class="form-control selector">
+                                    <option value="New client">New client</option>
+                                    <option value="Existing client">Existing client</option>
+                                    </select>-->
+                              </div>
+                              <div class="form-group col-md-3 col-sm-6">
+                                 <label>Expected Deal Closing Date <span class="req-mark">*</span> </label>
+                                 <!--     <apex:input styleclass="form-control" type="date" value="{!DealClosingDate}" id="date1"  />  -->
+                                 <!--<input type="date" class="form-control" placeholder="Choose" />-->
+                                 <apex:input styleclass="form-control" type="date" value="{!DealClosingDate}" id="date1" >
+                                    <apex:actionSupport event="onchange" reRender="date1id"/>
+                                 </apex:input>
+                                 <apex:outputPanel id="date1id">
+                                    <apex:outputText value="Invalid Date!" rendered="{!IF(AND(NOT(ISBLANK(DealClosingDate)),DealClosingDate < TODAY()), true, false)}" styleClass="error-msg-output"></apex:outputText>
+                                 </apex:outputPanel>
+                              </div>
+                           </div>
+                        </div>
+                        <h5>Add Product Description</h5>
+                        <apex:messages styleClass="error-msg" />
+                        <!--        <apex:outputText value="{!errormsgProd}" rendered="{!allProductList==''}"> </apex:outputText>  -->
+                        <!--product add table start -->
+                        <div class="table-responsive">
+                           <!--   <div class="form-row ">  
+                              <div class="col-md-12">  -->
+                           <apex:outputPanel id="ProdTabId">
+                              <table class="table table-bordered case-summary-table" id="ProductAddTable" style="margin-bottom: 5px;">
+                                 <tbody>
+                                    <apex:variable var="count" value="{!0}"   />
+                                    <apex:repeat value="{!allProductList}" var="apList" id="TABLIST">
+                                       <tr id="tr1">
+                                          <td class="col-md-1">
+                                             <apex:inputCheckbox id="myCheck"  style="margin: 11px 0px 0px 15px;">
+                                                <apex:actionSupport event="onclick" reRender="none"  action="{!checkFunction}">
+                                                   <apex:param name="checkboxcheck" value="{!count}"/>
+                                                </apex:actionSupport>
+                                             </apex:inputCheckbox>
+                                             <!--   <input type="checkbox" id="myCheck" name="chk" style="margin: 11px 0px 0px 15px;"  onclick="myCheckFunction({!count})"/>  -->
+                                          </td>
+                                          <td class="col-md-4" id="tdx1">
+                                             <apex:selectList value="{!apList.selectedproductFamily}" size="1" multiselect="false" styleClass="form-control" id="hav7"  >
+                                                <apex:selectOptions value="{!apList.productFamily}"  >
+                                                </apex:selectOptions>
+                                                <apex:actionSupport event="onchange" action="{!WrapProductlist}" reRender="i12">
+                                                   <apex:param name="windex" value="{!count}" assignTo="{!wrapIndex}"/>
+                                                </apex:actionSupport>
+                                             </apex:selectList>
+                                          </td>
+                                          <td class="col-md-4 tdxxx" id="td1">
+                                             <apex:outputPanel id="i12">
+                                                <apex:selectList value="{!apList.selectedProd}" size="1" multiselect="false" styleClass="form-control">
+                                                   <apex:selectOptions id="oppid" value="{!apList.product}"  />
+                                                </apex:selectList>
+                                             </apex:outputPanel>
+                                          </td>
+                                          <td class="col-md-3" id="qty1">
+                                             <apex:input type="text" styleClass="form-control" value="{!apList.productInfoquantity}" html-placeholder="Qty."/>
+                                          </td>
+                                       </tr>
+                                       <apex:variable value="{!count+1}" var="count"/>
+                                    </apex:repeat>
+                                 </tbody>
+                              </table>
+                              <div class="form-row form-group" style="float:right;">
+                              
+                                 <apex:outputPanel >
+                                    <div class="apex-button btn-info"><i class="fa fa fa-plus" aria-hidden="true" style="margin-right:5px;"></i>Add More </div>
+                                    <!--<span  class="cursor"><i class="fa fa-plus-circle" style="font-size:25px;color:#0565cc;" title="Add Product"></i> </span>-->
+                                    <apex:actionSupport event="onclick" action="{!addproductrow}" reRender="ProdTabId"/>
+                                 </apex:outputPanel>
+                                 <apex:outputPanel >
+                                    <div class="apex-button btn-danger" style="margin-right: 0;"><i class="fa fa-trash" aria-hidden="true" style="margin-right:5px;"></i>Delete</div>
+                                    <!--<span  class="cursor"><i class="fa fa-times-circle" style="font-size:25px;color:#d81712;" title="Delete Product"></i></span>-->
+                                    <apex:actionSupport event="onclick" action="{!DelProductRow}" reRender="ProdTabId"/>
+                                 </apex:outputPanel>
+                              </div>
+                           </apex:outputPanel>
+                           <!--   </div>  -->
+                        </div>
+                        <!-- Product Add Table Close Here-->        
+                        <div class="form-row form-group ">
+                           <div class="checkbox" >
+                              <!--   <label><input type="checkbox" id="chkPassport" />Do you want to register this project for special bid?</label><br/>  -->
+                              <apex:outputPanel id="panel1">
+                                 <apex:inputCheckbox value="{!show}" style="margin: 2px 6px 0px 0px; float: left; position: relative;">
+                                    Do you want to register this project for special bid?
+                                    <apex:actionsupport event="onchange" action="{!change}" rerender="ClientDetails" />
+                                 </apex:inputCheckbox>
+                              </apex:outputPanel>
+                           </div>
+                        </div>
+                        <apex:outputpanel id="ClientDetails">
+                           <apex:outputpanel rendered="{!bool}" >
+                              <!--client details form start -->
+                              <div class=" table-section" id="dvPassport" >
+                                 <h5>Add  Client Details</h5>
+                                 <apex:outputText value="{!errormsg1}"  styleClass="error-msg"></apex:outputText>
+                                 <!--row one start edited by suman 22-Sep-2018 -->
+                                 <div class="row">
+                                    <div class="form-row form-group ">
+                                       <div class="form-group col-md-3 col-sm-6">
+                                          <label>Client Type<span class="req-mark">*</span></label>
+                                          <apex:outputPanel ></apex:outputPanel>
+                                          <apex:selectList value="{!ClientType}" size="1" multiselect="false"  styleClass="form-control" id="clt1"  disabled="true">
+                                             <apex:selectOptions value="{!ClientTypeList}">
+                                             </apex:selectOptions>
+                                          </apex:selectList>
+                                       </div>
+                                       <div class="form-group col-md-3 col-sm-6">
+                                          <label>Client Name<span class="req-mark">*</span></label>
+                                          <apex:inputtext styleclass="form-control" value="{!ContactInfo}" id="contactinfo" html-placeholder="Client Name" />
+                                       </div>
+                                       <div class="form-group col-md-3 col-sm-6">
+                                          <label>Contact First Name <!--<span class="req-mark">*</span>--></label>
+                                          <apex:inputtext styleclass="form-control" value="{!ClientInfo}" id="Clienttinfo" html-placeholder="Contact First Name" />
+                                       </div>
+                                        <div class="form-group col-md-3 col-sm-6">
+                                          <label>Contact Last Name <span class="req-mark">*</span></label>
+                                          <apex:inputtext styleclass="form-control" value="{!Contactlast}" id="Contactlast" html-placeholder="Contact Last Name" />
+                                       </div>
+                                      
+                                    </div>
+                                    <!--row one end-->
+                                    <!--row two start here -->
+                                    <div class="form-row form-group ">
+                                     <div class="form-group col-md-3 col-sm-6">
+                                          <label>Mobile Number<span class="req-mark">*</span></label>
+                                          <apex:inputtext styleclass="form-control" value="{!MobileNo}" id="Mobile" html-placeholder="Mobile Number">
+                                             <apex:actionSupport event="onchange" reRender="outid"/>
+                                          </apex:inputtext>
+                                          <apex:outputPanel id="outid">                                          
+                                             <apex:outputText value="Invalid Mobile Number!" rendered="{!if(AND(!ISNUMBER(MobileNo),LEN(MobileNo)>0) ,true,if(AND(LEN(MobileNo)>10,LEN(MobileNo)>0),true,false))}"   styleClass="error-msg-output"></apex:outputText>   
+                                          </apex:outputPanel>
+                                       </div>
+                                       <div class="form-group col-md-3 col-sm-6">
+                                          <label>Phone Number<span class="req-mark">*</span></label>
+                                 <div class="input-group" style="width:100%"> 
+                                 <apex:inputtext value="{!cCode}"   styleClass="form-control"  style="width:23%"   html-placeholder="+00">
+                                  <apex:actionSupport event="onchange" reRender="out1id"/>
+                                          </apex:inputtext>                                        
+                                        <apex:inputtext styleclass="form-control" value="{!PhoneNo}" id="Phone" html-placeholder="Phone Number" style="width:77%;" >
+                                             <apex:actionSupport event="onchange" reRender="out1id"/>
+                                          </apex:inputtext> </div>
+                                          <apex:outputPanel id="out1id">
+                                             <!--<apex:outputText value="Invalid Phone Number!" rendered="{!if(AND(!ISNUMBER(PhoneNo),LEN(PhoneNo)>0) ,true,if(AND(LEN(PhoneNo)!=10,LEN(PhoneNo)>0),true,false))}"   style="color:red"></apex:outputText>   -->
+                                          <apex:outputText value="Invalid Country Code!" rendered="{!if(!BEGINS(cCode,'+'),true,if(AND(!ISNUMBER(cCode),LEN(cCode)>0 ) ,true,false))}"  styleClass="error-msg-output"></apex:outputText>                                         
+                                             <apex:outputText value="Invalid Phone Number!" rendered="{!if(AND(!ISNUMBER(PhoneNo),LEN(PhoneNo)>0) ,true,false)}"  styleClass="error-msg-output" style="margin-left:120px;"></apex:outputText>
+                                          </apex:outputPanel>
+                                       </div>
+                                       <div class="form-group col-md-3 col-sm-6">
+                                          <label> Email Address<span class="req-mark">*</span></label>
+                                          <apex:outputPanel id="emailid1">
+                                             <apex:inputtext styleclass="form-control" value="{!Email}" id="EmailId" html-placeholder="Email" >
+                                                <apex:actionSupport event="onchange" reRender="emailid1" action="{!checkEmail}" />
+                                             </apex:inputtext>
+                                             <apex:outputText value="{!errormsgEmail}" rendered="{!AND(Email!='',Email!=null)}" styleClass="error-msg-output"/>
+                                          </apex:outputPanel>
+                                       </div>
+                                       <div class="form-group col-md-3 col-sm-3">
+                                          <label>Street<span class="req-mark">*</span></label>
+                                          <apex:inputtext styleclass="form-control" value="{!Street}" id="strt" html-placeholder="Street" />
+                                       </div>
+                                    </div>
+                                    <!--row two End here -->
+                                    <!--row Three start here -->
+                                    <div class="form-row form-group ">
+                                       <div class="form-group col-md-3 col-sm-6">
+                                          <label>City<span class="req-mark">*</span></label>
+                                          <apex:inputtext styleclass="form-control" value="{!City}" id="cityId" html-placeholder="City" />
+                                       </div>
+                                       <div class="form-group col-md-3 col-sm-6">
+                                          <label>County / State<span class="req-mark">*</span></label>
+                                          <apex:inputtext styleclass="form-control" value="{!CountyState}" id="countystateId" html-placeholder="County / State" >
+                                             <apex:actionSupport event="onchange" reRender="stateId"/>
+                                          </apex:inputtext>
+                                          <apex:outputPanel id="stateId">
+                                             <apex:outputText value="Enter Correct State Name !" rendered="{!if(AND(ISNUMBER(CountyState)),true,false)}" styleClass="error-msg-output"></apex:outputText>
+                                          </apex:outputPanel>
+                                       </div>
+                                      
+                                       <div class="form-group col-md-3 col-sm-6">
+                                          <label>Country<span class="req-mark">*</span></label>
+                                          <apex:inputtext styleclass="form-control" value="{!Country}" id="cntryId" html-placeholder="Country" >
+                                             <apex:actionSupport event="onchange" reRender="CountryId"/>
+                                          </apex:inputtext>
+                                          <apex:outputPanel id="CountryId">
+                                             <apex:outputText value="Enter Correct Country Name !" rendered="{!if(AND(ISNUMBER(Country)),true,false)}" styleClass="error-msg-output"></apex:outputText>
+                                          </apex:outputPanel>
+                                       </div>
+                                        <div class="form-group col-md-3 col-sm-6">
+                                          <label>Postcode / Zipcode<span class="req-mark">*</span></label>
+                                          <apex:inputtext styleclass="form-control" value="{!PostcodeZipcode}" id="postcodeId" html-placeholder="Postcode / Zipcode" />
+                                          <!-- <apex:actionSupport event="onchange" reRender="zipid"/>
+                                             </apex:inputtext>
+                                             <apex:outputPanel id="zipid">
+                                             <apex:outputText value="Incorrect Zip Value!" rendered="{!if(AND(!ISNUMBER(PostcodeZipcode),LEN(PostcodeZipcode)>0),true,false)}"   style="color:red">
+                                             </apex:outputText>
+                                             </apex:outputPanel>   -->
+                                       </div>
+                                    </div>
+                                    <!--row Three start here -->
+                                 </div>
+                              </div>
+                           </apex:outputpanel>
+                        </apex:outputpanel>
+                        <!--client details form end -->
+                        <div class="form-row form-group " style="margin-right:0; margin-left: 0px;">
+                           <div class="form-group ">
+                              <label for="Remarks">Remarks (if any)</label>
+                              <apex:inputTextarea styleclass="form-control textarea-height" rows="4"  value="{!Remarks}" id="remrk1" />
+                           </div>
+                        </div>
+                     </div>
+                     <div class="panel-footer text-right">
+                        <apex:commandButton value="Submit Request" action="{!save}"  styleClass="action-button btn-primary btn-width"  />
+                        <!--    <button type="button" class="action-button btn-info btn-width" onclick="demorequest()" >Submit Request</button>   -->
+                     </div>
+                  </div>
+                  <!--Request form close -->
+               </div>
+            </div>
+         </apex:form>
+      </div>
+      <!--#############################FOOTER SECTION################################--->
+      <section>
+         <c:portal_footer ></c:portal_footer>
+         <a id="back2Top" href="#" title="Go to Top">&#10148;</a>  
+      </section>
+      <!--#############################################################--->
+   </body>
+</apex:page>
+***********************************************apex class ******************************************
+/*--------------
+Author: Anita
+        Created Date: 20/11/2018
+        Created For: This apex class is implemented for "RFQ's"object to request a quotation by Dealer/Distributor/Sub-dealer/retailer on portal.
+------------------------*/
+
+public class BidController_clone {
+
+    public Id contactId{get;set;}
+    public string errormsg {
+        get;
+        set;
+    }
+    public string errormsg1 {
+        get;
+        set;
+    }
+    public string errormsgEmail {
+        get;
+        set;
+    }
+    public string errormsgProd {
+        get;
+        set;
+    }
+    public string errormsgDate{
+        get;
+        set;
+    }    
+    public boolean show {
+        get;
+        set;
+    }
+    public boolean bool {
+        get;
+        set;
+    }
+
+    /*-------------- Fields to be mapped ---------------*/
+    //RFQ
+    public list < selectOption > RequestforList {
+        get;
+        set;
+    }
+    public string Requestfor {
+        get;
+        set;
+    }
+    public list < selectOption > PriorityList {
+        get;
+        set;
+    }
+    public string Priority {
+        get;
+        set;
+    }
+    public list < selectOption > ClientList {
+        get;
+        set;
+    }
+    public string Client {
+        get;
+        set;
+    }
+    public Date DealClosingDate {
+        get;
+        set;
+    }
+    public String Remarks {
+        get;
+        set;
+    }
+
+
+    //Client Detail
+    public String Street {
+        get;
+        set;
+    }
+    public String City {
+        get;
+        set;
+    }
+    public String PostcodeZipcode {
+        get;
+        set;
+    }
+    public String CountyState {
+        get;
+        set;
+    }
+    public String Country {
+        get;
+        set;
+    }
+    public String ContactInfo {
+        get;
+        set;
+    }
+    public String Contactlast{
+        get;
+        set;
+    }
+    public String ClientInfo {
+        get;
+        set;
+    }
+    public String MobileNo {
+        get;
+        set;
+    }
+     public String cCode {
+        get;
+        set;
+    }
+    public String PhoneNo {
+        get;
+        set;
+    }
+    public String Email {
+        get;
+        set;
+    }
+    public list < selectOption > ClientTypeList {
+        get;
+        set;
+    }
+    public string ClientType {
+        get;
+        set;
+    }
+
+    public RFQ__c rfq {
+        get;
+        set;
+    }
+    public Client_Detail__c cd {
+        get;
+        set;
+    }
+    public RFQ_Product__c RfqProduct {
+        get;
+        set;
+    }
+    //variable declaration for Prouct Info
+    public list < selectOption > selectProductList {
+        get;
+        set;
+    }
+    public string selectProduct {
+        get;
+        set;
+    }
+    public list < selectOption > selectProdList {
+        get;
+        set;
+    }
+    public string selectedProd {
+        get;
+        set;
+    }
+    public list < selectOption > ProductFamilyList {
+        get;
+        set;
+    }
+    public string ProductFamily {
+        get;
+        set;
+    }
+    public Integer wrapIndex {
+        get;
+        set;
+    }
+    public list < allProducts > allProductList {
+        get;
+        set;
+    }
+    public Integer wquant2 {
+        get;
+        set;
+    }
+
+    //creating set for checkbox 
+    public Set < Integer > selectcheckbox;
+
+
+    public BidController_clone() {
+        contactId = ApexPages.currentPage().getParameters().get('Id');
+        DealClosingDate =system.today();
+        show = False;
+        selectcheckbox = new Set < Integer > ();
+        allProductList = new list < allProducts > ();
+        addproductrow();
+
+        RequestforList = new List < selectOption > ();
+
+        Schema.DescribeFieldResult fieldResult1 = RFQ__c.Request_for__c.getDescribe();
+        List < Schema.PicklistEntry > cou1 = fieldResult1.getPicklistValues();
+        for (Schema.PicklistEntry f: cou1) {
+            RequestforList.add(new SelectOption(f.getLabel(), f.getValue()));
+        }
+        RequestforList.sort();
+
+        PriorityList = new List < selectOption > ();
+
+        Schema.DescribeFieldResult fieldResult2 = RFQ__c.Priority__c.getDescribe();
+        List < Schema.PicklistEntry > cou2 = fieldResult2.getPicklistValues();
+        for (Schema.PicklistEntry f: cou2) {
+            PriorityList.add(new SelectOption(f.getLabel(), f.getValue()));
+        }
+
+
+        ClientList = new List < selectOption > ();
+
+        Schema.DescribeFieldResult fieldResult3 = RFQ__c.Client_Type__c.getDescribe();
+        List < Schema.PicklistEntry > cou3 = fieldResult3.getPicklistValues();
+        for (Schema.PicklistEntry f: cou3) {
+            ClientList.add(new SelectOption(f.getLabel(), f.getValue()));
+        }
+
+        ClientTypeList = new List < selectOption > ();
+
+        Schema.DescribeFieldResult fieldResult4 = Client_Detail__c.Type__c.getDescribe();
+        List < Schema.PicklistEntry > cou4 = fieldResult4.getPicklistValues();
+        for (Schema.PicklistEntry f: cou4) {
+            ClientTypeList.add(new SelectOption(f.getLabel(), f.getValue()));
+        }
+
+        ProductFamilyList = new List < selectOption > ();
+
+        Schema.DescribeFieldResult fieldResult3111 = Product2.Family.getDescribe();
+        ProductFamilyList.add(new SelectOption('–None–', '–None–'));
+        List < Schema.PicklistEntry > cou3111 = fieldResult3111.getPicklistValues();
+        for (Schema.PicklistEntry f: cou3111) {
+            ProductFamilyList.add(new SelectOption(f.getLabel(), f.getValue()));
+        }
+
+        rfq = new RFQ__c();
+        cd = new Client_Detail__c();
+        RfqProduct = new RFQ_Product__c();
+
+    }
+
+
+    //This method is used to save data of Client, RFQ and RFQ_Product.
+    public pageReference save() {
+
+        //Insertion of RFQ Detail Object data start
+        RFQ__c rfq = new RFQ__c();
+        if (RequestFor != '' && RequestFor != null && Priority != '' && Priority != null && Client != '' && Client != null && DealClosingDate != null ) {
+          if(DealClosingDate >= System.Today()){
+            rfq.Request_for__c = RequestFor;
+            rfq.Remarks__c = Remarks;
+            rfq.Priority__c = Priority;
+            rfq.Client_Type__c = Client;
+            rfq.Contact__c = contactId;
+            rfq.Deal_Closing_Date__c = DealClosingDate;
+            insert rfq;
+           
+            } else { errormsgDate = 'Expected Deal Closing Date Should be Greater than Today.';
+            return null;}
+       
+        } else {
+            errormsg = 'All fields are mandatory.';
+            return null;
+        }
+        
+        //Insertion of Client Detail Object data start
+        // if(ContactInfo!=null && ContactInfo!=''){
+        if (show == True) {
+            if (/*ClientType != '' && ClientType != null &&*/ ContactInfo != '' && ContactInfo != null  && Contactlast !='' && Contactlast != null && MobileNo != '' && MobileNo != null &&  MobileNo.isNumeric() && MobileNo.length()<=10 && cCode !=null && cCode != '' && cCode.startsWith('+') && cCode.substringAfter('+').isNumeric() && PhoneNo != '' && PhoneNo != null && PhoneNo.isNumeric() && Email != '' && Email != null && (errormsgEmail==null || errormsgEmail=='') && Street != '' && Street != null && City != '' && City != null && CountyState != '' && CountyState != null && PostcodeZipcode != '' && PostcodeZipcode != null && Country != '' && Country != null && !Country.isNumeric()) {
+                //  if(errormsgEmail ==null && errormsgEmail == ''){
+                Client_Detail__c cd = new Client_Detail__c();
+                cd.RFQ__c = rfq.id;
+                cd.Type__c = ClientType;
+                cd.Name = ContactInfo;
+                cd.Contact_Name__c = ClientInfo;
+                cd.Contact_Last_Name__c = Contactlast;
+                cd.MobileNo__c = MobileNo;
+                cd.Country_Code__c = cCode;
+                cd.Phone_No__c = PhoneNo;
+                cd.Email_Address__c = Email;
+                cd.Street__c = Street;
+                cd.City__c = City;
+                cd.State__c = CountyState;
+                cd.PostCode__c = PostcodeZipcode;
+                cd.Country__c = Country;
+                insert cd;
+
+                if (cd.id != null) {
+                    rfq.Priority1__c = true;
+                    update rfq;
+                }
+                /*  } else {
+                   errormsgEmail = 'Check Email!';
+                   return null; 
+                   } */
+
+            } else {
+                errormsg1 = 'All Client fields are mandatory.';
+                return null;
+            }
+        }
+
+        //Insertion of the RFQ products start
+
+        List < RFQ_Product__c > allReqProducts = new List < RFQ_Product__c > ();
+
+        for (allProducts allp: allProductList) {
+
+            if (allp.selectedproductFamily != null && allp.selectedproductFamily != '' && allp.productInfoquantity != null && allp.productInfoquantity != '') {
+
+                for (Product2 p2: [select id, Name, Family, Active__c from Product2 where Name =: allp.selectedProd]) {
+                    RFQ_Product__c RfqProduct = new RFQ_Product__c();
+                    RfqProduct.Name = p2.Name;
+                    RfqProduct.Product_Family__c = allp.selectedproductFamily;
+                    RfqProduct.Quantity__c = Decimal.valueof(allp.productInfoquantity);
+                    RfqProduct.RFQ__c = rfq.Id;
+                    RfqProduct.Product__c = p2.Id;
+                    allReqProducts.add(RfqProduct);
+
+                }
+
+            } else {
+
+                ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING, 'Please Fill all Product Details.'));
+                //  errormsgProd = 'Please Fill all Product Details.';
+                return null;
+            }
+        }
+
+
+        if (allReqProducts.size() > 0)
+            insert allReqProducts;
+        try {
+            createBid(rfq.id);
+        } catch (exception e) {}
+
+
+        PageReference page = new PageReference('/apex/MyRfq_MMD?id=' + contactId);
+        page.setRedirect(true);
+        return page;
+    }
+
+
+    public list < SelectOption > ProdFamilyList() {
+        ProductFamilyList = new List < selectOption > ();
+        ProductFamilyList.add(new SelectOption('', 'Please Select'));
+        Schema.DescribeFieldResult fieldResult3111 = Product2.Family.getDescribe();
+        List < Schema.PicklistEntry > cou3111 = fieldResult3111.getPicklistValues();
+        for (Schema.PicklistEntry f: cou3111) {
+            ProductFamilyList.add(new SelectOption(f.getLabel(), f.getValue()));
+        }
+        return ProductFamilyList;
+    }
+
+    //Use of Wrapper class
+    public class allProducts {
+        public list < selectOption > productFamily {
+            get;
+            set;
+        }
+        public list < selectOption > product {
+            get;
+            set;
+        }
+        public Integer quantity {
+            get;
+            set;
+        }
+        public String selectedproductFamily {
+            get;
+            set;
+        }
+        public String selectedProd {
+            get;
+            set;
+        }
+        public integer WrapperIndex {
+            get;
+            set;
+        }
+        public string productInfoquantity {
+            get;
+            set;
+        }
+    }
+    public void WrapProductlist() {
+        string pp = apexpages.currentpage().getparameters().get('windex');
+        system.debug('wrapIndex======' + wrapIndex);
+        allProductList[wrapIndex].product = getListProduct();
+    }
+
+    public void Wrapuantity() {
+        system.debug('1==' + allProductList[wrapIndex].quantity);
+        allProductList[wrapIndex].quantity = wquant2;
+        system.debug('2==' + allProductList[wrapIndex].quantity);
+    }
+
+    Public list < SelectOption > getListProduct() {
+        selectProductList = new List < selectOption > ();
+        if (allProductList[wrapIndex].selectedproductFamily != '') {
+            system.debug('productstrin family' + allProductList[wrapIndex].selectedproductFamily);
+            for (Product2 p2: [select id, Name, Family, Active__c from Product2 where Family =: allProductList[wrapIndex].selectedproductFamily and Active__c != False]) {
+                selectProductList.add(new SelectOption(p2.name, p2.name));
+            }
+        }
+        return selectProductList;
+    }
+    //for deleting Product Row.
+    public void DelProductRow() {
+        Integer k = allProductList.size();
+        for (Integer i = k - 1; i > 0; i--) {
+            if (selectcheckbox.contains(i)) {
+                allProductList.remove(i);
+                selectcheckbox.remove(i);
+                system.debug('selectcheckbox---i=' + selectcheckbox);
+            }
+
+
+        }
+        system.debug('===allProductList==' + allProductList);
+    }
+    //for adding Product Row.
+    public void addproductrow() {
+        allProducts ap = new allProducts();
+        ap.productFamily = ProdFamilyList();
+        allProductList.add(ap);
+    }
+    //for deleting Product Row.
+    public void checkFunction() {
+        system.debug('hello');
+        string pp = apexpages.currentpage().getparameters().get('checkboxcheck');
+        system.debug('pp---=' + pp);
+        selectcheckbox.add(Integer.valueof(pp));
+        system.debug('selectcheckbox---1=' + selectcheckbox);
+    }
+
+    // to group rfq on basis of product and quantity and created a bid with all these rfqs as child added by indresh
+    public Static void createBid(string InsertedRFG) {
+        set < id > rfqid = new set < id > ();
+        set < string > newproductnameset = new set < string > ();
+        set < id > BidId = new set < id > ();
+        string BidDescription;
+        if (InsertedRFG != null && InsertedRFG != '') {
+            for (RFQ__c rf: [select id, Total_Amount__c, Contact__r.AccountId, (select id, name, Product__c, Quantity__c, Product__r.name from RFQ_Products__r) from RFQ__c where id =: InsertedRFG]) {
+                system.debug(rf.RFQ_Products__r);
+                for (RFQ_Product__c rfp: rf.RFQ_Products__r) {
+                    newproductnameset.add(rfp.name);
+                    if (BidDescription != '' && BidDescription != null) {
+                        BidDescription += ',' + rfp.name;
+                    } else {
+                        BidDescription = rfp.name;
+                    }
+                }
+                rfqid.add(rf.id);
+            }
+            for (RFQ__c rf: [select id, Total_Amount__c, Bid__c, Contact__r.AccountId, (select id, name, Product__r.name, Quantity__c from RFQ_Products__r) from RFQ__c where id NOT IN: (rfqid)]) {
+                set < string > prdocutname = new set < string > ();
+                for (RFQ_Product__c rfp: rf.RFQ_Products__r) {
+                    prdocutname.add(rfp.name);
+                }
+                if (prdocutname.containsAll(newproductnameset) == True && prdocutname.size() == newproductnameset.size() && rf.Bid__c == null) {
+                    rfqid.add(rf.id);
+                } else if (prdocutname.containsAll(newproductnameset) == True && prdocutname.size() == newproductnameset.size() && rf.Bid__c != null) {
+                    BidId.add(rf.Bid__c);
+                }
+            }
+            list < RFQ__c > rflist = new list < RFQ__c > ();
+            if (rfqid.size() > 0) {
+                Bid__c bd = new Bid__c();
+                if (BidId.size() == 0) {
+                    bd.Description__c = BidDescription;
+                    insert bd;
+                } else {
+                    bd = [select id from Bid__c where id In: BidId];
+                }
+                for (RFQ__c rf: [select id, Bid__c from RFQ__c where id IN: rfqid]) {
+                    rf.Bid__c = bd.id;
+                    rflist.add(rf);
+                }
+            }
+            if (rflist.size() > 0)
+                update rflist;
+        }
+    }
+    //PageReference method is used for redirecting to another page.
+    public PageReference RedirectDetailMMD() {
+        string idd = ApexPages.currentPage().getParameters().get('id');
+        PageReference pr = new PageReference('/apex/MyRfq_MMD?id=' + idd);
+        pr.setRedirect(True);
+        return pr;
+    }
+
+    public void checkEmail() {
+
+        if (!Pattern.matches('^[a-zA-Z0-9._|\\\\%#~`=?&/$^*!}{+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$', Email)) {
+            //ApexPages.addmessage(new ApexPages.message(ApexPages.severity.INFO, 'Check your email')); 
+            errormsgEmail = 'Check your email !';
+        } else {
+            errormsgEmail = '';
+        }
+    }
+
+    public void change() {
+        if (show == true) {
+            bool = true;
+        } else {
+            bool = false;
+        }
+    }
+    public void ClienttypeValue(){
+    if(Requestfor=='Individual')
+        ClientType='B2C';
+      else
+       ClientType='B2B';
+    }
+}
