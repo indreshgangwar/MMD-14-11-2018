@@ -1,0 +1,156 @@
+<!------------------------------------------------
+   Author: Anita
+   Created Date:14/11/2018
+   Created For: This apex class is implemented for showing a list of RFQ on portal. "ViewDetail" link is used to redirect to "RFQ detail" page.
+   --------------------------------------------------->
+<apex:page standardStylesheets="false" showHeader="false" Controller="MyRfqCtrl_Clone">
+   <apex:form >
+      <c:head_include ></c:head_include>
+      <c:portal_Script ></c:portal_Script>
+      <meta name="viewport" content="width=device-width" />
+      <style>
+         @media all and (min-width: 960px) {
+         body{
+         font-size: 14px;
+         }
+         }
+         @media all and (max-width: 959px) and (min-width: 600px) {
+         body{
+         font-size: 15px;
+         }
+         .site-logo {
+         padding: 0px 31px !important;
+         margin: 0px 0px;
+         }
+         }
+         @media all and (max-width: 599px) and (min-width: 320px) {
+         body{
+         font-size: 17px;
+         }
+         .site-logo {
+         padding: 0px 14px !important;
+         margin: 0px 0px;
+         }
+         }
+         .download-center{
+         background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/profile-banner.jpg')}');
+         height:200px; 
+         min-height:250px; 
+         width:100%; 
+         margin:0; 
+         padding:0;     
+         background-size: cover;
+         }
+         .txt-right{
+         text-align:right;
+         }
+      </style>
+      <body>
+         <script>
+            $(window).scroll(function() {
+                if($(this).scrollTop()>0) {
+                    $( ".navbar-me" ).addClass("fixed-me");
+                } else {
+                    $( ".navbar-me" ).removeClass("fixed-me");
+                }
+            });
+         </script>        
+         <section>
+            <c:DealerSideMenu ></c:DealerSideMenu>
+         </section>
+         <div id="main">
+            <div style="width:90%; margin:0 auto;">
+               <div class="row" style="min-height:350px;">
+                  <div class="title-grid" style="margin-bottom: 30px;">
+                     <h3>My Quote Request</h3>
+                     <p class="forgotten txt-right">
+                        <apex:outputLink value="/apex/Bid_System_MMD?id={!contactid}"> <span style="margin-right:5px;"><i class="fa fa-file-text-o"></i></span> Create New Quote Request</apex:outputLink>
+                     </p>
+                  </div>
+                  <div class="table-responsive" id="accordion">
+                     <table id="rfqTable" class="display table table-bordered" cellspacing="0" style="width:100%; ">
+                        <thead>
+                           <tr style="background: #eee; text-align: left;  font-weight: bold;">
+                              <td class="text-center">S.No.</td>
+                              <td class="text-center">RFQ Number</td>
+                              <td class="text-center">Request for</td>
+                              <td class="text-center">Client Type</td>
+                              <td class="text-center">Priority</td>
+                              <td class="text-center">Expected Deal Closing Date</td>
+                              <td class="text-center">&nbsp;</td>
+                           </tr>
+                        </thead>
+                        <apex:variable value="{!0}" var="count"/>
+                        <apex:repeat value="{!rfqList}" var="rflist">
+                           <apex:variable value="{!count+1}" var="count"/>
+                           <tr>
+                              <td><span>{!count}</span></td>
+                              <td><span>{!rflist.Name}</span></td>
+                              <td><span>{!rflist.Request_for__c}</span></td>
+                              <td><span>{!rflist.Client_Type__c}</span></td>
+                              <td><span>{!rflist.Priority__c}</span></td>
+                              <td><span>{!rflist.DealClosingDates__c}</span></td>
+                              <!----------------------for View Detail link ----------------->                                                               
+                              <td class="txt-right" style="margin-right:10px;" >
+                              <apex:outputLink value="/apex/MyRFQDetails_MMD?id={!contactid}&Rfqid={!rflist.id}">
+                                  <span>View Details</span>
+                                    <i class="fa fa-chevron-circle-right" style="font-size:16px; margin-left:10px;"> </i>
+                              </apex:outputLink>                                
+                              </td>
+                              <!------------------------------------------------------------>
+                           </tr>
+                        </apex:repeat>
+                     </table>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!--#############################FOOTER SECTION#################################-->
+         <section>
+            <c:portal_footer />
+         </section>
+         <a id="back2Top" href="#" title="Go to Top">&#10148;</a>
+         <!--############################################################################-->
+      </body>
+   </apex:form>
+</apex:page>
+
+************************************apex class ******************************************
+/************************************************
+        Author: Anita
+        Created Date:14/11/2018
+        Created For: This apex class is implemented for showing a list of RFQ on portal. "ViewDetail" link is used to redirect to "RFQ detail" page.
+*************************************************/
+
+public class MyRfqCtrl_Clone {
+
+public string contactid{get;set;}
+public MyRfqCtrl_Clone (){
+contactid=ApexPages.currentPage().getParameters().get('id');
+}
+
+//This method is used to get the list of RFQ records related to User.
+public list<RFQ__c> getrfqList(){
+        string idd=ApexPages.currentPage().getParameters().get('id');
+        system.debug('id=========='+idd);
+        list<RFQ__c> rfq=new list<RFQ__c>();
+        rfq=[Select id,Name,Client_Type__c,Contact__c,Deal_Closing_Date__c,Priority__c,DealClosingDates__c,Product__c,Remarks__c,Request_for__c,(select id,Name from Client_Details__r) from RFQ__c where Contact__c =: idd ORDER BY Name DESC ];
+        return rfq;
+    }
+//For redirecting to another "RFQ Detail" page through "View Details" link.
+public PageReference RedirectDetailedrfq(){
+        string idd=ApexPages.currentPage().getParameters().get('id');
+        id rfqid=ApexPages.currentPage().getParameters().get('rfqid');
+        PageReference pr=new PageReference('/apex/MyRFQDetails_MMD?id='+idd);
+        pr.getParameters().put('Rfqid', rfqid);
+        pr.setRedirect(True);
+        return pr;        
+    }
+//For Creating New RFQ through "Create New RFQ" link.   
+public PageReference RedirectCreateNew(){
+        string idd=ApexPages.currentPage().getParameters().get('id');
+        PageReference pr=new PageReference('/apex/Bid_System_MMD?id='+idd);
+        pr.setRedirect(True);
+        return pr;        
+    }
+}
