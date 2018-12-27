@@ -1,0 +1,222 @@
+<!-------------------------------------------------
+   Author: Anita
+   Created Date: 14/11/2018
+   Created For: This visualforce page is implemented for showing the "RFQ Details" of a particular user(Dealer/Distributor/Sub-dealer) on portal. 
+   --------------------------------------------------->
+<apex:page standardStylesheets="false" showHeader="false" controller="MyRFQDetailscntrl_Clone">
+   <apex:form >
+      <c:head_include ></c:head_include>
+      <c:portal_Script ></c:portal_Script>
+      <meta name="viewport" content="width=device-width" />
+      
+      <style>
+        @media all and (min-width: 960px) {
+         body{
+         font-size: 14px;
+         }
+         }
+         @media all and (max-width: 959px) and (min-width: 600px) {
+         body{
+         font-size: 15px;
+         }
+         .site-logo {
+         padding: 0px 31px !important;
+         margin: 0px 0px;
+         }
+         }
+         @media all and (max-width: 599px) and (min-width: 320px) {
+         body{
+         font-size: 17px;
+         }
+         .site-logo {
+         padding: 0px 14px !important;
+         margin: 0px 0px;
+         }
+         }
+         .download-center{
+         background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/profile-banner.jpg')}');
+         height:200px; 
+         min-height:250px; 
+         width:100%; 
+         margin:0; 
+         padding:0;     
+         background-size: cover;
+         }
+      </style>
+      <body>
+      
+      <script>
+            $(window).scroll(function() {
+                if($(this).scrollTop()>0) {
+                    $( ".navbar-me" ).addClass("fixed-me");
+                } else {
+                    $( ".navbar-me" ).removeClass("fixed-me");
+                }
+            });
+         </script> 
+         <section>
+            <c:DealerSideMenu ></c:DealerSideMenu>
+         </section>
+         <div id="main">
+            <div style="width:90%; margin:0 auto;">
+               <div class="row" style="min-height:350px;">
+                  <div class="title-grid" style="margin-bottom: 30px;">
+                     <h3>Quote Request Details</h3>
+                     <p class="forgotten" style="text-align:right;">
+                      <apex:outputLink value="/apex/Bid_System_MMD?id={!contactid}"> <span style="margin-right:5px;"><i class="fa fa-file-text-o"></i></span> Create New Quote Request</apex:outputLink>
+                       <span style="margin-left:10px; margin-right:10px; color:#333;">| </span>
+                        <apex:outputLink value="/apex/MyRfq_MMD?id={!contactid}"> <span style="margin-right:5px;"><i class="fa fa-file-text-o"></i></span> Go to My Quote Request List</apex:outputLink>
+                     </p>
+                  </div>
+                  <div class="table-responsive">
+                     <table id="rfqTable" class="display table table-bordered" cellspacing="0" style="width:100%; ">
+                        <div id="case-title">
+                           <h5>RFQ Number:- <span style="border: none; color: #5d5d5d;">{!Rfqview.Name}</span></h5>
+                        </div>
+                        <tr>
+                           <td class="col-md-1 col-lg-1"><b>Request for</b></td>
+                           <td class="col-md-2 col-lg-2">{!Rfqview.Request_for__c}</td>
+                           <td class="col-md-1 col-lg-1"><b>Client Type</b></td>
+                           <td class="col-md-2 col-lg-2">{!Rfqview.Client_Type__c}</td>
+                           <td class="col-md-1 col-lg-1"><b>Priority</b></td>
+                           <td class="col-md-1 col-lg-1">{!Rfqview.Priority__c}</td>
+                           <td class="col-md-2 col-lg-2"><b>Exp Deal Closing Date</b></td>
+                           <td class="col-md-2 col-lg-2">{!Rfqview.DealClosingDates__c}</td>
+                        </tr>
+                        <tr>
+                           <td colspan="2"><b>RFQ Title</b></td>
+                           <td colspan="6">{!Rfqview.Remarks__c}</td>
+                        </tr>
+                     </table>
+                  </div>
+                   <apex:outputPanel rendered="{!bool==false}">
+                  <div id="case-title">
+                     <h5>Client Details</h5>
+                  </div>
+                 
+                  <div class="table-responsive">
+                  <table class="table table-hover table-bordered " id="demoProductList">
+                     <tr>
+                        <td class="col-md-1 col-lg-1"><b>Client Name</b></td>
+                        <td class="col-md-2 col-lg-2">{!clnt.Name}</td>
+                        <td class="col-md-1 col-lg-1"><b>Contact Name</b></td>
+                        <td class="col-md-2 col-lg-2">{!clnt.Contact_Name__c} {!clnt.Contact_Last_Name__c}</td>
+                        <td class="col-md-1 col-lg-1"><b>Client Type</b></td>
+                        <td class="col-md-1 col-lg-1">{!clnt.Type__c}</td>
+                        <td class="col-md-2 col-lg-2"><b>Email Address</b></td>
+                        <td class="col-md-1 col-lg-1">{!clnt.Email_Address__c}</td>
+                     </tr>
+                     <tr>
+                        <td class="col-md-2 col-lg-2"><b>Mobile No</b></td>
+                        <td class="col-md-2 col-lg-2">{!clnt.Country_Code__c}-{!clnt.MobileNo__c}</td>
+                        <td class="col-md-2 col-lg-2"><b>Phone No</b></td>
+                        <td class="col-md-2 col-lg-2">{!clnt.Country_Code__c}-{!clnt.Phone_No__c}</td>
+                        <td class="col-md-2 col-lg-2"><b>Address</b></td>
+                        <td colspan="4">{!clnt.Street__c}, {!clnt.City__c}, {!clnt.State__c}, {!clnt.Country__c}, {!clnt.PostCode__c}</td>
+                     </tr>
+                  </table>
+                  </div>
+                  </apex:outputPanel>
+                  <div id="case-title">
+                     <h5>Product Details</h5>
+                  </div>
+                  <table class="table table-hover table-bordered " id="demoProductList">
+                     <thead>
+                        <tr>
+                           <th class="col-md-1">S.No</th>
+                           <th>Product Family</th>
+                           <th>Product Name</th>
+                           <th class="col-md-1">Qty.</th>
+                        </tr>
+                        <apex:variable value="{!0}" var="count"/>
+                        <apex:repeat value="{!rfqProductviewList}" var="clist">
+                           <apex:variable value="{!count+1}" var="count"/>
+                           <tr>
+                              <td>{!count}</td>
+                              <td style="text-align: left;" ><span>{!clist.Product_Family__c}</span></td>
+                              <td style="text-align: left;" ><span>{!clist.Name}</span></td>
+                              <td style="text-align: left;" ><span>{!clist.Quantity__c}</span></td>
+                           </tr>
+                        </apex:repeat>
+                     </thead>
+                  </table>
+               </div>
+            </div>
+         </div>
+         <!--#############################FOOTER SECTION################################--->
+         <a id="back2Top" href="#" title="Go to Top">&#10148;</a>
+         <section>
+            <c:portal_footer />
+         </section>
+      </body>
+   </apex:form>
+</apex:page>
+
+*********************************************apex class ******************************************
+/*************************************************
+        Author: Anita
+        Created Date: 14/11/2018
+        Created For: This apex class is implemented for showing the "RFQ Details" of a particular user(Dealer/Distributor/Sub-dealer) on portal. Information regarding 
+        RFQ and its related Products are getting through this class.
+        
+**************************************************/
+
+Global class MyRFQDetailscntrl_Clone {
+
+ public boolean bool {get;set;}
+ public string contactid{get;set;}
+global MyRFQDetailscntrl_Clone (){
+      Contactid =ApexPages.currentPage().getParameters().get('id');
+     string rfqid=ApexPages.currentPage().getParameters().get('Rfqid');
+     bool=false;    
+      List<Client_Detail__c> clientList = new List<Client_Detail__c>();
+      try{
+       clientList=[Select id,Name,Contact_Name__c,RFQ__c,Type__c,MobileNo__c,Contact_Last_Name__c,Email_Address__c,Phone_No__c,Street__c,City__c,State__c,PostCode__c,Country__c from Client_Detail__c where RFQ__c=:rfqid];                 
+     }catch(exception e){} 
+     system.debug('===='+clientList);
+      if(clientList.size()==0){
+        bool=true;
+      }else{
+       bool=false;
+      }
+}
+//Showing data of RFQ 
+global RFQ__c getRfqview(){
+        string Contactid =ApexPages.currentPage().getParameters().get('id');
+        string rfqid=ApexPages.currentPage().getParameters().get('Rfqid');
+        system.debug('id=========='+rfqid);
+        RFQ__c rfq = new RFQ__c();        
+        rfq = [Select id,Name,Client_Type__c,Contact__c,Deal_Closing_Date__c,Priority__c,DealClosingDates__c,Product__c,Remarks__c,Request_for__c,Total_Amount__c from RFQ__c where Contact__c=:Contactid and id=:rfqid];       
+        return rfq;
+  }
+  
+  public boolean getboolClient(){
+      return bool;
+  }
+ global Client_Detail__c getclnt(){
+        string Contactid =ApexPages.currentPage().getParameters().get('id');
+        string rfqid=ApexPages.currentPage().getParameters().get('Rfqid');
+        
+        Client_Detail__c clientdetail = new Client_Detail__c();  
+        try{      
+        clientdetail = [Select id,Name,Contact_Name__c,RFQ__c,Type__c,Country_Code__c,MobileNo__c,Contact_Last_Name__c,Email_Address__c,Phone_No__c,Street__c,City__c,State__c,PostCode__c,Country__c from Client_Detail__c where RFQ__c=:rfqid];                  
+         }catch(exception e){}
+        return clientdetail;
+  }
+  
+//Showing data of RFQ Products in table format 
+global list<RFQ_Product__c> getrfqProductviewList(){
+        string rfqid=ApexPages.currentPage().getParameters().get('Rfqid');
+        system.debug('id=========='+rfqid);
+        list<RFQ_Product__c> cas = new list<RFQ_Product__c>();        
+        cas = [select id,name,RFQ__c,Product_Family__c,Product__c,Quantity__c,Amount__c from RFQ_Product__c where RFQ__c=:rfqid ORDER BY CreatedDate Asc limit 50000];        
+        return cas;
+    }
+//Redirecting to RFQ List page using "View RFQ List" link    
+Global PageReference RedirectDetailMMD(){
+        string Contactid =ApexPages.currentPage().getParameters().get('id');
+        PageReference pr=new PageReference('/apex/MyRfq_MMD?id='+Contactid);
+        pr.setRedirect(True);
+        return pr;
+    }
+}
