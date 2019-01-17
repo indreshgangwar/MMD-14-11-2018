@@ -1,0 +1,2235 @@
+<apex:page standardStylesheets="false" showHeader="false" docType="html-5.0" id="pgid" controller="RegisterController_clone" >
+   <meta name="viewport" content="width=device-width" />
+   <c:portal_Script ></c:portal_Script>
+   <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <c:head_include ></c:head_include>
+      <!--////////////////////////////////////DATA TABLE STYLE AND JAVASCRIPT ////////////////////////////--->
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+      <style>
+         @media all and (min-width: 960px) {
+         body{
+         font-size: 14px;
+         }
+         }
+         @media all and (max-width: 959px) and (min-width: 600px) {
+         body{
+         font-size: 15px;
+         }
+         .site-logo {
+         padding: 0px 31px !important;
+         margin: 0px 0px;
+         }
+         }
+         @media all and (max-width: 599px) and (min-width: 320px) {
+         body{
+         font-size: 17px;
+         }
+         .site-logo {
+         padding: 0px 14px !important;
+         margin: 0px 0px;
+         }
+         }
+         .download-center{
+         background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/case-registration.jpg')}');
+         height:200px; 
+         min-height:250px; 
+         width:100%; 
+         margin:0; 
+         padding:0;     
+         background-size: cover;
+         }
+         .product-modal{
+         padding: 5px 20px 5px 20px;
+         }
+         .alphabet-button{
+         height: 19px;
+         width: 19px;
+         margin: 0;
+         padding: 0 1px;
+         vertical-align: middle;
+         border: 0;
+         font-family: "Lato", "Helvetica Neue", arial, helvetica, sans-serif;
+         font-size: 9px;
+         font-weight: 300;
+         color: #fff;
+         -moz-border-radius: 2px;
+         -webkit-border-radius: 2px;
+         border-radius: 2px;
+         text-shadow: none;
+         -moz-box-shadow: none;
+         -webkit-box-shadow: none;
+         box-shadow: none;
+         -o-transition: all .3s;
+         -moz-transition: all .3s;
+         -webkit-transition: all .3s;
+         -ms-transition: all .3s;
+         transition: all .3s;
+         }
+         .dataTables_wrapper .dataTables_paginate .paginate_button {
+         box-sizing: border-box;
+         display: inline-block;
+         min-width: 25px!important;
+         height: 25px!important;
+         padding: 2px 5px!important;
+         margin-left: 2px;
+         text-align: center;
+         text-decoration: none !important;
+         cursor: pointer;
+         color: #333 !important;
+         border: 1px solid transparent;
+         border-radius: 2px;
+         }
+         .dataTables_wrapper .dataTables_filter input {
+         margin-left: 0.5em;
+         border: 1px solid #d4d4d4!important;
+         border-radius: 3px!important;
+         }
+         .table.dataTable thead th, table.dataTable thead td{
+         padding: 7px 10px !important;
+         border-bottom: 1px solid #b9b9b9 !important;
+         }
+         file .form-control{
+         height: 50px;
+         margin: 0;
+         margin-bottom: 10px;
+         padding: 0 20px;
+         vertical-align: middle;
+         background: #ffffff5e;
+         border: 1px solid #ddd;
+         font-family: "Lato", "Helvetica Neue", arial, helvetica, sans-serif;
+         font-size: 16px;
+         font-weight: 400;
+         line-height: 50px;
+         color: #888;
+         -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
+         -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
+         -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
+         }
+         .displayNone { 
+         display:none; 
+         }
+         .displayBlock {
+         display:block;
+         }
+         .ui-autocomplete-loading { 
+         background: white url(/img/loading32.gif) right center no-repeat;
+         background-size:15px 15px; 
+         }
+         .placeHolder {
+         font-style: italic;
+         }
+         input[type="text"], input[type="password"] .form-control {
+         height: 34px !important; 
+         padding: 6px 12px!important; 
+         margin: 0;
+         vertical-align: middle;
+         background: #ffffff5e;
+         border: 1px solid #ddd;
+         font-family: "Lato", "Helvetica Neue", arial, helvetica, sans-serif;
+         font-size: 14px;
+         font-weight: 400;
+         line-height: 50px;
+         color: #888;
+         -moz-border-radius: 4px;
+         -webkit-border-radius: 4px;
+         border-radius: 4px;
+         -moz-box-shadow: none;
+         -webkit-box-shadow: none;
+         box-shadow: none;
+         -o-transition: all .3s;
+         -moz-transition: all .3s;
+         -webkit-transition: all .3s;
+         -ms-transition: all .3s;
+         transition: all .3s;
+         }
+         // Make multiple select elements height not fixed
+         select[multiple],
+         select[size] {
+         height: 34px;
+         }
+         .apex-height{
+         height:34px!important;
+         }
+         /* Hide all steps by default: */
+         .tab {
+         display: none;
+         }
+         /* Make circles that indicate the steps of the form: */
+        
+          .step {
+         height: 15px;
+         width: 15px;
+         margin: 0 2px;
+         background-color: #bbbbbb;
+         border: none;  
+         border-radius: 50%;
+         display: inline-block;
+         opacity: 0.5;
+         }
+         /* active progressbar added by indresh */
+          /* Make circles that indicate the steps of the form: */
+      .step1 {
+      height: 15px;
+      width: 15px;
+      margin: 0 2px;
+      background-color: #229af3;
+      border: none;  
+      border-radius: 50%;
+      display: inline-block;
+      opacity: 1;
+      }
+         .step.active {
+         opacity: 1;
+         }
+         /* Mark the steps that are finished and valid: */
+         .step.finish {
+         background-color: #4CAF50;
+         }
+         .navbar-default .navbar-nav>li>a {
+         color:#f00;
+         }
+         .btn-width{
+         width:150px;
+         }
+         /* STYLE ADDED BY INDRESH FOR FILE UPLOAD PAGE CUSTOME MODAL */
+         /* The Modal (background) */
+         .modal1 {          
+         position: fixed; /* Stay in place */
+         z-index: 150; /* Sit on top */
+         padding-top: 0px; /* Location of the box */
+         left: 0px;
+         top: 0;
+         width: 100%; /* Full width */
+         height: 53.6%; /* Full height */
+         overflow: auto;/* Enable scroll if needed */
+         background-color: rgb(0,0,0); /* Fallback color */
+         background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+         }
+         /* Modal Content */
+         .modal-content1 {
+         background-color: #fefefe;
+         border-radius: 10px;
+         padding: 10px;           
+         width: 99.4%;
+         height:100%;
+         color:#5b7075 !important;
+         }
+         #imageview-center{
+         background-image: url('{!URLFOR($Resource.DropAndDragImage)}'); 
+         height:200px; 
+         min-height:250px; 
+         width:100%; 
+         margin:0; 
+         padding:0;     
+         background-size: cover;
+         } 
+         /* Outline div */
+         .modal-div1 {
+         background-color: #4195e2;
+         margin: auto;
+         padding: 0px;
+         top-margin:0;       
+         width: 100%;
+         height:100%;
+         }
+         /* Close icon */
+         .close1 {
+         color: #aeafaf;
+         float: right;
+         font-size: 15px;
+         font-weight: bold;
+         }
+         .file{
+         width: 100% !important;
+         border: 1px solid #d0d0d0!important;
+         height: 34px!important;
+         border-radius: 3px!important;
+         text-align: left!important;
+         padding: 0!important;
+         background: none!important;
+         }
+         .file-icon{
+         background: #0796ea!important;
+         height: 34px!important!important;
+         padding: 8px 20px 8px 33px!important;
+         color:#fff!important;
+         margin-right: 10px!important;
+         }
+         .error-msg{
+         color: red;
+         list-style-type: none;
+         padding: 0px 0 0 0;
+         font-size: 11px;
+         line-height: 8px;
+         }
+         .error-msg-output {
+         color: red;
+         list-style-type: none;
+         font-size: 11px;
+         position: absolute;
+         }
+         .req-mark{
+         color: red;
+         font-size: 17px;
+         line-height: 16px;
+         }
+      </style>
+      <body>
+         <script>
+            $(window).scroll(function() {
+                if($(this).scrollTop()>0) {
+                    $( ".navbar-me" ).addClass("fixed-me");
+                } else {
+                    $( ".navbar-me" ).removeClass("fixed-me");
+                }
+            });
+         </script>
+         <script>
+            function attachment(){
+            
+            
+            //alert('uploading resume');
+            }
+         </script> 
+         <!--navbar menu-->
+         <apex:outputPanel rendered="{!SHowpage==false}" >
+            <section class="navbar-info">
+               <div class="download-center">
+                  <nav class="navbar navbar-default navbar-me">
+                     <div class="container-fluid ">
+                        <!-- Brand and toggle get grouped for better mobile display -->
+                        <div class="navbar-header">
+                           <button type="button" class="navbar-toggle collapsed menu-collapsed-button" data-toggle="collapse" data-target="#navbar-primary-collapse" aria-expanded="false">
+                           <span class="sr-only">Toggle navigation</span>
+                           <span class="icon-bar"></span>
+                           <span class="icon-bar"></span>
+                           <span class="icon-bar"></span>
+                           </button>
+                           <a class="navbar-brand site-logo" href="/apex/IndexHome">
+                              <apex:image url="{!URLFOR($Resource.img, 'img/logo.png')}"/>
+                           </a>
+                        </div>
+                        <div class="collapse navbar-collapse navbar-right  header-right-menu" id="navbar-primary-collapse">
+                           <ul class="nav navbar-nav ">
+                              <li class="cursor">
+                                 <apex:outputLink value="/apex/ProblemsFAQ" styleClass="header">FAQ's</apex:outputLink>
+                              </li>
+                           </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                     </div>
+                  </nav>
+                  <!--       <div id="mySidenav" class="sidenav">
+                     <div class="row side_nav_close">
+                        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                     </div>
+                     <div class="row tab-main-row">
+                        <div class="col-lg-12 col-md-12 col-sm-8 col-xs-9 bhoechie-tab-container">
+                           <div class="col-lg-3 col-md-3 col-sm-4 col-xs-4 bhoechie-tab-menu">
+                              <div class="list-group">
+                                
+                                 <a href="#" class="list-group-item text-center">
+                                    <h4 class="fa fa-list"></h4>
+                                    <br/>FAQ's
+                                 </a>
+                                 <a href="#" class="list-group-item text-center">
+                                    <h4 class="fa fa-industry"></h4>
+                                    <br/>Review
+                                 </a>
+                              </div>
+                           </div>
+                           <div class="col-lg-9 col-md-9 col-sm-8 col-xs-8 bhoechie-tab">  -->
+                  <!-- Products section -->
+                  <!-- Solutions section -->
+                  <!--     <div class="bhoechie-tab-content">
+                     <center>
+                        <h3 style="margin-top: 0;color:#55518a">FAQ's</h3>
+                     </center>
+                     <div class="side_menu">
+                        <ul >
+                           <li><a href="https://saasnic-philipsnl.cs89.force.com/apex/ProblemsFAQ">Go to FAQ</a></li>
+                        </ul>
+                     </div>
+                     </div>  -->
+                  <!-- Industries search -->
+                  <!--       <div class="bhoechie-tab-content">
+                     <center>
+                        <h3 style="margin-top: 0;color:#55518a">Feedback</h3>
+                     </center>
+                     <div class="side_menu">
+                        <ul >
+                           <li><a href="#">Write Your Feedback</a></li>
+                        </ul>
+                     </div>
+                     </div>
+                     </div>
+                     </div>
+                     </div>
+                     </div> -->              
+               </div>
+            </section>
+            <!---////////////////Side Button////////////////-->
+            <!---////////////////Side Button////////////////-->
+            <div id="main">
+               <apex:form id="ni" >
+                  <!--- onsubmit="regs()"> -->
+                  <!--- <apex:actionFunction name="getAttachment" action="{!getAttachment}"/> -->
+                  <div style="width:90%; margin:0 auto;">
+                     <div class="row">
+                        <div class="title-grid">
+                           <h3>{!if(TagIndex==1,'Create Account','Create a New Case')}</h3>
+                           <!--<p class="forgotten" style="text-align:right;" onclick="myFunction()"><a href="#"><span style="margin-right:5px;"><i class="fa fa-envelope"></i></span>Log a Case From Email<span style="margin-left:5px;"><i class="fa fa-caret-right" aria-hidden="true"></i></span></a></p>-->
+                        </div>
+                        <span Class="error-msg">Items marked with (*) are required.</span>
+                     </div>
+                     <!-- <apex:pageMessages style="color:red;" />-->
+                     <apex:outputPanel id="opp1">
+                        <div class="row" style="margin-top:10px;">
+                           <apex:messages styleClass="error-msg" />
+                           <div class="panel panel-default " >
+                              <div class="panel-body" id="case-title">
+                                 <apex:outputPanel id="opp2">
+                                    <apex:outputPanel id="p1" rendered="{!TagIndex=1}">
+                                       <div  id="CustomerTab">
+                                          <h5>Customer Detail</h5>
+                                          <div class="row">
+                                             <div class="form-row">
+                                                <!-- <apex:outputPanel id="messg">
+                                                   <apex:messages />
+                                                   </apex:outputPanel>
+                                                    <apex:outputPanel id="messg1">
+                                                   <apex:messages />
+                                                   </apex:outputPanel> -->
+                                                <div class="form-group col-md-4">
+                                                   <label for="fname1">
+                                                      First Name<!--<span class="req-mark">*</span> -->
+                                                   </label>
+                                                   <!-- <input type="text" class="form-control required" id="fname1" placeholder="First Name" autofocus="true"  /> -->
+                                                   <apex:inputText value="{!hfstname}" styleClass="form-control" html-placeholder="First Name" />
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                   <label for="LastName">Last Name<span class="req-mark">*</span></label>
+                                                   <!--- <input type="" class="form-control" id="lname1" placeholder="Last Name" required="True"  /> -->
+                                                   <apex:inputText value="{!hlstname}" styleClass="form-control" html-placeholder="Last Name" />
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                   <label for="Email">Email Address<span class="req-mark">*</span></label>
+                                                   <apex:outputPanel >
+                                                      <apex:actionRegion >
+                                                         <apex:inputText value="{!hemail}" html-placeholder="Email Address" styleClass="form-control" >
+                                                            <apex:actionSupport event="onchange" action="{!checkEmail}" rerender="opid123"/>
+                                                         </apex:inputtext>
+                                                      </apex:actionRegion>
+                                                      <apex:outputPanel id="opid123">
+                                                         <apex:actionRegion >
+                                                            <apex:outputText value="{!errormessage}" rendered="{!LEN(errormessage)>0}" styleClass="error-msg-output" />
+                                                           <apex:outputText value="{!DuplicateEmail}" rendered="{!LEN(DuplicateEmail)>0}" styleClass="error-msg-output" />
+                                                         </apex:actionRegion>
+                                                      </apex:outputPanel>
+                                                   </apex:outputPanel>
+                                                </div>
+                                             </div>
+                                             <div class="form-row">
+                                                <!--code modify for country code add-->
+                                                <div class="col-md-3">
+                                                   <label for="PhoneNumber">Phone Number</label>
+                                                   <div class="input-group col-md-12">
+                                                      <apex:inputText value="{!hcountycode}"  styleClass="form-control" style="width:19%; height:35px; border-radius: 4px;border: 1px solid #ddd;font-size: 14px; padding: 0 12px; font-weight: 400;" html-placeholder="+00">
+                                                         <apex:actionSupport event="onchange" reRender="outid"/>
+                                                      </apex:inputtext>
+                                                      <apex:inputText value="{!hphone}" styleClass="form-control" style=" padding: 6px 12px!important;width:81%; height:34px; border-radius: 4px;border: 1px solid #ddd;font-size: 14px;font-weight: 400;"  html-placeholder="Phone Number" >
+                                                         <apex:actionSupport event="onchange" reRender="outid"/>
+                                                      </apex:inputtext>
+                                                   </div>
+                                                   <apex:outputPanel id="outid">
+                                                      <apex:outputText value="Invalid Phone Number!" rendered="{!if(AND(!ISNUMBER(hphone),LEN(hphone)>0) ,true,false)}"  styleClass="error-msg-output" style="margin-left:120px;" ></apex:outputText>
+                                                      <apex:outputText value="Invalid Country Code!"  rendered="{!if(!BEGINS(hcountycode,'+'),true,if(AND(!ISNUMBER(hcountycode),LEN(hcountycode)>0 ) ,true,false))}" styleClass="error-msg-output" ></apex:outputText>
+                                                   </apex:outputPanel>
+                                                </div>
+                                                <div class="col-md-3">
+                                                   <label for="MobileNumber">Mobile Number<span class="req-mark">*</span></label>
+                                                   <div class="input-group col-md-12">
+                                                      <apex:inputText value="{!hcountycode1}"  styleClass="form-control" style="width:19%; height:35px; border-radius: 4px;border: 1px solid #ddd;font-size: 14px; padding: 0 12px; font-weight: 400;" html-placeholder="+00">
+                                                         <apex:actionSupport event="onchange" reRender="outid1"/>
+                                                      </apex:inputtext>
+                                                      <apex:inputText value="{!hphone1}" styleClass="form-control" style=" padding: 6px 12px!important;width:81%; height:34px; border-radius: 4px;border: 1px solid #ddd;font-size: 14px;font-weight: 400;"  html-placeholder="Mobile Number" >
+                                                         <apex:actionSupport event="onchange" reRender="outid1"/>
+                                                      </apex:inputtext>
+                                                   </div>
+                                                   <apex:outputPanel id="outid1">
+                                                      <apex:outputText value="Invalid Mobile Number!" rendered="{!if(AND(!ISNUMBER(hphone1),LEN(hphone1)>0) ,true,if(AND(LEN(hphone1)>10,LEN(hphone1)>0),true,false))}"  styleClass="error-msg-output" style="margin-left:120px;" ></apex:outputText>
+                                                      <apex:outputText value="Invalid Country Code!"  rendered="{!if(!BEGINS(hcountycode1,'+'),true,if(AND(!ISNUMBER(hcountycode1),LEN(hcountycode1)>0 ) ,true,false))}" styleClass="error-msg-output" ></apex:outputText>
+                                                   </apex:outputPanel>
+                                                </div>
+                                                <!-- <div class="form-group col-md-3">
+                                                   <label for="Street">Street<span class="req-mark">*</span></label>
+                                                   <apex:inputText value="{!hstreet}" styleClass="form-control" html-placeholder="Street" />
+                                                   </div>-->
+                                                <div class="form-group col-md-3">
+                                                   <label for="Street">Address Line 1<span class="req-mark">*</span></label>
+                                                   <apex:inputText value="{!hstreet}" styleClass="form-control" html-placeholder="Address Line 1" />
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                   <label for="Street">Address Line 2</label>
+                                                   <apex:inputText value="{!hstreet1}" styleClass="form-control" html-placeholder="Address Line 2" />
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                   <label for="City">City<span class="req-mark">*</span></label>
+                                                   <apex:inputText value="{!hcity}" styleClass="form-control" html-placeholder="City"/>
+                                                </div>
+                                             </div>
+                                             <div class="form-row">
+                                                <div class="form-group col-md-3">
+                                                   <label for="State">County / State<span class="req-mark">*</span></label>
+                                                   <apex:inputText value="{!hstate}" styleclass="form-control" html-placeholder="County / State"/>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                   <label for="Country">Country<span class="req-mark">*</span></label>
+                                                   <apex:inputText value="{!hcountry}" styleclass="form-control" html-placeholder="Country" >
+                                                      <apex:actionSupport event="onchange" reRender="country"/>
+                                                   </apex:inputtext>
+                                                   <apex:outputPanel id="country">
+                                                      <apex:outputText value="Enter Correct Country Name !" rendered="{!if(AND(ISNUMBER(hcountry)),true,false)}" styleClass="error-msg-output" ></apex:outputText>
+                                                   </apex:outputPanel>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                   <label for="Zipcode">Postcode / Zipcode<span class="req-mark">*</span></label>
+                                                   <apex:inputText value="{!hzip}" styleclass="form-control" html-placeholder="Postcode / Zipcode"/>
+                                                   <!--     <apex:actionSupport event="onchange" reRender="zipcode"/>
+                                                      <apex:outputPanel id="zipcode">
+                                                         <apex:outputText value="Enter Correct Zip Code !" rendered="{!if(AND(!ISNUMBER(hzip),LEN(hzip)>0),true,false)}" styleClass="error-msg-output" ></apex:outputText>
+                                                      </apex:outputPanel>  -->
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </apex:outputPanel>
+                                 </apex:outputPanel>
+                                 <!--tab 1st end here-->
+                                 <!--ticket tab start here -->
+                                 <apex:outputPanel id="p2" rendered="{!TagIndex==2}">
+                                 <div class="title-grid" style="text-align:center;">
+                                     <span class="step1" id="tab1"></span>
+                                     <span class="step"></span>
+                                  </div>
+                                    <div  id="TicketTab">
+                                       <h5>Case Information</h5>
+                                       <div class="row">
+                                          <div class="row form-row" style="margin-right:0; margin-left: 0px;">
+                                             <div class="form-group col-md-4">
+                                                <label for="Case Type">Case Reason<span class="req-mark">*</span></label>
+                                                <apex:selectList value="{!caseType}" size="1" multiselect="false" styleClass="form-control apex-height" id="hav2" >
+                                                   <apex:selectOptions value="{!caseTypeList}">
+                                                   </apex:selectOptions>
+                                                </apex:selectList>
+                                             </div>
+                                             <div class="form-group col-md-4">
+                                                <label for="New or Repeat">New or Repeat<span class="req-mark">*</span></label><br/>
+                                                <apex:selectList value="{!ComplaintType}" size="1" multiselect="false" styleClass="form-control apex-height" id="hav1">
+                                                   <apex:selectOptions value="{!ComplaintTypeList}">
+                                                   </apex:selectOptions>
+                                                </apex:selectList>
+                                             </div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Complaint Type">Preferred Contact Method<span class="req-mark">*</span></label><br/>
+                                                <apex:selectList value="{!gdprcase}" size="1" multiselect="false" styleClass="form-control apex-height">
+                                                   <apex:selectOptions value="{!GDPRList}">
+                                                   </apex:selectOptions>
+                                                </apex:selectList>
+                                             </div>
+                                          </div>
+                                          <div class="row form-row" style="margin-right:0; margin-left: 0px;">
+                                             <div class="form-group col-md-4">
+                                                <label for="IfcustomerhasTeamviewer">Do you have TeamViewer?<span class="req-mark">*</span></label>                     
+                                                <apex:selectList value="{!TeamViewer}" size="1" multiselect="false" styleClass="form-control apex-height" id="TeamViewer5" tabindex="10">
+                                                   <apex:selectOptions value="{!TeamViewerList}">
+                                                   </apex:selectOptions>
+                                                </apex:selectList>
+                                             </div>
+                                             <div class="form-group col-md-4">
+                                                <label for="PurchaseDate">Purchase Date<span class="req-mark">*</span></label>
+                                                <apex:input type="date" value="{!purchasedate}" styleclass="form-control">
+                                                   <apex:actionSupport event="onchange" reRender="dateid"/>
+                                                </apex:input>
+                                                <apex:outputPanel id="dateid">
+                                                   <apex:outputText value="Invalid Date!" rendered="{!IF(AND(NOT(ISBLANK(PurchaseDate)),PurchaseDate> TODAY()), true, false)}"  style="color:red"></apex:outputText>
+                                                </apex:outputPanel>
+                                             </div>
+                                             <div class="form-group col-md-4">
+                                                <label for="BillNo">Invoice No.</label>
+                                                <apex:inputText value="{!hbill2}"  styleclass="form-control" html-placeholder="Invoice No."/>
+                                             </div>
+                                          </div>
+                                                <div class="col-md-12">
+                                                    <h5>Product Information</h5>
+                                                </div>
+                                          <div class="form-row">
+                                             
+                                            <div class="form-group col-md-3">
+                                                <label for="ProductFamily">Product Type<span class="req-mark">*</span></label>
+                                                <apex:actionRegion >
+                                                   <apex:selectList value="{!ProductFamily}" size="1" multiselect="false" styleClass="form-control apex-height" id="hav7"  >
+                                                      <apex:selectOptions value="{!ProductFamilyList}"  >
+                                                      </apex:selectOptions>
+                                                      <apex:actionSupport event="onchange" action="{!ChangeProductlist}" reRender="i12,as1,fizz1">
+                                                      </apex:actionSupport>
+                                                   </apex:selectList>
+                                                </apex:actionRegion>
+                                             </div> 
+                                             
+                                             <div class="form-group col-md-3">
+                                                <label for="Product List">Select Your Product</label>
+                                                <apex:outputPanel id="i12">
+                                                   <apex:selectList value="{!ProductName}" size="1" multiselect="false" styleClass="form-control apex-height"  >
+                                                      <apex:selectOptions value="{!selectProdList}"  >
+                                                      </apex:selectOptions>
+                                                   </apex:selectList>
+                                                </apex:outputPanel>
+                                             </div>
+                                             
+                                             <div class="form-group col-md-3">
+                                                <label for="ModelNo">Model No.<span class="req-mark">*</span></label>
+                                                <apex:inputText value="{!hmodel2}" styleclass="form-control" html-placeholder="Model No." />
+                                             </div>
+                                             <div class="form-group col-md-3">
+                                                <label for="SerialNo">Serial No.<span class="req-mark">*</span></label>
+                                                <apex:inputText value="{!hserial2}" styleclass="form-control" html-placeholder="Serial No."/>
+                                             </div>
+                                             
+                                             
+                                          </div>
+                                          <div class="row form-row" style="margin-right:0; margin-left: 0px;">
+                                             <div class="form-group col-md-3">
+                                                <label for="ExtendedWarrantyTaken">Extended Warranty Taken<span class="req-mark">*</span></label>
+                                                <apex:selectList value="{!WarrantyTaken}" size="1" multiselect="false" styleClass="form-control apex-height">
+                                                   <apex:actionSupport event="onchange" reRender="mainout"/>
+                                                   <apex:selectOptions value="{!WarrantyTakenList}">
+                                                   </apex:selectOptions>
+                                                </apex:selectList>
+                                             </div>
+                                             
+                                             <div class="form-group col-md-3">
+                                                <label for="ExtendedWarrantyDuration">Extended Warranty Duration</label>
+                                                <apex:outputPanel id="mainout">
+                                                   <apex:outputPanel rendered="{!IF(OR(WarrantyTaken=='Yes',WarrantyTaken=='-–None–-'),true,false)}">
+                                                      <apex:selectList value="{!WarrantyDuration}" size="1" multiselect="false" styleClass="form-control apex-height" id="hav6">
+                                                         <apex:selectOptions value="{!WarrantyDurationList}">
+                                                         </apex:selectOptions>
+                                                      </apex:selectList>
+                                                   </apex:outputPanel>
+                                                   <apex:outputPanel rendered="{!IF(WarrantyTaken=='No',true,false)}">
+                                                      <apex:selectList value="{!WarrantyDuration}" size="1" multiselect="false" styleClass="form-control apex-height" id="hav62" disabled="true">
+                                                         <apex:selectOptions value="{!WarrantyDurationList}">
+                                                         </apex:selectOptions>
+                                                      </apex:selectList>
+                                                   </apex:outputPanel>
+                                                </apex:outputPanel>
+                                             </div>
+                                             
+                                             <div class="form-group col-md-3">
+                                                <label for="CaseReason">Type of Case</label>
+                                                <apex:outputPanel id="as1">
+                                                   <apex:selectList value="{!CaseReasonType}" size="1" multiselect="false" styleClass="form-control apex-height" id="hav3">
+                                                      <apex:selectOptions value="{!CaseReasonTypeList}">
+                                                      </apex:selectOptions>
+                                                      <apex:actionSupport event="onchange" action="{!casereasonform}" reRender="fizz1">
+                                                      </apex:actionSupport>
+                                                   </apex:selectList>
+                                                </apex:outputPanel>
+                                             </div>
+                                             
+                                          </div>
+                                          <div class="form-row">
+                                             <div class="form-group col-md-12">
+                                                <label for="Description">Description of Issue</label>
+                                                <apex:inputTextarea id="Description" styleclass="form-control" value="{!hdesc2}" html-placeholder="Description" style="height:80px;"/>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </apex:outputPanel>
+                               <!-- upload image start -->
+                                
+                                
+                                   <apex:outputPanel rendered="{!tagIndex==3}" >
+                                    <apex:actionFunction name="MyUploadimage" action="{!Uploadimage}" />                                  
+                                      <div class="title-grid" style="text-align:center;">
+                                         <span class="step" ></span>
+                                         <span class="step1"></span>
+                                        
+                                      </div>
+                                         <div  id="CustomerTab">
+                                            <h5>Upload File</h5>
+                                                <div class="col-md-12">
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-sm-12 col-md-3 col-form-label">Attach File for Product</label>
+                                                        <div class="col-sm-12 col-md-9">
+                                                          <button type="button" class="btn-labeled file form-control-plaintext" style="width: 300px!important; background:transparent!important;" onclick="MyUploadimage();">
+                                                                <span class="btn-label file-icon"><i class="fa fa-cloud-upload" style="font-size:15px; margin-right:10px;" aria-hidden="true"></i></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-sm-12 col-md-3 col-form-label">Attach File for Type of Case</label>
+                                                        <div class="col-sm-12 col-md-9">
+                                                        
+                                                          <button type="button" class="btn-labeled file form-control-plaintext" style="width: 300px!important; background:transparent!important;" onclick="MyUploadimage();">
+                                                                <span class="btn-label file-icon"><i class="fa fa-cloud-upload" style="font-size:15px; margin-right:10px;" aria-hidden="true"></i></span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                         </div>
+                                      </apex:outputPanel>                                  
+                           <!-- upload image close ---> 
+                              </div>
+                              <!------shipping details tab end here----->
+                           </div>
+                           <apex:outputPanel id="fizz1">
+                              <!-------------------Case Reason Form Information Added by Asger------------------->     
+                              <!----------------------CMND singage Start------------------------->
+                              <apex:outputPanel rendered="{!TagIndex==2}">
+                              <apex:outputPanel id="p4" rendered="{!showinteger=13}">
+                                 <div class="panel panel-default " >
+                                    <div class="panel-body" id="case-title">
+                                       <div  id="CaseReason">
+                                          <h5>CMND ProTV</h5>
+                                          <div>
+                                             <div class="form-group col-md-3">
+                                                <label for="Form List">Firmware Version</label>
+                                                <apex:inputText value="{!Firmware_versionCMNDProTV}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div class="form-group col-md-3">
+                                             <label for="Version">Version</label><br/>
+                                             <apex:selectList value="{!VersionCMNDProTV}"  size="1" multiselect="false" styleClass="form-control apex-height" >
+                                                <apex:selectOptions value="{!VersionList}">
+                                                </apex:selectOptions>
+                                             </apex:selectList>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-3">
+                                                <label for="Form List">TeamViewer Id</label>
+                                                <apex:inputText value="{!Teamviewer_IDCMNDProTV}" styleclass="form-control"  />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-3">
+                                                <label for="Form List">TeamViewer Password</label>
+                                                <apex:inputText value="{!Teamviewer_PasswordCMNDProTV}" styleclass="form-control"  />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-12">
+                                                <label for="Form List">Description</label>
+                                                <apex:inputText value="{!protvDescriptionCMNDProTV}"  styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </apex:outputPanel>
+                              <!----------------------CMND singage End-------------------------->
+                              <!----------------------Inquiry Start----------------------------->
+                              <apex:outputPanel id="p5" rendered="{!showinteger=2}">
+                                 <div class="panel panel-default " >
+                                    <div class="panel-body" id="case-title">
+                                       <div  id="Inquiry">
+                                          <h5>Inquiry</h5>
+                                          <div class="row form-row">
+                                             <div class="form-group col-md-2">
+                                                <div style="margin-top: 32px;margin-left:30px;align:right">NDA Established </div>
+                                             </div>
+                                             <div class="form-group col-md-1">
+                                                <apex:inputCheckbox value="{!NDA_establishedInquiryform}" style="margin-top: 32px;width:20px;height:20px;" />
+                                             </div>
+                                             
+                                          </div>
+                                          <div class="row form-row">
+                                             <div class="form-group col-md-3">
+                                                <div style="margin-left:30px;align:right">Description </div>
+                                             </div>
+                                             <div class="form-group col-md-9">
+                                                <apex:inputText value="{!protvDescriptionInquiryform}"  styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </apex:outputPanel>
+                              <!-------------------------------Inquiry End-------------------------------->
+                              <!------------------------------CDB Start----------------------------------->
+                              <apex:outputPanel id="p7" rendered="{!showinteger=7}">
+                                 <div class="panel panel-default " >
+                                    <div class="panel-body" id="case-title">
+                                       <div  id="CDB">
+                                          <h5>CDB</h5>
+                                          <div class="row form-row">
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">Firmware Version</label>
+                                                <apex:inputText value="{!Firmware_versionCDBform}" styleclass="form-control"  />
+                                             </div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">System Info</label>
+                                                <apex:inputText value="{!System_InfoCDBform}" styleclass="form-control" />
+                                             </div>
+                                             
+                                          </div>
+                                          <div class="row form-row">
+                                             <div class="form-group col-md-12">
+                                                <label for="Form List">Description</label>
+                                                <apex:inputText value="{!protvDescriptionCDBform}" id="ww1dtyha1" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <!--<div>
+                                             <div class="form-group col-md-4">
+                                                 <label for="Form List">Clone</label>
+                                                 <apex:inputText value="{!filebody}" id="wwd1tha1" />
+                                             </div>
+                                             </div>-->                                             
+                                       </div>
+                                    </div>
+                                 </div>
+                              </apex:outputPanel>
+                              <!------------------------------CDB End----------------------------------->
+                              <!------------------------------SXP Start--------------------------------->             
+                              <apex:outputPanel id="p6" rendered="{!showinteger=8}">
+                                 <div class="panel panel-default " >
+                                    <div class="panel-body" id="case-title">
+                                       <div  id="SXP">
+                                          <h5>SXP</h5>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">Firmware Version</label>
+                                                <apex:inputText value="{!Firmware_versionSXPform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">System Info</label>
+                                                <apex:inputText value="{!System_InfoSXPform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             
+                                          </div>
+                                          <div class="row form-row">
+                                       <div class="col-md-12">
+                                       <div class="form-group col-md-2">
+                                          <div style="float:left;margin-top: 30px;margin-left:1px;align:right">NDA Established</div>
+                                          <apex:inputCheckbox value="{!NDA_establishedSXPform}"  style=" margin-top:30px;width:18px;height:18px;float:right"/>
+                                       </div>
+                                       <div class="form-group col-md-10">
+                                          <label for="Form List">Description</label>
+                                          <apex:inputText value="{!protvDescriptionSXPform}" id="ww1dtyha2" styleclass="form-control" style=" margin-right: 2px" />
+                                       </div>
+                                       </div>
+                                    </div>
+                                    <div>
+                                             <!---  <div class="form-group col-md-4">
+                                                <label for="Form List">Clone</label>
+                                                <apex:inputText value="{!filebody}" id="ww1th1" />
+                                                </div>--->
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </apex:outputPanel>
+                              <!------------------------------SXP End----------------------------------->  
+                              <!---------------------------Mychoice Start------------------------------->                          
+                              <apex:outputPanel id="p8" rendered="{!showinteger=9}">
+                                 <div class="panel panel-default " >
+                                    <div class="panel-body" id="case-title">
+                                       <div  id="Mychoice">
+                                          <h5>My Choice</h5>
+                                          <div>
+                                             <div class="form-group col-md-6">
+                                                <label for="Form List">Firmware Version</label>
+                                                <apex:inputText value="{!Firmware_versionMyChoiceform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-12">
+                                                <label for="Form List">Description</label>
+                                                <apex:inputText value="{!protvDescriptionMyChoiceform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <!-- <div class="form-group col-md-4">
+                                                <label for="Form List">Clone</label>
+                                                <apex:inputText value="{!filebody}" id="ww1tsh1" />
+                                                </div>-->
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </apex:outputPanel>
+                              <!---------------------------Mychoice End------------------------------->                          
+                              <!--------------------------V Secure Start------------------------------>                                                    
+                              <apex:outputPanel id="p9" rendered="{!showinteger=10}">
+                                 <div class="panel panel-default " >
+                                    <div class="panel-body" id="case-title">
+                                       <div  id="V Secure">
+                                          <h5>V Secure</h5>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">Firmware Version</label>
+                                                <apex:inputText value="{!Firmware_versionVSecureform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">System</label>
+                                                <apex:inputText value="{!SystemcaseVSecureform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">CAM Card Version</label>
+                                                <apex:inputText value="{!CAM_card_versionVSecureform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-12">
+                                                <label for="Form List">Description</label>
+                                                <apex:inputText value="{!protvDescriptionVSecureform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </apex:outputPanel>
+                              <!--------------------------V Secure End------------------------------>
+                              <!----------------------CMND Signage Start---------------------------->                                      
+                              <apex:outputPanel id="p10" rendered="{!showinteger=1}">
+                                 <div class="panel panel-default " >
+                                    <div class="panel-body" id="case-title">
+                                       <div  id="CMNDSignage">
+                                          <h5>CMND Signage</h5>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">Firmware Version</label>
+                                                <apex:inputText value="{!Firmware_versionCMNDSignageform}" styleclass="form-control"/>
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">Scalar Version</label>
+                                                <apex:inputText value="{!Scalar_versionCMNDSignageform}" styleclass="form-control"  />
+                                             </div>
+                                          </div>
+                                          <div class="form-group col-md-4">
+                                             <label for="Version">Version</label><br/>
+                                             <apex:selectList value="{!VersionCMNDSignageform}" size="1" multiselect="false" styleClass="form-control apex-height">
+                                                <apex:selectOptions value="{!VersionList}">
+                                                </apex:selectOptions>
+                                             </apex:selectList>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">TeamViewer Id</label>
+                                                <apex:inputText value="{!Teamviewer_IDCMNDSignageform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">TeamViewer Password</label>
+                                                <apex:inputText value="{!Teamviewer_PasswordCMNDSignageform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">Description</label>
+                                                <apex:inputText value="{!protvDescriptionCMNDSignageform}" styleclass="form-control"  />
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </apex:outputPanel>
+                              <!----------------------CMND Signage End---------------------------->                                        
+                              <!----------------------Issue Pro Tv Start-------------------------->                                                                                                          
+                              <apex:outputPanel id="p52" rendered="{!showinteger=14}">
+                                 <div class="panel panel-default " >
+                                    <div class="panel-body" id="case-title">
+                                       <div  id="CMNDSignage">
+                                          <h5>Issue ProTV</h5>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">Location</label>
+                                                <apex:inputText value="{!Locationprotv1}" styleclass="form-control"/>
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">Firmware Version</label>
+                                                <apex:inputText value="{!FirmwareVersionprotv1}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div class="form-group col-md-4">
+                                             <label for="Version">Installation</label><br/>
+                                             <apex:selectList value="{!Installationprotv1}" size="1" multiselect="false" styleClass="form-control apex-height">
+                                                <apex:selectOptions value="{!Installationlistprotv1}" >
+                                                </apex:selectOptions>
+                                             </apex:selectList>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">System Description</label>
+                                                <apex:inputText value="{!Systemdescriptionprotv1}" styleclass="form-control"/>
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List"># Units Affected</label>
+                                                <apex:inputText value="{!Unitsaffectedprotv1}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-12">
+                                                <label for="Form List">Description</label>
+                                                <apex:inputText value="{!protvDescriptionprotv1}" styleclass="form-control"  />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <!--<div class="form-group col-md-4">
+                                                <label for="Form List">Upload</label>
+                                                <apex:inputText value="{!filebody}" id="ww11s1tdssh1" />
+                                                </div>-->
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </apex:outputPanel>
+                              <!----------------------issue pro tv End---------------------------->                                        
+                              <!----------------------Issue_Signage Start------------------------->                                                                            
+                              <apex:outputPanel id="p11"  rendered="{!showinteger=3}" >
+                                 <div class="panel panel-default" >
+                                    <div class="panel-body" id="case-title">
+                                       <div  id="Issue_Signage">
+                                          <h5>Issue Signage</h5>
+                                          <div>
+                                             <div class="form-group col-md-3">
+                                                <label for="Form List">Firmware Version</label>
+                                                <apex:inputText value="{!Firmware_versionIssue_Signageform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-3">
+                                                <label for="Form List">Scalar Version</label>
+                                                <apex:inputText value="{!Scalar_versionIssue_Signageform }" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-3">
+                                                <label for="Form List">Additional Hardware</label>
+                                                <apex:inputText value="{!Additional_hardwareIssue_Signageform }" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-12">
+                                                <label for="Form List">Description</label>
+                                                <apex:inputText value="{!protvDescriptionIssue_Signageform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <!--<div class="form-group col-md-4">
+                                                <label for="Form List">Upload</label>
+                                                <apex:inputText value="{!filebody}" id="ww11s1tdssh1" />
+                                                </div>-->
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </apex:outputPanel>
+                              <!----------------------Issue_Signage End---------------------------->                                       
+                              <!-----------------------Calibration Start--------------------------->                                                                           
+                              <apex:outputPanel id="p13" rendered="{!showinteger=4}">
+                                 <div class="panel panel-default " >
+                                    <div class="panel-body" id="case-title">
+                                       <div  id="Calibration">
+                                          <h5>Calibration</h5>
+                                          <div>
+                                             <!--<div class="form-group col-md-4">
+                                                <label for="Form List">Picture</label>
+                                                <apex:inputText value="{!filebody}" id="ww11s1tsd1h" />
+                                                </div>-->
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-3">
+                                                <label for="Form List">Software Version</label>
+                                                <apex:inputText value="{!Software_versionCalibrationform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-3">
+                                                <label for="Form List">Cabling Structure</label>
+                                                <apex:inputText value="{!Cabling_structureCalibrationform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div class="form-group col-md-3">
+                                             <label for="Form List">Tool</label><br/>
+                                             <apex:selectList value="{!Tool123}" size="1" multiselect="false" styleClass="form-control apex-height">
+                                                <apex:selectOptions value="{!ToolList}" >
+                                                </apex:selectOptions>
+                                             </apex:selectList>
+                                          </div>
+                                          <div>
+                                             
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-12">
+                                                <label for="Form List">Description</label>
+                                                <apex:inputText value="{!protvDescriptionCalibrationform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </apex:outputPanel>
+                              <!----------------------Calibration End---------------------------->                                         
+                              <!--------------------Project Support Start-------------------------->                                     
+                              <apex:outputPanel id="p14" rendered="{!showinteger=5}">
+                                 <div class="panel panel-default " >
+                                    <div class="panel-body" id="case-title">
+                                       <div  id="Project_Support">
+                                          <h5>Project Support</h5>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">Contact Name</label>
+                                                <apex:inputText value="{!Contact_NameProjectSupportform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">Contact Phone</label>
+                                                <apex:inputText value="{!Contact_PhoneProjectSupportform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <!--    <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">Software version</label>
+                                                <apex:inputText value="{!Software_versionProjectSupportform}" styleclass="form-control" />
+                                             </div>
+                                             </div>  -->
+                                          <div>
+                                             <div class="form-group col-md-4">
+                                                <label for="Form List">Location</label>
+                                                <apex:inputText value="{!LocatioProjectSupportform }" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-12">
+                                                <label for="Form List">Project Description</label>
+                                                <apex:inputText value="{!protvDescriptionProjectSupportform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </apex:outputPanel>
+                              <!--------------------Project Support End-------------------------->   
+                              <!----------------------App Signing Start-------------------------->                                         
+                              <apex:outputPanel id="p15" rendered="{!showinteger=6}">
+                                 <div class="panel panel-default " >
+                                    <div class="panel-body" id="case-title">
+                                       <div  id="App_Signing">
+                                          <h5>App Signing</h5>
+                                          <div>
+                                             <!--  <div class="form-group col-md-4">
+                                                <label for="Form List">APK Upload</label>
+                                                <apex:inputText value="{!filebody}" id="w11s4swwsa1" />
+                                                </div>-->
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-3">
+                                                <label for="Form List">App Version</label>
+                                                <apex:inputText value="{!App_VersionAppSigningform}" styleclass="form-control"/>
+                                             </div>
+                                          </div>
+                                          <div>
+                                             
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-6">
+                                                <label for="Form List">Description</label>
+                                                <apex:inputText value="{!protvDescriptionAppSigningform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </apex:outputPanel>
+                              <!----------------------App Signing End-------------------------->    
+                              <!------------------------CRD50 Start---------------------------->                                  
+                              <apex:outputPanel id="p16" rendered="{!showinteger=11}">
+                                 <div class="panel panel-default " >
+                                    <div class="panel-body" id="case-title">
+                                       <div  id="App_Signing">
+                                          <h5>CRD 50</h5>
+                                          <div>
+                                             <div class="form-group col-md-3">
+                                                <label for="Form List">Monitor Type</label>
+                                                <apex:inputText value="{!Monitor_typeCRD50form}" styleclass="form-control"/>
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-3">
+                                                <label for="Form List">Monitor Firmware</label>
+                                                <apex:inputText value="{!Monitor_FirmwareCRD50form}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-3">
+                                                <label for="Form List">Scalar Firmware</label>
+                                                <apex:inputText value="{!Scalar_firmwareCRD50form}" styleclass="form-control"/>
+                                             </div>
+                                          </div>
+                                          <div>
+                                             
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-12">
+                                                <label for="Form List">Description</label>
+                                                <apex:inputText value="{!protvDescriptionCRD50form}" styleclass="form-control"/>
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <!--<div class="form-group col-md-4">
+                                                <label for="Form List">APK</label>
+                                                <apex:inputText value="{!filebody}" id="ww11s1d1sdd7tsh1" />
+                                                </div>-->
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </apex:outputPanel>
+                              <!--------------------------CRD50 End----------------------------->  
+                              <!------------------------Accesories Start------------------------>                                         
+                              <apex:outputPanel id="p17" rendered="{!showinteger=12}">
+                                 <div class="panel panel-default " >
+                                    <div class="panel-body" id="case-title">
+                                       <div  id="App_Signing">
+                                          <h5>Accesories </h5>
+                                          <div>
+                                             <div class="form-group col-md-6">
+                                                <label for="Form List">Device</label>
+                                                <apex:inputText value="{!DeviceAccessoriesform}" styleclass="form-control"/>
+                                             </div>
+                                          </div>
+                                          <div>
+                                             <div class="form-group col-md-6">
+                                                <label for="Form List">Description</label>
+                                                <apex:inputText value="{!protvDescriptionAccessoriesform}" styleclass="form-control" />
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </apex:outputPanel>
+                              </apex:outputPanel>
+                              <!-------------------------Accesories End-------------------------->           
+                           </apex:outputPanel>
+                           <!----Accesories Asger----> 
+                                                                             
+                           <apex:outputPanel id="p3">
+                              <div class="pannel-footer">
+                                 <div style="float:right;">
+                                    <apex:actionregion >
+                                       <!-- <apex:commandButton value="Previous" action="{!ShowHide}" styleClass="action-button btn-info btn-padding btn-width" rendered="{!TagIndex=2}"/> -->
+                                       <apex:commandButton value="Save" action="{!createCust}" styleClass="action-button btn-info btn-padding btn-width "  rendered="{!TagIndex=1}" />
+                                       &nbsp;&nbsp;  
+                                       <apex:commandButton value="Save and Create Case" action="{!ShowHide}" styleClass="action-button btn-info btn-padding btn-width" rendered="{!TagIndex=1}" />
+                                       &nbsp;&nbsp; 
+                                       <apex:commandButton value="Save and Next" action="{!createCustomer}" styleClass="action-button btn-info btn-padding btn-width" rendered="{!TagIndex=2}"/>
+                                     <apex:commandButton value="Submit" action="{!FinalSumbit}" styleClass="action-button btn-info btn-padding btn-width" rendered="{!TagIndex=3}"/>
+                                    </apex:actionregion>
+                                 </div>
+                              </div>
+                           </apex:outputPanel>
+                           <!-- <div class="form-row">
+                              <div class="col-md-6 col-sm-12 col-xs-12">
+                                 <apex:commandButton value="Submit Case" styleclass="action-button btn-info"   onclick="regs()"  action="{!getAttachment}"/> 
+                              </div>
+                              </div> --->
+                        </div>
+                        <!--<div style="text-align:center;margin-top:40px; display:none;">
+                           <span class="step"></span>
+                           <span class="step"></span>
+                           <span class="step"></span>
+                           <span class="step"></span>
+                        </div> -->
+                     </apex:outputPanel>
+                  </div>
+               </apex:form>
+            </div>
+         </apex:outputpanel>
+         <!-- code for attachmnet start------->
+         <apex:form >
+            <apex:outputPanel rendered="{!SHowpage==true}">
+               <c:head_include ></c:head_include>
+               <c:portal_Script ></c:portal_Script>
+               <apex:outputPanel styleClass="modal1" layout="block" rendered="true" id="panel3">
+                  <div class="modal-div1">
+                     <!--navbar menu-->
+                     <section class="navbar-info">
+                        <div id="imageview-center">
+                           <nav class="navbar navbar-default navbar-me">
+                              <div class="container-fluid ">
+                                 <!-- Brand and toggle get grouped for better mobile display -->
+                                 <div class="navbar-header">
+                                    <a class="navbar-brand site-logo" href="#">
+                                       <apex:image url="{!URLFOR($Resource.img, 'img/logo.png')}"/>
+                                    </a>
+                                 </div>
+                              </div>
+                           </nav>
+                        </div>
+                     </section>
+                     <apex:commandbutton value="Back" action="{!backmethod}" styleclass="action-button btn-info" style="font-size:20px;width:100%;height:20%"/>
+                  </div>
+               </apex:outputPanel>
+               <apex:iframe src="/apex/DragDropToCloud__DragDropUploader?parent_id={!PageId}"  id="theIframe" rendered="{!showdragANDdrop==true}" height="630px"/>
+            </apex:outputPanel>
+         </apex:form>
+         <!-- code for attachmnet stop------->
+         <!--#############################FOOTER SECTION################################--->
+         <script>
+            function countrycode(po)
+            {
+            
+            if(po.length<=3 && typeof po == 'number')
+              {
+              alert(true);
+              
+              }
+              else
+            {
+            alert("message");
+            var msg = 'Please check Your Number !';
+            document.getElementById("demo").innerHTML=msg;
+            return false;
+            }
+              
+            }
+         </script>
+         <section>
+            <c:portal_footer />
+            <a id="back2Top" href="#" title="Go to Top">&#10148;</a>
+         </section>
+         <!--#############################################################--->
+         <!--/////////////////////////////START PRODUCT SELECT MODAL/////////////////////////////////-->
+      </body>
+   </html>
+</apex:page>
+
+**************************************apex class **********************************************************
+public class RegisterController_clone {
+
+public list<selectOption> caseTypeList {get;set;}
+public string caseType{get;set;}
+public list<selectOption> ComplaintTypeList {get;set;}
+public string ComplaintType{get;set;}
+public list<selectOption> CaseReasonTypeList {get;set;}
+public string CaseReasonType{get;set;}
+public list<selectOption> PriorityList {get;set;}
+public string Priority{get;set;}
+public list<selectOption> WarrantyTakenList {get;set;}
+public string WarrantyTaken{get;set;}
+public list<selectOption> WarrantyDurationList {get;set;}
+public string CountryCode{get;set;}
+public list<selectOption> CountryCodeList {get;set;}
+public string WarrantyDuration{get;set;}
+public list<selectOption> ProductFamilyList {get;set;}
+public string ProductFamily{get;set;}
+public list<selectOption>  VersionList{get;set;}
+public string Version{get;set;}
+public list<selectOption> GDPRList{get;set;}
+public string gdprcase{get;set;}
+Public static  blob filebody{get;set;}     
+public static String fileName {get;set;}
+public static String contId{get;set;}
+public date pdate;
+public string errormessage{get;set;}
+public string DuplicateEmail{get;set;}
+public string errormessages {get;set;}
+Public Integer TagIndex{get;set;}
+public list<selectOption> selectProdList {get;set;}
+    public string hlstname{get;set;} 
+    public string hfstname{get;set;} 
+    public string hemail{get;set;} 
+    public string hphone{get;set;} 
+    public string hphone1{get;set;}
+    public string hstreet{get;set;} 
+    public string hstreet1{get;set;}
+    public string hcity{get;set;} 
+    public string hstate{get;set;}
+    public string hcountry{get;set;} 
+    public string hzip{get;set;}
+    public string hcountycode{get;set;}
+    public string hcountycode1{get;set;}
+    public date purchasedate{get;set;}
+    public boolean errorcheck{get;set;}
+    public string hDate2{get;set;} 
+    public string hbill2{get;set;} 
+    public string hmodel2{get;set;} 
+    public string hserial2{get;set;} 
+    public string hdesc2{get;set;} 
+    public string hproductTable2{get;set;}
+    public string hcaseTypevalue{get;set;} 
+    public string hComplaintTypevalue{get;set;} 
+    public string hCaseReasonvalue{get;set;} 
+    public string hPriorityvalue{get;set;} 
+    public string hWarrantyTakenvalue{get;set;} 
+    public string hWarrantyDurationvalue{get;set;} 
+    public string hProductFamilyvalue{get;set;}
+    public string hShippingStreet{get;set;} 
+    public string hShippingCity{get;set;}         
+    public string hShippingState{get;set;} 
+    public string hShippingZip{get;set;} 
+    public string hShippingCountry{get;set;} 
+    public string hContactName{get;set;}
+    public string url;
+    Public string ProductName{get;set;}
+    
+    Public string Teamviewer_ID{get;set;}
+    Public string Teamviewer_Password{get;set;}
+    Public string protvDescription{get;set;}
+    Public string Firmware_version{get;set;}
+    Public integer Units_affected{get;set;}
+    Public string Additional_hardware{get;set;}
+    Public string App_Version{get;set;}
+    Public string Cabling_structure{get;set;}
+    Public string CAM_card_version{get;set;}
+    Public string Contact_Name{get;set;}
+    Public string Contact_Phone{get;set;}
+    Public string Device{get;set;}
+    Public string Installation{get;set;}
+    Public string Location{get;set;}
+    Public string Monitor_Firmware{get;set;}
+    Public string Monitor_type{get;set;}
+    Public boolean NDA_established{get;set;}
+    Public string Project_description{get;set;}
+    Public string Scalar_firmware{get;set;}
+    Public string Scalar_version{get;set;}
+    Public string Software_version{get;set;}
+    Public string Systemcase{get;set;}
+    Public string System_description{get;set;}
+    Public string System_Info{get;set;}
+    Public Id CMNDProTV;
+    Public Id Inquiryform{get;set;}
+    Public Id CDBform{get;set;} 
+    Public Id SXPform{get;set;}  
+    Public Id MyChoiceform{get;set;} 
+    Public Id VSecureform{get;set;}
+    Public Id CMNDSignageform{get;set;}
+    Public Id Issue_Signageform{get;set;}
+    Public Id Calibrationform{get;set;}
+    Public Id ProjectSupportform{get;set;}
+    Public Id AppSigningform{get;set;}
+    Public Id CRD50form{get;set;}
+    Public Id Accessoriesform{get;set;}
+    Public Id CMNDProTV1{get;set;} 
+    public integer showinteger{get;set;}
+   Public string Firmware_versionCMNDProTV{get;set;}
+   Public string  VersionCMNDProTV{get;set;}
+   Public string Teamviewer_IDCMNDProTV{get;set;}
+   Public string Teamviewer_PasswordCMNDProTV{get;set;}
+   Public string protvDescriptionCMNDProTV{get;set;}
+   Public string Firmware_versionCDBform{get;set;}
+   Public string System_InfoCDBform{get;set;}
+   Public Boolean NDA_establishedCDBform{get;set;}
+   Public string protvDescriptionCDBform{get;set;}
+   Public Boolean NDA_establishedInquiryform{get;set;}
+   Public string protvDescriptionInquiryform{get;set;}
+   Public string Firmware_versionSXPform{get;set;}
+   Public string protvDescriptionSXPform{get;set;}
+   Public string System_InfoSXPform{get;set;}
+   Public string Firmware_versionMyChoiceform{get;set;}
+   Public string protvDescriptionMyChoiceform{get;set;}
+   Public string Firmware_versionVSecureform{get;set;}
+   Public string SystemcaseVSecureform{get;set;}
+   Public string CAM_card_versionVSecureform{get;set;}
+   Public string protvDescriptionVSecureform{get;set;}
+   Public string Firmware_versionCMNDSignageform{get;set;}
+   Public string Scalar_versionCMNDSignageform{get;set;}
+   Public string VersionCMNDSignageform{get;set;}
+   Public string Teamviewer_IDCMNDSignageform{get;set;}
+   Public string Teamviewer_PasswordCMNDSignageform{get;set;}
+   Public string protvDescriptionCMNDSignageform{get;set;}
+   Public string Firmware_versionIssue_Signageform{get;set;} 
+   Public string Scalar_versionIssue_Signageform{get;set;} 
+   Public string Additional_hardwareIssue_Signageform{get;set;}
+   Public string protvDescriptionIssue_Signageform{get;set;}  
+   Public string Software_versionCalibrationform{get;set;} 
+   Public string Cabling_structureCalibrationform{get;set;} 
+   Public string protvDescriptionCalibrationform{get;set;} 
+   Public string Contact_NameProjectSupportform{get;set;} 
+   Public string Contact_PhoneProjectSupportform{get;set;} 
+   Public string Software_versionProjectSupportform{get;set;}  
+   Public string LocatioProjectSupportform{get;set;}  
+   Public string protvDescriptionProjectSupportform{get;set;} 
+   Public string App_VersionAppSigningform{get;set;} 
+   Public string protvDescriptionAppSigningform{get;set;} 
+   Public string Monitor_typeCRD50form{get;set;} 
+   Public string Monitor_FirmwareCRD50form{get;set;} 
+   Public string Scalar_firmwareCRD50form{get;set;} 
+   Public string protvDescriptionCRD50form{get;set;} 
+   Public string DeviceAccessoriesform{get;set;} 
+   Public string protvDescriptionAccessoriesform{get;set;}
+   Public string Locationprotv1{get;set;}
+   Public string FirmwareVersionprotv1{get;set;}
+   public list<selectOption> Installationlistprotv1{get;set;}
+   Public string  Installationprotv1{get;set;}
+   Public string Systemdescriptionprotv1{get;set;}
+   Public integer  Unitsaffectedprotv1{get;set;}
+   Public string protvDescriptionprotv1{get;set;}
+   Public string Case_id;
+     public list < selectOption > TeamViewerList {
+        get;
+        set;
+    }
+    public string TeamViewer {
+        get;
+        set;
+    }
+    Public string Tool123 {
+        get;
+        set;
+    }
+    public list < selectOption > ToolList {
+        get;
+        set;
+    }
+     Public Boolean NDA_establishedSXPform {
+        get;
+        set;
+    }
+   //variables for attachmentb added by indresh
+    public string PageId{get;set;}
+    public string InsertedFilename{get;set;}
+    public boolean showdragANDdrop{get;set;}
+    public boolean SHowpage{get;set;}
+     public string contactid{get;set;}
+public RegisterController_clone (){  
+    SHowpage=false;
+    PurchaseDate = system.today();
+    WarrantyTaken='-–None–-';
+    showdragANDdrop=false;
+   errorcheck=false;
+    String Index= ApexPages.currentpage().getParameters().get('Index');
+    if(Index!=null && Index!=''){
+        TagIndex=3;
+    }else{
+        TagIndex=1;
+    }
+    
+   //TagIndex=3;
+    selectProdList = new List<selectOption>();
+    caseTypeList = new List<selectOption>();
+       showinteger=0;
+                //To get the value for the picklist field  Start 
+                Schema.DescribeFieldResult fieldResult11 = case.Type.getDescribe();
+                List<Schema.PicklistEntry> cou21 = fieldResult11.getPicklistValues();
+                for( Schema.PicklistEntry f : cou21)
+                {
+                  caseTypeList.add(new SelectOption(f.getLabel(), f.getValue()));
+                }
+                
+                ComplaintTypeList = new List<selectOption>();
+
+                Schema.DescribeFieldResult fieldResult1 = case.Complaint_Type__c.getDescribe();
+                List<Schema.PicklistEntry> cou2 = fieldResult1.getPicklistValues();
+                for( Schema.PicklistEntry f : cou2)
+                {
+                  ComplaintTypeList.add(new SelectOption(f.getLabel(), f.getValue()));
+                }  
+                
+                PriorityList = new List<selectOption>();
+
+                Schema.DescribeFieldResult fieldResult3 = case.Priority.getDescribe();
+                List<Schema.PicklistEntry> cou4 = fieldResult3.getPicklistValues();
+                for( Schema.PicklistEntry f : cou4)
+                {
+                  PriorityList.add(new SelectOption(f.getLabel(), f.getValue()));
+                }  
+                
+                TeamViewerList = new List < selectOption > ();
+                Schema.DescribeFieldResult fieldResult31p = case.If_customer_has_Team_viewer__c.getDescribe();
+                List < Schema.PicklistEntry > cou41p = fieldResult31p.getPicklistValues();
+                for (Schema.PicklistEntry f: cou41p) {
+                    TeamViewerList.add(new SelectOption(f.getLabel(), f.getValue()));
+                }
+                
+                WarrantyTakenList = new List<selectOption>();
+
+                Schema.DescribeFieldResult fieldResult31 = case.Extended_Warranty_Taken__c.getDescribe();
+                List<Schema.PicklistEntry> cou41 = fieldResult31.getPicklistValues();
+                for( Schema.PicklistEntry f : cou41)
+                {
+                  WarrantyTakenList.add(new SelectOption(f.getLabel(), f.getValue()));
+                }  
+                
+                WarrantyDurationList = new List<selectOption>();
+
+                Schema.DescribeFieldResult fieldResult311 = case.Extended_Warranty_Duration__c.getDescribe();
+                List<Schema.PicklistEntry> cou311 = fieldResult311.getPicklistValues();
+                for( Schema.PicklistEntry f : cou311)
+                {
+                  WarrantyDurationList.add(new SelectOption(f.getLabel(), f.getValue()));
+                }  
+                
+                ProductFamilyList = new List<selectOption>();
+
+                Schema.DescribeFieldResult fieldResult3111 = case.Product_Family__c.getDescribe();
+                List<Schema.PicklistEntry> cou3111 = fieldResult3111.getPicklistValues();
+                for( Schema.PicklistEntry f : cou3111)
+                {
+                  ProductFamilyList.add(new SelectOption(f.getLabel(), f.getValue()));
+                } 
+                
+                 CountryCodeList = new List<selectOption>();
+
+                Schema.DescribeFieldResult fieldResult31111 = contact.Country_Codes__c.getDescribe();
+                List<Schema.PicklistEntry> cou31111 = fieldResult31111.getPicklistValues();
+                for( Schema.PicklistEntry f : cou31111)
+                {
+                  CountryCodeList.add(new SelectOption(f.getLabel(), f.getValue()));
+                } 
+                
+                 VersionList = new List<selectOption>();
+
+                Schema.DescribeFieldResult fieldResult111 = Form_Information__c.Version__c .getDescribe();
+                List<Schema.PicklistEntry> cou211 = fieldResult111.getPicklistValues();
+                for( Schema.PicklistEntry f : cou211)
+                {
+                  VersionList.add(new SelectOption(f.getLabel(), f.getValue()));
+                }  
+                
+                Installationlistprotv1 = new List<selectOption>();
+
+                Schema.DescribeFieldResult fieldResult457 = Form_Information__c.Installation__c.getDescribe();
+                List<Schema.PicklistEntry> cou1452 = fieldResult457.getPicklistValues();
+                for( Schema.PicklistEntry f : cou1452)
+                {
+                  Installationlistprotv1.add(new SelectOption(f.getLabel(), f.getValue()));
+                }  
+                 
+                 
+                
+                 GDPRList = new List<selectOption>();
+
+                Schema.DescribeFieldResult fieldResult321 = case.GDPR__c.getDescribe();
+                List<Schema.PicklistEntry> cou421 = fieldResult321.getPicklistValues();
+                for( Schema.PicklistEntry f : cou421)
+                {
+                  GDPRList.add(new SelectOption(f.getLabel(), f.getValue()));
+                }  
+                 ToolList = new List < selectOption > ();
+
+                Schema.DescribeFieldResult fieldResult333 = Form_Information__c.Tool__c.getDescribe();
+                List < Schema.PicklistEntry > cou2pp = fieldResult333.getPicklistValues();
+                for (Schema.PicklistEntry f: cou2pp) {
+                    ToolList.add(new SelectOption(f.getLabel(), f.getValue()));
+                }
+               //To get the value for the picklist field End 
+}
+   
+  public  PageReference createCust(){
+   Id cId = Schema.SObjectType.Contact.RecordTypeInfosByName.get('Customer').getRecordTypeId();
+   contact con = new contact ();
+    if( (DuplicateEmail == null || DuplicateEmail == '') && hfstname!=null && hfstname!=''  && hlstname!=null && hlstname!= '' && hemail!= null && hemail!='' && hstreet!= null && hstreet!='' && hcity!=null && hcity!='' && hstate!=null && hstate!='' && hcountry!= null && hcountry!='' &&  hZip!= null && hZip!=''   && (hcountycode1!=null && hcountycode1!='' && hcountycode1.startsWith('+') && hcountycode1.substringAfter('+').isNumeric() && !hcountycode1.contains('.'))  && (hphone1!= null && hphone1!='' && hphone1.isNumeric() && hphone1.length()<=10 && !hphone1.contains('.')) && ((hcountycode==NULL || hcountycode=='') || (hcountycode!=NULL && hcountycode!='' && hcountycode.startsWith('+') && hcountycode.substringAfter('+').isNumeric() && !hcountycode.contains('.')))  && ((hphone==NULL || hphone=='') || (hphone!=NULL && hphone!=NULL && hphone.isNumeric() && !hphone.contains('.'))) && Pattern.matches('^[a-zA-Z0-9._|\\\\%#~`=?&/$^*!}{+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$', hemail)) 
+          {
+          system.debug('asger');
+    con.RecordTypeId = cId ;
+          con.FirstName = hfstname ;
+          con.LastName = hlstname;
+          con.email = hemail;
+          con.User_Name__c = hemail;
+          con.Address_Line_1__c = hstreet;
+          con.Address_Line_2__c=hstreet1;
+          con.MailingCity = hcity;
+          con.MailingState = hstate;
+          con.MailingCountry = hcountry;
+          con.MailingPostalCode = hZip;
+          con.Country_Codes__c = hcountycode;
+          con.phone = hphone;
+          con.Country_Code_Mobile__c=hcountycode1;
+          con.MobilePhone=hphone1;
+         
+         
+          insert con;
+          contactid =con.id;
+          PageReference orderPage = new PageReference('/apex/UserRegisterThankYou_Customer');
+      orderPage.setRedirect(true);
+      return orderPage;
+         
+          }
+          else
+          {
+           ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please insert value in required field!'));
+          return null;
+          }
+   
+   
+  }
+  
+  // This method is used to create case and contact start 
+  public  PageReference createCustomer(){
+  system.debug('Asger');
+     
+     system.debug('Firmware_version---'+Firmware_version);
+    system.debug('Teamviewer----'+Teamviewer_ID);
+     
+      List<Case> mycase = new List<Case>();
+      List<Case> cc = new List<Case>();
+      list<Case> ca1 =[select Id,Model_Number__c ,Serial_Number__c ,Bill_Number__c,Purchase_Date__c,ContactId,ContactEmail ,Complaint_Type__c from Case  ];
+      list<Case> caList =[select Id,Model_Number__c ,Serial_Number__c ,Bill_Number__c,Purchase_Date__c,ContactId,ContactEmail ,Complaint_Type__c from Case where  ContactEmail=:hemail];
+       system.debug('casss'+ca1);
+       boolean checkInsert=False;      
+          if(caList.size()>0){
+            errormessage='You already Have existing Account from this Email.Please login to your Account to register the case';
+          }else{
+              checkInsert=true;
+          }
+    
+     if(checkInsert==true && hmodel2 !=null && hmodel2 !='' && hserial2 !=null && hserial2 !='' && String.isNotEmpty(gdprcase) && PurchaseDate!=null && PurchaseDate <= system.today() ){
+    
+         list<Product2> prod =[select id,name from Product2 where name=:ProductName limit 1];
+      id pid=null;
+      
+      
+      if(prod.size()>=0  ){
+          pid = prod[0].id;
+           /* contact con = new contact ();
+            system.debug('Mehndi');
+          //con.RecordTypeId = cId ;
+          con.FirstName = hfstname ;
+          con.LastName = hlstname;
+          con.email = hemail;
+          con.User_Name__c = hemail;
+          con.MailingStreet = hstreet;
+          con.MailingCity = hcity;
+          con.MailingState = hstate;
+          con.MailingCountry = hcountry;
+          con.MailingPostalCode = hZip;
+          con.Country_Codes__c = hcountycode;
+          con.phone = hphone;
+         
+          insert con;
+          system.debug('con--'+con);
+          contactid = con.id;*/
+          
+          case cs = new case();
+          cs.Model_Number__c = hmodel2;
+          cs.Serial_Number__c = hserial2;
+          cs.Bill_Number__c = hbill2;
+          cs.Purchase_Date__c = purchasedate; 
+          cs.Origin = 'Web';
+          cs.status = 'NEW';
+          cs.Description = hdesc2;
+          cs.ContactId = contactid;
+          cs.GDPR__c=gdprcase;
+          cs.type = caseType;
+          cs.Complaint_Type__c = ComplaintType;
+          cs.Reason = CaseReasonType;
+          cs.If_customer_has_Team_viewer__c = TeamViewer;
+          cs.Extended_Warranty_Taken__c = WarrantyTaken;
+          cs.Extended_Warranty_Duration__c = WarrantyDuration;
+          cs.Product_Family__c = ProductFamily;
+          cs.Product_Name__c =  prod[0].name;
+          cs.Product__c = pid;
+          insert cs;
+          Case_id=cs.id;
+          
+        
+      // This method is used to create case and contact end
+      //This is used to check the condition  and insert case reason form  start
+      Form_Information__c fi = new Form_Information__c();
+      system.debug('Asgerasas==='+Firmware_version);
+     if((Firmware_versionCMNDSignageform !=null && Firmware_versionCMNDSignageform != ''))
+      {
+      system.debug('Asgerasas');
+         CMNDProTV = Schema.SObjectType.Form_Information__c.RecordTypeInfosByName.get('CMND Signage').RecordTypeId;
+      fi.RecordTypeId =CMNDProTV;
+      fi.Firmware_version__c=Firmware_versionCMNDSignageform;
+      fi.Scalar_version__c= Scalar_versionCMNDSignageform; 
+      fi.Version__c =VersionCMNDSignageform;
+      fi.Teamviewer_ID__c =Teamviewer_IDCMNDSignageform;
+      fi.Teamviewer_Password__c =Teamviewer_PasswordCMNDSignageform;
+      fi.Description__c=protvDescriptionCMNDSignageform;
+      fi.Case__c=cs.id;
+       insert fi;
+       }
+        else if(NDA_established == True && protvDescription != null && protvDescription != '' && Firmware_version !='' && Firmware_version != null && System_Info != '' && System_Info != null)
+      {
+       CDBform= Schema.SObjectType.Form_Information__c.RecordTypeInfosByName.get('CDB').RecordTypeId;
+      fi.Firmware_version__c=Firmware_versionCDBform;
+      fi.System_Info__c=System_InfoCDBform;
+      fi.RecordTypeId = CDBform;
+      fi.NDA_established__c = NDA_establishedCDBform;
+      fi.Description__c = protvDescriptionCDBform;
+      fi.Case__c=cs.id;
+      insert fi;
+      }
+       else if(NDA_establishedInquiryform == True && protvDescriptionInquiryform != null && protvDescriptionInquiryform  != '')
+      {
+       Inquiryform = Schema.SObjectType.Form_Information__c.RecordTypeInfosByName.get('Inquiry').RecordTypeId;
+      fi.NDA_established__c = NDA_establishedInquiryform;
+      fi.Description__c = protvDescriptionInquiryform ;
+      fi.RecordTypeId = Inquiryform;
+      fi.Case__c=cs.id;
+      insert fi;
+      }
+      else if(Firmware_versionSXPform != null && Firmware_versionSXPform != '' && protvDescriptionSXPform != null && protvDescriptionSXPform != '' && System_InfoSXPform != null && System_InfoSXPform != '' )
+      {
+      SXPform = Schema.SObjectType.Form_Information__c.RecordTypeInfosByName.get('SXP').RecordTypeId;
+      fi.RecordTypeId = SXPform;
+      fi.Firmware_version__c=Firmware_versionSXPform ;
+      fi.Description__c = protvDescriptionSXPform ;
+      fi.System_Info__c=System_InfoSXPform ;
+      fi.NDA_established__c = NDA_establishedSXPform;
+      fi.Case__c=cs.id;
+      insert fi;
+      }
+      else if(Firmware_versionMyChoiceform != null && Firmware_versionMyChoiceform != '' && protvDescriptionMyChoiceform != null && protvDescriptionMyChoiceform != '')
+      {
+      MyChoiceform = Schema.SObjectType.Form_Information__c.RecordTypeInfosByName.get('My Choice').RecordTypeId;
+      fi.Firmware_version__c=Firmware_versionMyChoiceform;
+      fi.Description__c = protvDescriptionMyChoiceform;
+      fi.Case__c=cs.id;
+      fi.RecordTypeId = MyChoiceform;
+      }
+       else if(Firmware_versionVSecureform != null && Firmware_versionVSecureform != '' && protvDescriptionVSecureform != null && protvDescriptionVSecureform != '' && CAM_card_versionVSecureform !=null && CAM_card_versionVSecureform !='' && SystemcaseVSecureform !='' &&  SystemcaseVSecureform != null)
+       {
+         VSecureform = Schema.SObjectType.Form_Information__c.RecordTypeInfosByName.get('VSecure').RecordTypeId;
+         fi.Firmware_version__c=Firmware_versionVSecureform;
+         fi.System__c = SystemcaseVSecureform;
+         fi.CAM_card_version__c = CAM_card_versionVSecureform; 
+         fi.Description__c = protvDescriptionVSecureform;
+         fi.Case__c=cs.id;
+         fi.RecordTypeId = VSecureform;
+         insert fi;
+       }
+       else if(Firmware_versionIssue_Signageform != null && Firmware_versionIssue_Signageform != '' && Scalar_versionIssue_Signageform != null && Scalar_versionIssue_Signageform  != '' && Additional_hardwareIssue_Signageform  !=null && Additional_hardwareIssue_Signageform  !='' && protvDescriptionIssue_Signageform !='' &&  protvDescriptionIssue_Signageform != null)
+       {
+         Issue_Signageform = Schema.SObjectType.Form_Information__c.RecordTypeInfosByName.get('Issue Signage').RecordTypeId;
+         fi.Firmware_version__c=Firmware_versionIssue_Signageform;
+         fi.Scalar_version__c= Scalar_versionIssue_Signageform ;   
+         fi.Additional_hardware__c= Additional_hardwareIssue_Signageform ;
+         fi.Description__c =protvDescriptionIssue_Signageform ;
+         fi.Case__c=cs.id;
+         fi.RecordTypeId = Issue_Signageform ;
+         insert fi;
+       }
+       else if(Software_versionCalibrationform != null && Software_versionCalibrationform != '' && Cabling_structureCalibrationform != null && Cabling_structureCalibrationform != '' && protvDescriptionCalibrationform !=null && protvDescriptionCalibrationform !='')
+       {
+         Calibrationform = Schema.SObjectType.Form_Information__c.RecordTypeInfosByName.get('Calibration').RecordTypeId;
+         fi.Software_version__c=Software_versionCalibrationform;
+         fi.Cabling_structure__c= Cabling_structureCalibrationform ;   
+         fi.Description__c =protvDescriptionCalibrationform ;
+          fi.Tool__c = Tool123;
+         fi.Case__c=cs.id;
+         fi.RecordTypeId = Calibrationform;
+         insert fi;
+       }
+       else if(Contact_NameProjectSupportform != null && Contact_NameProjectSupportform != '' && Contact_PhoneProjectSupportform != null && Contact_PhoneProjectSupportform != '' && protvDescriptionProjectSupportform != null && protvDescriptionProjectSupportform!= '' && Software_versionProjectSupportform != null && Software_versionProjectSupportform != '' && LocatioProjectSupportform != null && LocatioProjectSupportform != '')
+       {
+         ProjectSupportform = Schema.SObjectType.Form_Information__c.RecordTypeInfosByName.get('Project Support').RecordTypeId;
+         fi.Contact_Name__c=Contact_NameProjectSupportform;
+         fi.Contact_Phone__c = Contact_PhoneProjectSupportform;
+         fi.Software_version__c=Software_versionProjectSupportform ;
+         fi.Location__c =LocatioProjectSupportform;
+         fi.Description__c =protvDescriptionProjectSupportform;
+         fi.Case__c=cs.id;
+         fi.RecordTypeId = ProjectSupportform ;
+         insert fi;
+       }
+       else if(Contact_NameProjectSupportform != null && Contact_NameProjectSupportform != '' && Contact_PhoneProjectSupportform != null && Contact_PhoneProjectSupportform != '' && protvDescriptionProjectSupportform != null && protvDescriptionProjectSupportform!= '' && Software_versionProjectSupportform != null && Software_versionProjectSupportform != '' && LocatioProjectSupportform != null && LocatioProjectSupportform != '')
+       {
+         ProjectSupportform = Schema.SObjectType.Form_Information__c.RecordTypeInfosByName.get('Project Support').RecordTypeId;
+         fi.Contact_Name__c=Contact_NameProjectSupportform;
+         fi.Contact_Phone__c = Contact_PhoneProjectSupportform;
+         fi.Software_version__c=Software_versionProjectSupportform ;
+         fi.Location__c =LocatioProjectSupportform;
+         fi.Description__c =protvDescriptionProjectSupportform;
+         fi.Case__c=cs.id;
+         fi.RecordTypeId = ProjectSupportform ;
+         insert fi;
+       }
+       else
+      if(App_VersionAppSigningform != null && App_VersionAppSigningform != '' && protvDescriptionAppSigningform != null && protvDescriptionAppSigningform != '' )
+       {
+         AppSigningform = Schema.SObjectType.Form_Information__c.RecordTypeInfosByName.get('App Signing').RecordTypeId;
+         fi.App_Version__c = App_VersionAppSigningform;
+         fi.Description__c =protvDescriptionAppSigningform;
+         fi.Case__c=cs.id;
+         fi.RecordTypeId = AppSigningform;
+         insert fi;
+       }
+       else
+      if(Monitor_typeCRD50form != null && Monitor_typeCRD50form != '' && Monitor_FirmwareCRD50form != null && Monitor_FirmwareCRD50form!= '' && Scalar_firmwareCRD50form !=null && Scalar_firmwareCRD50form !='' && protvDescriptionCRD50form !=null && protvDescriptionCRD50form !='')
+       {
+         CRD50form = Schema.SObjectType.Form_Information__c.RecordTypeInfosByName.get('CRD 50').RecordTypeId;
+         fi.Monitor_type__c=Monitor_typeCRD50form;
+         fi.Monitor_Firmware__c=Monitor_FirmwareCRD50form;
+         fi.Scalar_firmware__c=Scalar_firmwareCRD50form;
+         fi.Description__c =protvDescriptionCRD50form;
+         fi.Case__c=cs.id;
+         fi.RecordTypeId = CRD50form;
+         insert fi;
+       }
+       else
+      if(Monitor_typeCRD50form != null && Monitor_typeCRD50form != '' && Monitor_FirmwareCRD50form != null && Monitor_FirmwareCRD50form!= '' && Scalar_firmwareCRD50form !=null && Scalar_firmwareCRD50form !='' && protvDescriptionCRD50form !=null && protvDescriptionCRD50form !='')
+       {
+         Accessoriesform = Schema.SObjectType.Form_Information__c.RecordTypeInfosByName.get('Accessories').RecordTypeId;
+         fi.Device__c=DeviceAccessoriesform;
+         fi.Description__c =protvDescriptionAccessoriesform;
+         fi.Case__c=cs.id;
+         fi.RecordTypeId = Accessoriesform;
+         insert fi;
+       }
+       else
+       if(Locationprotv1 !=null && Locationprotv1 !='' && FirmwareVersionprotv1 !=null && FirmwareVersionprotv1 !='' && Installationprotv1 !=null && Installationprotv1 !='' && Systemdescriptionprotv1 !=null && Systemdescriptionprotv1 !='' && Unitsaffectedprotv1 !=null  && protvDescriptionprotv1 != null && protvDescriptionprotv1 != '' )
+       {
+         CMNDProTV1 = Schema.SObjectType.Form_Information__c.RecordTypeInfosByName.get('CMND Pro TV').RecordTypeId;
+          fi.Case__c=cs.id;
+          fi.RecordTypeId = CMNDProTV1;
+          fi.Location__c=Locationprotv1;
+          fi.Firmware_version__c=FirmwareVersionprotv1;
+          fi.Installation__c= Installationprotv1;
+          fi.System_description__c=Systemdescriptionprotv1;
+          fi.Units_affected__c=Unitsaffectedprotv1;
+          insert fi;
+       }
+     
+      }       
+     // getAttachment();
+      //PageReference orderPage = new PageReference('/apex/UserRegisterThankYou');
+     // orderPage.setRedirect(true);
+     // return orderPage;
+     TagIndex=TagIndex+1;
+     }
+    else
+    {
+               ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please insert value in required field!'));
+
+    } 
+     if(mycase.size()>0){
+        update mycase ;
+        
+         PageReference orderPage1 = new PageReference('/apex/Customercaseview_MMD?id='+url);
+             orderPage1.setRedirect(true);
+              return orderPage1;
+
+     }
+     system.debug('Indreshmam');
+      return null;
+       
+ }  
+ //This is used to check the condition  and insert case reason form  end
+ //This method is used check whether email is duplicates or not start
+ public void DuplicateEmailMethod(){
+      list<Contact> caList =[select Id,Email from Contact where Email=:hemail];
+     if(caList.size()>0 ){
+           // DuplicateEmail='You already Have existing Account from this Email.Please login to your Account to register the case';
+           DuplicateEmail ='Email is already registered!';
+          }else{
+              DuplicateEmail='';
+          }
+         
+ }
+public void checkEmail()
+    {
+        if(!Pattern.matches('^[a-zA-Z0-9._|\\\\%#~`=?&/$^*!}{+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$', hemail))
+        {           
+            errormessage=  'Check your email';
+        }else{
+             errormessage=' ';
+        }
+        DuplicateEmailMethod();
+    }
+ public void ShowHide(){
+      system.debug('hlstname===='+hlstname);
+     if(TagIndex==1){
+       if( (DuplicateEmail == null || DuplicateEmail == '') && hlstname !=null && hlstname !='' && hemail !=null && hemail !='' && hstreet !=null && hstreet !='' && hcity !=null && hcity !='' && hstate !=null && hstate !='' && hcountry != null && hcountry !='' && hZip !=null && hZip !='' && hphone1 !=null && hphone1 !='' && hphone1.isNumeric() && hphone1.length()<=10  && !hphone1.contains('.') &&  hcountycode1 !=null && hcountycode1 !='' && hcountycode1.startsWith('+') && hcountycode1.substringAfter('+').isNumeric()   && ((hphone== NULL || hphone=='' ) || (hphone!=NULL && hphone!='' && !hphone.contains('.') && hphone.isNumeric())) && ((hcountycode==NULL || hcountycode=='') || (hcountycode!=NULL && hcountycode!='' && hcountycode.startsWith('+') && hcountycode.substringAfter('+').isNumeric()) ) && Pattern.matches('^[a-zA-Z0-9._|\\\\%#~`=?&/$^*!}{+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$', hemail) )
+        {
+             errorcheck=false;
+         TagIndex=2;
+          Id cId = Schema.SObjectType.Contact.RecordTypeInfosByName.get('Customer').getRecordTypeId();
+          contact con = new contact ();
+           system.debug('Mehndi');
+          con.RecordTypeId = cId ;
+          con.FirstName = hfstname ;
+          con.LastName = hlstname;
+          con.email = hemail;
+          con.User_Name__c = hemail;
+          con.Address_Line_1__c= hstreet;
+          con.Address_Line_2__c=hstreet1;         
+          con.MailingCity = hcity;
+          con.MailingState = hstate;
+          con.MailingCountry = hcountry;
+          con.MailingPostalCode = hZip;
+          con.Country_Codes__c = hcountycode;
+          con.phone = hphone;
+          con.Country_Code_Mobile__c=hcountycode1;
+          con.MobilePhone=hphone1;
+        //if( Pattern.matches('^[a-zA-Z0-9._|\\\\%#~`=?&/$^*!}{+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$', hemail)){
+          insert con;
+          
+          //}
+          contactid = con.id;
+          system.debug('con--'+con);
+          
+         system.debug('TagIndex1---'+TagIndex);
+         } else
+         {
+                  errorcheck =true ;
+                  ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING,'Please insert value in required field!'));
+
+         system.debug('Asger');
+         }
+     }else  if(TagIndex==2 && errorcheck==false){
+         TagIndex=1;
+         errorcheck=false;
+         system.debug('TagIndex2---'+TagIndex);
+     }
+ }
+ public void showphone()
+ {
+ //system.debug('Asgervalidation');
+ if(!Pattern.matches('[0-9]{10}', hphone) )
+ {
+ 
+            errormessages=  'It should be a Number';
+        }else{
+             errormessages='';
+        }
+}
+
+
+//This method is used check whether email is duplicates or not end
+//This method is used to get product list start
+Public void ChangeProductlist(){
+     CaseReasonType='';
+     showinteger=0;
+     selectProdList =getproduct();
+    CaseReasonTypeList=getcasereason();
+ }
+  Public list<SelectOption> getproduct(){  
+       list<SelectOption> options= new List<selectOption>();
+       list <product2> prolist=new list <product2>();
+       if(ProductFamily!=''){
+           system.debug('product family'+ProductFamily);
+           for(Product2 p2:[select id ,Name,Family,Active__c from Product2 where Family =:ProductFamily and Active__c != False]){
+               options.add(new SelectOption(p2.name, p2.name));
+           }
+       }
+      return options;
+   }
+//This method is used to get product list start
+//This method is used to case reason dependent on product family start
+   Public list<SelectOption> getcasereason()
+   {
+   case ca2 =new case();
+    List<selectOption> CaseReasonType = new List<selectOption>();
+              If(ProductFamily =='High Bright Signage Display')
+              {
+                  CaseReasonType.add(new SelectOption('-None-','-None-'));
+                  CaseReasonType.add(new SelectOption('CMND','CMND'));
+                  CaseReasonType.add(new SelectOption('Inquiry','Inquiry'));
+                  CaseReasonType.add(new SelectOption('Issue','Issue'));     
+                return CaseReasonType;
+                }
+                else if(ProductFamily =='Videowall Display')
+                {
+                 List<selectOption> CaseReasonType1 = new List<selectOption>();
+                  CaseReasonType.add(new SelectOption('-None-','-None-'));
+                  CaseReasonType.add(new SelectOption('CMND','CMND'));
+                  CaseReasonType.add(new SelectOption('Inquiry','Inquiry'));
+                  CaseReasonType.add(new SelectOption('Issue','Issue'));  
+                  CaseReasonType.add(new SelectOption('Calibration','Calibration'));   
+                return CaseReasonType;
+                }
+                else if(ProductFamily =='Indoor LED Display')
+                {
+                List<selectOption> CaseReasonType2 = new List<selectOption>();
+                  CaseReasonType.add(new SelectOption('-None-','-None-'));
+                  CaseReasonType.add(new SelectOption('CMND','CMND'));
+                  CaseReasonType.add(new SelectOption('Inquiry','Inquiry'));
+                  CaseReasonType.add(new SelectOption('Project Support','Project Support'));  
+                  CaseReasonType.add(new SelectOption('Issue','Issue'));   
+                return CaseReasonType;
+                }
+                else if(ProductFamily=='Signage Display')
+                {
+                List<selectOption> CaseReasonType3 = new List<selectOption>();
+                  CaseReasonType.add(new SelectOption('-None-','-None-'));
+                  CaseReasonType.add(new SelectOption('CMND','CMND'));
+                  CaseReasonType.add(new SelectOption('Inquiry','Inquiry'));
+                  CaseReasonType.add(new SelectOption('Issue','Issue'));  
+                  CaseReasonType.add(new SelectOption('App Signing','App Signing'));   
+                return CaseReasonType;
+                }
+                else if(ProductFamily=='ProTv')
+                {
+                List<selectOption> CaseReasonType3 = new List<selectOption>();
+                  CaseReasonType.add(new SelectOption('-None-','-None-'));
+                  CaseReasonType.add(new SelectOption('CMND','CMND'));
+                  CaseReasonType.add(new SelectOption('Inquiry','Inquiry'));
+                  CaseReasonType.add(new SelectOption('Issue','Issue'));  
+                  CaseReasonType.add(new SelectOption('CDB','CDB')); 
+                  CaseReasonType.add(new SelectOption('SXP','SXP'));
+                  CaseReasonType.add(new SelectOption('MyChoice','MyChoice'));  
+                  CaseReasonType.add(new SelectOption('Vsecure','Vsecure'));   
+                return CaseReasonType;
+                }
+                else if(ProductFamily=='LED')
+                {
+                List<selectOption> CaseReasonType3 = new List<selectOption>();
+                  CaseReasonType.add(new SelectOption('-None-','-None-'));
+                  CaseReasonType.add(new SelectOption('CMND','CMND'));
+                  CaseReasonType.add(new SelectOption('Inquiry','Inquiry'));
+                  CaseReasonType.add(new SelectOption('Project Support','Project Support'));  
+                  CaseReasonType.add(new SelectOption('Issue','Issue')); 
+                return CaseReasonType;
+                }
+                else if(ProductFamily=='Touch')
+                {
+                List<selectOption> CaseReasonType3 = new List<selectOption>();
+                  CaseReasonType.add(new SelectOption('-None-','-None-'));
+                  CaseReasonType.add(new SelectOption('CMND','CMND'));
+                  CaseReasonType.add(new SelectOption('Inquiry','Inquiry'));
+                 CaseReasonType.add(new SelectOption('Issue','Issue'));  
+                  CaseReasonType.add(new SelectOption('App Signing','App Signing'));   
+                return CaseReasonType;
+                }
+                else if(ProductFamily=='OPS')
+                {
+                List<selectOption> CaseReasonType3 = new List<selectOption>();
+                  CaseReasonType.add(new SelectOption('-None-','-None-'));
+                   CaseReasonType.add(new SelectOption('CRD50','CRD50'));
+                return CaseReasonType;
+                }
+                 else if(ProductFamily=='Accessories')
+                {
+                List<selectOption> CaseReasonType3 = new List<selectOption>();
+                  CaseReasonType.add(new SelectOption('-None-','-None-'));
+                   CaseReasonType.add(new SelectOption('Remote Control','Remote Control'));
+                   CaseReasonType.add(new SelectOption('CRD41','CRD41'));
+                return CaseReasonType;
+                }
+                return null;
+   }
+//This method is used to case reason dependent on product family end
+//This method is used to create case reason dependent on case form functionality start 
+      public Void casereasonform()
+     {
+      if(CaseReasonType== 'CMND' && ProductFamily=='ProTv')
+     {
+     showinteger=13;
+     }
+    else if(CaseReasonType== 'Issue' && ProductFamily=='ProTv')
+     {
+     showinteger=14;
+     }
+     else if(CaseReasonType== 'CMND' && ProductFamily !='ProTv')
+     {
+     showinteger=1;
+     }
+     else if(CaseReasonType== 'Inquiry')
+     {
+    showinteger=2;
+     }
+     else if(CaseReasonType== 'Issue')
+     {
+    showinteger=3;
+     }
+     else if(CaseReasonType== 'Calibration')
+     {
+    showinteger=4;
+     }
+     else if(CaseReasonType== 'Project Support')
+     {
+    showinteger=5;
+     }
+     else if(CaseReasonType== 'App Signing')
+     {
+    showinteger=6;
+     }
+     else if(CaseReasonType== 'CDB')
+     {
+    showinteger=7;
+     }
+     else if(CaseReasonType== 'SXP')
+     {
+    showinteger=8;
+     }
+      else if(CaseReasonType== 'MyChoice')
+     {
+    showinteger=9;
+     }
+     else if(CaseReasonType== 'Vsecure')
+     {
+     showinteger=10;
+     }
+     else if(CaseReasonType== 'CRD50')
+     {
+     showinteger=11;
+     }
+     else if(CaseReasonType== 'Remote Control')
+     {
+     showinteger=12;
+     }
+     else if(CaseReasonType== 'CRD41')
+     {
+     showinteger=12;
+     }else{
+              showinteger = 0;
+        }
+
+     
+     }  
+   public PageReference myAttactmentmethod(){
+       PageId= contactid;
+       system.debug('contactid =='+contactid ); 
+      showdragANDdrop=true;
+      SHowpage=true;
+      return null;
+   }
+   //method to back on main page from attachment block added by indresh
+   public void backmethod(){
+       String currentid = ApexPages.currentpage().getParameters().get('id');
+       system.debug('contactid ========'+contactid );
+       try{
+       DragDropToCloud__Cloud_Documents__c cc=new DragDropToCloud__Cloud_Documents__c();
+       cc=[select id,name from DragDropToCloud__Cloud_Documents__c where DragDropToCloud__Contact__c=:contactid order by createddate desc limit 1];
+       InsertedFilename=cc.name;
+       }catch(exception e){}
+       showdragANDdrop=false;
+       SHowpage=false;
+   }
+    public PageReference FinalSumbit(){
+       PageReference orderPage = new PageReference('/apex/UserRegisterThankYou');
+       orderPage.setRedirect(true);
+       return orderPage;
+   }
+   
+   public PageReference Uploadimage(){
+   system.debug('Case_id='+Case_id);
+       PageReference orderPage = new PageReference('/apex/Attachfile?id='+Case_id);
+       orderPage.getParameters().put('PageName','ProductCaseRegister');
+       orderPage.setRedirect(true);
+     return orderPage;
+      //return null;
+   }
+}
