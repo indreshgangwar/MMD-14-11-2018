@@ -1,0 +1,1116 @@
+<apex:page standardStylesheets="false" controller="Partner_Signup" showHeader="false">
+  <script>
+
+function check(obj)
+  {
+     
+      if(obj.checked == true)
+         document.getElementById("{!$Component.pick}").disabled=true;
+      else
+         document.getElementById("{!$Component.pick}").disabled=false;
+  }
+  function check1(obj)
+  {
+     
+      if(obj.checked == true)
+         document.getElementById("{!$Component.pick1}").disabled=true;
+      else
+         document.getElementById("{!$Component.pick1}").disabled=false;
+  }
+</script>
+
+<apex:form >
+   
+   <c:head_include ></c:head_include>
+   <c:portal_Script ></c:portal_Script>
+   <style>
+   
+      .title-grid h3{
+      letter-spacing: -1px;
+      font-size: 40px !important;
+      line-height: 60px;
+      color: #323232;
+      font-weight: 800;
+      margin-bottom: 5px;
+      font-family: centrale_sans,tahoma,arial,helvetica,sans-serif;
+      }
+      .error-msg-output {
+      color: red;
+      list-style-type: none;
+      font-size: 11px;
+      position: absolute;
+      }
+      
+      .heading-03 {
+      letter-spacing: -0.2px;
+      font-size: 21px;
+      line-height: 26px;
+      color: #323232;
+      font-weight: 800;
+      margin-bottom: 13px;
+      }
+      
+      .top-header{
+      background-color: rgb(0, 103, 164);
+      height: 80px;
+      }
+      
+      .bg-image
+      {
+      position: relative;
+      width: 100%;
+      background:url('https://www.philips.com/c-dam/b2c/professional-catalog/professionaldisplays/contactus/masthead-contac-L.jpg');
+      height:100px;
+      background-position: 55% 2%;
+      }
+      .gif-div
+      {
+      /*   display: block;
+      position: absolute;*/
+      width: 100%;
+      z-index: 0;
+      height: 160px;
+      left: 0;
+      top: 0;
+      background-color: transparent;
+      background-repeat: repeat-x;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0, rgba(0,0,0,0.25) 20%, transparent 100%);
+      }
+      .hero-content img
+      {
+      width: 30%;
+      }
+      .hero-content h2
+      {
+      letter-spacing: -1px;
+      font-size: 50px;
+      line-height: 60px;
+      color: #0777d8;
+      font-family: centrale_sans_light,tahoma,arial,helvetica,sans-serif;
+      font-weight: normal!important;
+      margin-bottom: 21px; 
+      }
+      .hero-content
+      {
+      margin: 7% 0px;
+      }    
+      .clearfix
+      {
+      clear: both;
+      }
+  
+      #become_partner{
+        background-image: url('{!URLFOR($Resource.img, '/img/backgrounds/1.jpg')}');
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .bg-white{
+        background:#ffffffc4;
+        padding: 15px 25px 15px 25px;
+      }
+      .signup-title {
+        font-size: 1.42em;
+        color: #0066a1;
+        margin-top: 10px;
+    }
+    .signup-sub-title{
+        margin-top: 20px;
+        font-family: 'CentraleSansBook', sans-serif;
+        font-size: 1em;
+        line-height: 1.5em;
+    }
+    input[type="password"], [type="text"] {
+        display: block;
+        width: 100%;
+        height: 34px !important;
+        padding: 6px 12px !important;
+        font-size: 14px !important;
+        line-height: 27px !important;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc !important;
+        border-radius: 4px !important;
+    }
+    .required{
+        font-size:14px;
+        color:#f00;
+        top: -0.2em!important;
+    }
+    textarea, textarea.form-control {
+        height:80px!important;
+    }
+    .signin-button{
+      width:100%;
+      font-size: 14px;
+      height: 36px;
+      padding: 0 10px;
+      border: none;
+      border-radius: 0px;
+      }
+   </style>
+   <!-- Begin Default Content REMOVE THIS -->
+   <body >
+      <!--Top Nav-->
+      <section class="top-header">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                  <apex:image url="{!URLFOR($Resource.img, 'img/logo.png')}"/>
+               </div>
+               <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                  <div class="profile-search">
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!--Top Nav-->
+      <!--header-->
+      <section>
+         <header>
+
+               <div class="container">
+                  <div class="row">
+                     <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="title-grid" style="border-bottom:none;">
+                            <h3>Become a Partner</h3>
+                            <apex:messages styleClass="error-msg-output"/>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+            <div class="clearfix"></div>
+         </header>
+      </section>
+      <!--header close-->
+      <section id="become_partner">
+         <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-4 bg-white">
+                     <h4 class="signup-title">Create your personal account and become a partner</h4>
+                     <p class="signup-sub-title">MMD values and respects your privacy. Please read our <a href="#">Privacy Policy</a> for more information. Items marked with an asterix (*) are required.</p>
+                     <!--form section -->
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-sm-4" for="email">Email<sup class="required">*</sup>:</label>
+                                <div class="col-sm-8">
+                                <!--  <input type="email" class="form-control" id="email" /> -->
+                                  <apex:outputPanel id="emailid">
+                                      <apex:inputText styleclass=" form-control" value="{!CnEmail}" id="email" html-placeholder="Email" styleClass="form-control" tabindex="4">
+                                          <apex:actionSupport event="onchange" reRender="emailid" action="{!checkEmail}"/>
+                                      </apex:inputText>
+                                      <apex:outputText value="{!errormessage}" styleClass="error-msg-output" />
+                                  </apex:outputPanel>
+                                </div>
+                             </div>                             
+                            <!-- <div class="form-group">
+                                <label class="control-label col-sm-4" for="password">Password<sup class="required">*</sup>:</label>
+                                <div class="col-sm-8">
+                                  <input type="password" class="form-control" id="password"  />
+                                </div>
+                             </div>
+                             
+                             <div class="form-group">
+                                <label class="control-label col-sm-4" for="Confirm password">Confirm Password<sup class="required">*</sup>:</label>
+                                <div class="col-sm-8">
+                                  <input type="password" class="form-control" id="Confirm_password"  />
+                                </div>
+                             </div>
+                             -->
+                             <div class="form-group">
+                                <label class="control-label col-sm-4" for="first name">First Name<sup class="required"></sup>:</label>
+                                <div class="col-sm-8">
+                              <!--    <input type="text" class="form-control" id="First_Name"  /> -->
+                                  <apex:inputText styleclass="form-control" value="{!Fname}" id="First_Name" html-placeholder="First Name"/>
+                                </div>
+                             </div>
+                             
+                             <div class="form-group">
+                                <label class="control-label col-sm-4" for="last name">Last Name<sup class="required">*</sup>:</label>
+                                <div class="col-sm-8">
+                              <!--    <input type="text" class="form-control" id="last_name" /> -->
+                              <apex:inputtext value="{!Lname}" styleclass=" form-control" id="last_name" html-placeholder="Last Name" />
+                                </div>
+                             </div>
+                             
+                             <div class="form-group">
+                                <label class="control-label col-sm-4" for="company">Company<sup class="required">*</sup>:</label>
+                                <div class="col-sm-8">
+                             <!--     <input type="text" class="form-control" id="company" /> -->
+                             <apex:inputText styleclass=" form-control" value="{!CnCompany}" id="company" html-placeholder="Company" />
+                                </div>
+                             </div>
+                             
+                             <div class="form-group">
+                                <label class="control-label col-sm-4" for="city">City<sup class="required">*</sup>:</label>
+                                <div class="col-sm-8">
+                            <!--      <input type="text" class="form-control" id="city"  />  -->
+                            <apex:inputText styleclass=" form-control" value="{!Cityy}" id="city" html-placeholder="City" />
+                                </div>
+                             </div>
+                             
+                             <div class="form-group">
+                                <label class="control-label col-sm-4" for="State">County / State:</label>
+                                <div class="col-sm-8">
+                             <!--     <input type="text" class="form-control" id="State"  /> -->
+                             <apex:inputText styleclass=" form-control" value="{!CnState}" id="State" html-placeholder="County / State"/>
+                                </div>
+                             </div>
+                             
+                             <div class="form-group">
+                                <label class="control-label col-sm-4" for="Country">Country<sup class="required">*</sup>:</label>
+                                <div class="col-sm-8">
+                                    <!--country list -->
+                                        <!--<select name="country" id="id_country" class="form-control">
+                                                <option>--Select country--</option>
+                                              <option value="AF">Afghanistan</option>
+                                              <option value="AX">Åland Islands</option>
+                                              <option value="AL">Albania</option>
+                                              <option value="DZ">Algeria</option>
+                                              <option value="AS">American Samoa</option>
+                                              <option value="AD">Andorra</option>
+                                              <option value="AO">Angola</option>
+                                              <option value="AI">Anguilla</option>
+                                              <option value="AQ">Antarctica</option>
+                                              <option value="AG">Antigua and Barbuda</option>
+                                              <option value="AR">Argentina</option>
+                                              <option value="AM">Armenia</option>
+                                              <option value="AW">Aruba</option>
+                                              <option value="AU">Australia</option>
+                                              <option value="AT">Austria</option>
+                                              <option value="AZ">Azerbaijan</option>
+                                              <option value="BS">Bahamas</option>
+                                              <option value="BH">Bahrain</option>
+                                              <option value="BD">Bangladesh</option>
+                                              <option value="BB">Barbados</option>
+                                              <option value="BY">Belarus</option>
+                                              <option value="BE">Belgium</option>
+                                              <option value="BZ">Belize</option>
+                                              <option value="BJ">Benin</option>
+                                              <option value="BM">Bermuda</option>
+                                              <option value="BT">Bhutan</option>
+                                              <option value="BO">Bolivia</option>
+                                              <option value="BQ">Bonaire, Sint Eustatius and Saba</option>
+                                              <option value="BA">Bosnia and Herzegovina</option>
+                                              <option value="BW">Botswana</option>
+                                              <option value="BV">Bouvet Island</option>
+                                              <option value="BR">Brazil</option>
+                                              <option value="IO">British Indian Ocean Territory</option>
+                                              <option value="BN">Brunei</option>
+                                              <option value="BG">Bulgaria</option>
+                                              <option value="BF">Burkina Faso</option>
+                                              <option value="BI">Burundi</option>
+                                              <option value="CV">Cabo Verde</option>
+                                              <option value="KH">Cambodia</option>
+                                              <option value="CM">Cameroon</option>
+                                              <option value="CA">Canada</option>
+                                              <option value="KY">Cayman Islands</option>
+                                              <option value="CF">Central African Republic</option>
+                                              <option value="TD">Chad</option>
+                                              <option value="CL">Chile</option>
+                                              <option value="CN">China</option>
+                                              <option value="CX">Christmas Island</option>
+                                              <option value="CC">Cocos (Keeling) Islands</option>
+                                              <option value="CO">Colombia</option>
+                                              <option value="KM">Comoros</option>
+                                              <option value="CG">Congo</option>
+                                              <option value="CD">Congo (the Democratic Republic of the)</option>
+                                              <option value="CK">Cook Islands</option>
+                                              <option value="CR">Costa Rica</option>
+                                              <option value="CI">Côte d&#39;Ivoire</option>
+                                              <option value="HR">Croatia</option>
+                                              <option value="CU">Cuba</option>
+                                              <option value="CW">Curaçao</option>
+                                              <option value="CY">Cyprus</option>
+                                              <option value="CZ">Czechia</option>
+                                              <option value="DK">Denmark</option>
+                                              <option value="DJ">Djibouti</option>
+                                              <option value="DM">Dominica</option>
+                                              <option value="DO">Dominican Republic</option>
+                                              <option value="EC">Ecuador</option>
+                                              <option value="EG">Egypt</option>
+                                              <option value="SV">El Salvador</option>
+                                              <option value="GQ">Equatorial Guinea</option>
+                                              <option value="ER">Eritrea</option>
+                                              <option value="EE">Estonia</option>
+                                              <option value="ET">Ethiopia</option>
+                                              <option value="FK">Falkland Islands  [Malvinas]</option>
+                                              <option value="FO">Faroe Islands</option>
+                                              <option value="FJ">Fiji</option>
+                                              <option value="FI">Finland</option>
+                                              <option value="FR">France</option>
+                                              <option value="GF">French Guiana</option>
+                                              <option value="PF">French Polynesia</option>
+                                              <option value="TF">French Southern Territories</option>
+                                              <option value="GA">Gabon</option>
+                                              <option value="GM">Gambia</option>
+                                              <option value="GE">Georgia</option>
+                                              <option value="DE">Germany</option>
+                                              <option value="GH">Ghana</option>
+                                              <option value="GI">Gibraltar</option>
+                                              <option value="GR">Greece</option>
+                                              <option value="GL">Greenland</option>
+                                              <option value="GD">Grenada</option>
+                                              <option value="GP">Guadeloupe</option>
+                                              <option value="GU">Guam</option>
+                                              <option value="GT">Guatemala</option>
+                                              <option value="GG">Guernsey</option>
+                                              <option value="GN">Guinea</option>
+                                              <option value="GW">Guinea-Bissau</option>
+                                              <option value="GY">Guyana</option>
+                                              <option value="HT">Haiti</option>
+                                              <option value="HM">Heard Island and McDonald Islands</option>
+                                              <option value="VA">Holy See</option>
+                                              <option value="HN">Honduras</option>
+                                              <option value="HK">Hong Kong</option>
+                                              <option value="HU">Hungary</option>
+                                              <option value="IS">Iceland</option>
+                                              <option value="IN">India</option>
+                                              <option value="ID">Indonesia</option>
+                                              <option value="IR">Iran</option>
+                                              <option value="IQ">Iraq</option>
+                                              <option value="IE">Ireland</option>
+                                              <option value="IM">Isle of Man</option>
+                                              <option value="IL">Israel</option>
+                                              <option value="IT">Italy</option>
+                                              <option value="JM">Jamaica</option>
+                                              <option value="JP">Japan</option>
+                                              <option value="JE">Jersey</option>
+                                              <option value="JO">Jordan</option>
+                                              <option value="KZ">Kazakhstan</option>
+                                              <option value="KE">Kenya</option>
+                                              <option value="KI">Kiribati</option>
+                                              <option value="KW">Kuwait</option>
+                                              <option value="KG">Kyrgyzstan</option>
+                                              <option value="LA">Laos</option>
+                                              <option value="LV">Latvia</option>
+                                              <option value="LB">Lebanon</option>
+                                              <option value="LS">Lesotho</option>
+                                              <option value="LR">Liberia</option>
+                                              <option value="LY">Libya</option>
+                                              <option value="LI">Liechtenstein</option>
+                                              <option value="LT">Lithuania</option>
+                                              <option value="LU">Luxembourg</option>
+                                              <option value="MO">Macao</option>
+                                              <option value="MK">Macedonia</option>
+                                              <option value="MG">Madagascar</option>
+                                              <option value="MW">Malawi</option>
+                                              <option value="MY">Malaysia</option>
+                                              <option value="MV">Maldives</option>
+                                              <option value="ML">Mali</option>
+                                              <option value="MT">Malta</option>
+                                              <option value="MH">Marshall Islands</option>
+                                              <option value="MQ">Martinique</option>
+                                              <option value="MR">Mauritania</option>
+                                              <option value="MU">Mauritius</option>
+                                              <option value="YT">Mayotte</option>
+                                              <option value="MX">Mexico</option>
+                                              <option value="FM">Micronesia (Federated States of)</option>
+                                              <option value="MD">Moldova</option>
+                                              <option value="MC">Monaco</option>
+                                              <option value="MN">Mongolia</option>
+                                              <option value="ME">Montenegro</option>
+                                              <option value="MS">Montserrat</option>
+                                              <option value="MA">Morocco</option>
+                                              <option value="MZ">Mozambique</option>
+                                              <option value="MM">Myanmar</option>
+                                              <option value="NA">Namibia</option>
+                                              <option value="NR">Nauru</option>
+                                              <option value="NP">Nepal</option>
+                                              <option value="NL">Netherlands</option>
+                                              <option value="NC">New Caledonia</option>
+                                              <option value="NZ">New Zealand</option>
+                                              <option value="NI">Nicaragua</option>
+                                              <option value="NE">Niger</option>
+                                              <option value="NG">Nigeria</option>
+                                              <option value="NU">Niue</option>
+                                              <option value="NF">Norfolk Island</option>
+                                              <option value="KP">North Korea</option>
+                                              <option value="MP">Northern Mariana Islands</option>
+                                              <option value="NO">Norway</option>
+                                              <option value="OM">Oman</option>
+                                              <option value="PK">Pakistan</option>
+                                              <option value="PW">Palau</option>
+                                              <option value="PS">Palestine, State of</option>
+                                              <option value="PA">Panama</option>
+                                              <option value="PG">Papua New Guinea</option>
+                                              <option value="PY">Paraguay</option>
+                                              <option value="PE">Peru</option>
+                                              <option value="PH">Philippines</option>
+                                              <option value="PN">Pitcairn</option>
+                                              <option value="PL">Poland</option>
+                                              <option value="PT">Portugal</option>
+                                              <option value="PR">Puerto Rico</option>
+                                              <option value="QA">Qatar</option>
+                                              <option value="RE">Réunion</option>
+                                              <option value="RO">Romania</option>
+                                              <option value="RU">Russia</option>
+                                              <option value="RW">Rwanda</option>
+                                              <option value="BL">Saint Barthélemy</option>
+                                              <option value="SH">Saint Helena, Ascension and Tristan da Cunha</option>
+                                              <option value="KN">Saint Kitts and Nevis</option>
+                                              <option value="LC">Saint Lucia</option>
+                                              <option value="MF">Saint Martin (French part)</option>
+                                              <option value="PM">Saint Pierre and Miquelon</option>
+                                              <option value="VC">Saint Vincent and the Grenadines</option>
+                                              <option value="WS">Samoa</option>
+                                              <option value="SM">San Marino</option>
+                                              <option value="ST">Sao Tome and Principe</option>
+                                              <option value="SA">Saudi Arabia</option>
+                                              <option value="SN">Senegal</option>
+                                              <option value="RS">Serbia</option>
+                                              <option value="SC">Seychelles</option>
+                                              <option value="SL">Sierra Leone</option>
+                                              <option value="SG">Singapore</option>
+                                              <option value="SX">Sint Maarten (Dutch part)</option>
+                                              <option value="SK">Slovakia</option>
+                                              <option value="SI">Slovenia</option>
+                                              <option value="SB">Solomon Islands</option>
+                                              <option value="SO">Somalia</option>
+                                              <option value="ZA">South Africa</option>
+                                              <option value="GS">South Georgia and the South Sandwich Islands</option>
+                                              <option value="KR">South Korea</option>
+                                              <option value="SS">South Sudan</option>
+                                              <option value="ES">Spain</option>
+                                              <option value="LK">Sri Lanka</option>
+                                              <option value="SD">Sudan</option>
+                                              <option value="SR">Suriname</option>
+                                              <option value="SJ">Svalbard and Jan Mayen</option>
+                                              <option value="SZ">Swaziland</option>
+                                              <option value="SE">Sweden</option>
+                                              <option value="CH">Switzerland</option>
+                                              <option value="SY">Syria</option>
+                                              <option value="TW">Taiwan</option>
+                                              <option value="TJ">Tajikistan</option>
+                                              <option value="TZ">Tanzania</option>
+                                              <option value="TH">Thailand</option>
+                                              <option value="TL">Timor-Leste</option>
+                                              <option value="TG">Togo</option>
+                                              <option value="TK">Tokelau</option>
+                                              <option value="TO">Tonga</option>
+                                              <option value="TT">Trinidad and Tobago</option>
+                                              <option value="TN">Tunisia</option>
+                                              <option value="TR">Turkey</option>
+                                              <option value="TM">Turkmenistan</option>
+                                              <option value="TC">Turks and Caicos Islands</option>
+                                              <option value="TV">Tuvalu</option>
+                                              <option value="UG">Uganda</option>
+                                              <option value="UA">Ukraine</option>
+                                              <option value="AE">United Arab Emirates</option>
+                                              <option value="GB">United Kingdom</option>
+                                              <option value="UM">United States Minor Outlying Islands</option>
+                                              <option value="US">United States of America</option>
+                                              <option value="UY">Uruguay</option>
+                                              <option value="UZ">Uzbekistan</option>
+                                              <option value="VU">Vanuatu</option>
+                                              <option value="VE">Venezuela</option>
+                                              <option value="VN">Vietnam</option>
+                                              <option value="VG">Virgin Islands (British)</option>
+                                              <option value="VI">Virgin Islands (U.S.)</option>
+                                              <option value="WF">Wallis and Futuna</option>
+                                              <option value="EH">Western Sahara</option>
+                                              <option value="YE">Yemen</option>
+                                              <option value="ZM">Zambia</option>
+                                              <option value="ZW">Zimbabwe</option>
+                                            </select>-->
+                                                <apex:inputText styleclass=" form-control" value="{!CountryList}" id="Country" html-placeholder="Country" />
+                                              <!-- <apex:selectList Value="{!CountryList}" size="1" id="id_country" styleclass="form-control hideDropdown">
+                                              <apex:selectOption itemValue="" itemlabel="--Select country--"/>
+                                              <apex:selectOption itemValue="Afghanistan" itemlabel="Afghanistan"/>
+                                              <apex:selectOption itemValue="Åland Islands" itemlabel="Åland Islands"/>
+                                              <apex:selectOption itemValue="Albania" itemlabel="Albania"/>
+                                              <apex:selectOption itemValue="Algeria" itemlabel="Algeria"/>
+                                              <apex:selectOption itemValue="American Samoa" itemlabel="American Samoa"/>
+                                              <apex:selectOption itemValue="Andorra" itemlabel="Andorra"/>
+                                              <apex:selectOption itemValue="Angola" itemlabel="Angola"/>
+                                              <apex:selectOption itemValue="Anguilla" itemlabel="Anguilla"/>
+                                              <apex:selectOption itemValue="Antarctica" itemlabel="Antarctica"/>
+                                              <apex:selectOption itemValue="Antigua and Barbuda" itemlabel="Antigua and Barbuda"/>
+                                              <apex:selectOption itemValue="Argentina" itemlabel="Argentina"/>
+                                              <apex:selectOption itemValue="Armenia" itemlabel="Armenia"/>
+                                              <apex:selectOption itemValue="Aruba" itemlabel="Aruba"/>
+                                              <apex:selectOption itemValue="Australia" itemlabel="Australia"/>
+                                              <apex:selectOption itemValue="Austria" itemlabel="Austria"/>
+                                              <apex:selectOption itemValue="Azerbaijan" itemlabel="Azerbaijan"/>
+                                              <apex:selectOption itemValue="Bahamas" itemlabel="Bahamas"/>
+                                              <apex:selectOption itemValue="Bahrain" itemlabel="Bahrain"/>
+                                              <apex:selectOption itemValue="Bangladesh" itemlabel="Bangladesh"/>
+                                              <apex:selectOption itemValue="Barbados" itemlabel="Barbados"/>
+                                              <apex:selectOption itemValue="Belarus" itemlabel="Belarus"/>
+                                              <apex:selectOption itemValue="Belgium" itemlabel="Belgium"/>
+                                              <apex:selectOption itemValue="Belize" itemlabel="Belize"/>
+                                              <apex:selectOption itemValue="Benin" itemlabel="Benin"/>
+                                              <apex:selectOption itemValue="Bermuda" itemlabel="Bermuda"/>
+                                              <apex:selectOption itemValue="Bhutan" itemlabel="Bhutan"/>
+                                              <apex:selectOption itemValue="Bolivia" itemlabel="Bolivia"/>
+                                              <apex:selectOption itemValue="Bonaire, Sint Eustatius and Saba" itemlabel="Bonaire, Sint Eustatius and Saba"/>
+                                              <apex:selectOption itemValue="Bosnia and Herzegovina" itemlabel="Bosnia and Herzegovina"/>
+                                              <apex:selectOption itemValue="Botswana" itemlabel="Botswana"/>
+                                              <apex:selectOption itemValue="Bouvet Island" itemlabel="Bouvet Island"/>
+                                              <apex:selectOption itemValue="Brazil" itemlabel="Brazil"/>
+                                              <apex:selectOption itemValue="British Indian Ocean Territory" itemlabel="British Indian Ocean Territory"/>
+                                              <apex:selectOption itemValue="Brunei" itemlabel="Brunei"/>
+                                              <apex:selectOption itemValue="Bulgaria" itemlabel="Bulgaria"/>
+                                              <apex:selectOption itemValue="Burkina Faso" itemlabel="Burkina Faso"/>
+                                              <apex:selectOption itemValue="Burundi" itemlabel="Burundi"/>
+                                              <apex:selectOption itemValue="Cabo Verde" itemlabel="Cabo Verde"/>
+                                              <apex:selectOption itemValue="Cambodia" itemlabel="Cambodia"/>
+                                              <apex:selectOption itemValue="Cameroon" itemlabel="Cameroon"/>
+                                              <apex:selectOption itemValue="Canada" itemlabel="Canada"/>
+                                              <apex:selectOption itemValue="Cayman Islands" itemlabel="Cayman Islands"/>
+                                              <apex:selectOption itemValue="Central African Republic" itemlabel="Central African Republic"/>
+                                              <apex:selectOption itemValue="Chad" itemlabel="Chad"/>
+                                              <apex:selectOption itemValue="Chile" itemlabel="Chile"/>
+                                              <apex:selectOption itemValue="China" itemlabel="China"/>
+                                              <apex:selectOption itemValue="Christmas Island" itemlabel="Christmas Island"/>
+                                              <apex:selectOption itemValue="Cocos (Keeling) Islands" itemlabel="Cocos (Keeling) Islands"/>
+                                              <apex:selectOption itemValue="Colombia" itemlabel="Colombia"/>
+                                              <apex:selectOption itemValue="Comoros" itemlabel="Comoros"/>
+                                              <apex:selectOption itemValue="Congo" itemlabel="Congo"/>
+                                              <apex:selectOption itemValue="Congo (the Democratic Republic of the)" itemlabel="Congo (the Democratic Republic of the)"/>
+                                              <apex:selectOption itemValue="Cook Islands" itemlabel="Cook Islands"/>
+                                              <apex:selectOption itemValue="Costa Rica" itemlabel="Costa Rica"/>
+                                              <apex:selectOption itemValue="Côte d&#39;Ivoire" itemlabel="Côte d&#39;Ivoire"/>
+                                              <apex:selectOption itemValue="Croatia" itemlabel="Croatia"/>
+                                              <apex:selectOption itemValue="Cuba" itemlabel="Cuba"/>
+                                              <apex:selectOption itemValue="Curaçao" itemlabel="Curaçao"/>
+                                              <apex:selectOption itemValue="Cyprus" itemlabel="Cyprus"/>
+                                              <apex:selectOption itemValue="Czechia" itemlabel="Czechia"/>
+                                              <apex:selectOption itemValue="Denmark" itemlabel="Denmark"/>
+                                              <apex:selectOption itemValue="Djibouti" itemlabel="Djibouti"/>
+                                              <apex:selectOption itemValue="Dominica" itemlabel="Dominica"/>
+                                              <apex:selectOption itemValue="Dominican Republic" itemlabel="Dominican Republic"/>
+                                              <apex:selectOption itemValue="Ecuador" itemlabel="Ecuador"/>
+                                              <apex:selectOption itemValue="Egypt" itemlabel="Egypt"/>
+                                              <apex:selectOption itemValue="El Salvador" itemlabel="El Salvador"/>
+                                              <apex:selectOption itemValue="Equatorial Guinea" itemlabel="Equatorial Guinea"/>
+                                              <apex:selectOption itemValue="Eritrea" itemlabel="Eritrea"/>
+                                              <apex:selectOption itemValue="Estonia" itemlabel="Estonia"/>
+                                              <apex:selectOption itemValue="Ethiopia" itemlabel="Ethiopia"/>
+                                              <apex:selectOption itemValue="Falkland Islands [Malvinas]" itemlabel="Falkland Islands [Malvinas]"/>
+                                              <apex:selectOption itemValue="Faroe Islands" itemlabel="Faroe Islands"/>
+                                              <apex:selectOption itemValue="Fiji" itemlabel="Fiji"/>
+                                              <apex:selectOption itemValue="Finland" itemlabel="Finland"/>
+                                              <apex:selectOption itemValue="France" itemlabel="France"/>
+                                              <apex:selectOption itemValue="French Guiana" itemlabel="French Guiana"/>
+                                              <apex:selectOption itemValue="French Polynesia" itemlabel="French Polynesia"/>
+                                              <apex:selectOption itemValue="French Southern Territories" itemlabel="French Southern Territories"/>
+                                              <apex:selectOption itemValue="Gabon" itemlabel="Gabon"/>
+                                              <apex:selectOption itemValue="Gambia" itemlabel="Gambia"/>
+                                              <apex:selectOption itemValue="Georgia" itemlabel="Georgia"/>
+                                              <apex:selectOption itemValue="Germany" itemlabel="Germany"/>
+                                              <apex:selectOption itemValue="Ghana" itemlabel="Ghana"/>
+                                              <apex:selectOption itemValue="Gibraltar" itemlabel="Gibraltar"/>
+                                              <apex:selectOption itemValue="Greece" itemlabel="Greece"/>
+                                              <apex:selectOption itemValue="Greenland" itemlabel="Greenland"/>
+                                              <apex:selectOption itemValue="Grenada" itemlabel="Grenada"/>
+                                              <apex:selectOption itemValue="Guadeloupe" itemlabel="Guadeloupe"/>
+                                              <apex:selectOption itemValue="Guam" itemlabel="Guam"/>
+                                              <apex:selectOption itemValue="Guatemala" itemlabel="Guatemala"/>
+                                              <apex:selectOption itemValue="Guernsey" itemlabel="Guernsey"/>
+                                              <apex:selectOption itemValue="Guinea" itemlabel="Guinea"/>
+                                              <apex:selectOption itemValue="Guinea-Bissau" itemlabel="Guinea-Bissau"/>
+                                              <apex:selectOption itemValue="Guyana" itemlabel="Guyana"/>
+                                              <apex:selectOption itemValue="Haiti" itemlabel="Haiti"/>
+                                              <apex:selectOption itemValue="Heard Island and McDonald Islands" itemlabel="Heard Island and McDonald Islands"/>
+                                              <apex:selectOption itemValue="Holy See" itemlabel="Holy See"/>
+                                              <apex:selectOption itemValue="Honduras" itemlabel="Honduras"/>
+                                              <apex:selectOption itemValue="Hong Kong" itemlabel="Hong Kong"/>
+                                              <apex:selectOption itemValue="Hungary" itemlabel="Hungary"/>
+                                              <apex:selectOption itemValue="Iceland" itemlabel="Iceland"/>
+                                              <apex:selectOption itemValue="India" itemlabel="India"/>
+                                              <apex:selectOption itemValue="Indonesia" itemlabel="Indonesia"/>
+                                              <apex:selectOption itemValue="Iran" itemlabel="Iran"/>
+                                              <apex:selectOption itemValue="Iraq" itemlabel="Iraq"/>
+                                              <apex:selectOption itemValue="Ireland" itemlabel="Ireland"/>
+                                              <apex:selectOption itemValue="Isle of Man" itemlabel="Isle of Man"/>
+                                              <apex:selectOption itemValue="Israel" itemlabel="Israel"/>
+                                              <apex:selectOption itemValue="Italy" itemlabel="Italy"/>
+                                              <apex:selectOption itemValue="Jamaica" itemlabel="Jamaica"/>
+                                              <apex:selectOption itemValue="Japan" itemlabel="Japan"/>
+                                              <apex:selectOption itemValue="Jersey" itemlabel="Jersey"/>
+                                              <apex:selectOption itemValue="Jordan" itemlabel="Jordan"/>
+                                              <apex:selectOption itemValue="Kazakhstan" itemlabel="Kazakhstan"/>
+                                              <apex:selectOption itemValue="Kenya" itemlabel="Kenya"/>
+                                              <apex:selectOption itemValue="Kiribati" itemlabel="Kiribati"/>
+                                              <apex:selectOption itemValue="Kuwait" itemlabel="Kuwait"/>
+                                              <apex:selectOption itemValue="Kyrgyzstan" itemlabel="Kyrgyzstan"/>
+                                              <apex:selectOption itemValue="Laos" itemlabel="Laos"/>
+                                              <apex:selectOption itemValue="Latvia" itemlabel="Latvia"/>
+                                              <apex:selectOption itemValue="Lebanon" itemlabel="Lebanon"/>
+                                              <apex:selectOption itemValue="Lesotho" itemlabel="Lesotho"/>
+                                              <apex:selectOption itemValue="Liberia" itemlabel="Liberia"/>
+                                              <apex:selectOption itemValue="Libya" itemlabel="Libya"/>
+                                              <apex:selectOption itemValue="Liechtenstein" itemlabel="Liechtenstein"/>
+                                              <apex:selectOption itemValue="Lithuania" itemlabel="Lithuania"/>
+                                              <apex:selectOption itemValue="Luxembourg" itemlabel="Luxembourg"/>
+                                              <apex:selectOption itemValue="Macao" itemlabel="Macao"/>
+                                              <apex:selectOption itemValue="Macedonia" itemlabel="Macedonia"/>
+                                              <apex:selectOption itemValue="Madagascar" itemlabel="Madagascar"/>
+                                              <apex:selectOption itemValue="Malawi" itemlabel="Malawi"/>
+                                              <apex:selectOption itemValue="Malaysia" itemlabel="Malaysia"/>
+                                              <apex:selectOption itemValue="Maldives" itemlabel="Maldives"/>
+                                              <apex:selectOption itemValue="Mali" itemlabel="Mali"/>
+                                              <apex:selectOption itemValue="Malta" itemlabel="Malta"/>
+                                              <apex:selectOption itemValue="Marshall Islands" itemlabel="Marshall Islands"/>
+                                              <apex:selectOption itemValue="Martinique" itemlabel="Martinique"/>
+                                              <apex:selectOption itemValue="Mauritania" itemlabel="Mauritania"/>
+                                              <apex:selectOption itemValue="Mauritius" itemlabel="Mauritius"/>
+                                              <apex:selectOption itemValue="Mayotte" itemlabel="Mayotte"/>
+                                              <apex:selectOption itemValue="Mexico" itemlabel="Mexico"/>
+                                              <apex:selectOption itemValue="Micronesia (Federated States of)" itemlabel="Micronesia (Federated States of)"/>
+                                              <apex:selectOption itemValue="Moldova" itemlabel="Moldova"/>
+                                              <apex:selectOption itemValue="Monaco" itemlabel="Monaco"/>
+                                              <apex:selectOption itemValue="Mongolia" itemlabel="Mongolia"/>
+                                              <apex:selectOption itemValue="Montenegro" itemlabel="Montenegro"/>
+                                              <apex:selectOption itemValue="Montserrat" itemlabel="Montserrat"/>
+                                              <apex:selectOption itemValue="Morocco" itemlabel="Morocco"/>
+                                              <apex:selectOption itemValue="Mozambique" itemlabel="Mozambique"/>
+                                              <apex:selectOption itemValue="Myanmar" itemlabel="Myanmar"/>
+                                              <apex:selectOption itemValue="Namibia" itemlabel="Namibia"/>
+                                              <apex:selectOption itemValue="Nauru" itemlabel="Nauru"/>
+                                              <apex:selectOption itemValue="Nepal" itemlabel="Nepal"/>
+                                              <apex:selectOption itemValue="Netherlands" itemlabel="Netherlands"/>
+                                              <apex:selectOption itemValue="New Caledonia" itemlabel="New Caledonia"/>
+                                              <apex:selectOption itemValue="New Zealand" itemlabel="New Zealand"/>
+                                              <apex:selectOption itemValue="Nicaragua" itemlabel="Nicaragua"/>
+                                              <apex:selectOption itemValue="Niger" itemlabel="Niger"/>
+                                              <apex:selectOption itemValue="Nigeria" itemlabel="Nigeria"/>
+                                              <apex:selectOption itemValue="Niue" itemlabel="Niue"/>
+                                              <apex:selectOption itemValue="Norfolk Island" itemlabel="Norfolk Island"/>
+                                              <apex:selectOption itemValue="North Korea" itemlabel="North Korea"/>
+                                              <apex:selectOption itemValue="Northern Mariana Islands" itemlabel="Northern Mariana Islands"/>
+                                              <apex:selectOption itemValue="Norway" itemlabel="Norway"/>
+                                              <apex:selectOption itemValue="Oman" itemlabel="Oman"/>
+                                              <apex:selectOption itemValue="Pakistan" itemlabel="Pakistan"/>
+                                              <apex:selectOption itemValue="Palau" itemlabel="Palau"/>
+                                              <apex:selectOption itemValue="Palestine, State of" itemlabel="Palestine, State of"/>
+                                              <apex:selectOption itemValue="Panama" itemlabel="Panama"/>
+                                              <apex:selectOption itemValue="Papua New Guinea" itemlabel="Papua New Guinea"/>
+                                              <apex:selectOption itemValue="Paraguay" itemlabel="Paraguay"/>
+                                              <apex:selectOption itemValue="Peru" itemlabel="Peru"/>
+                                              <apex:selectOption itemValue="Philippines" itemlabel="Philippines"/>
+                                              <apex:selectOption itemValue="Pitcairn" itemlabel="Pitcairn"/>
+                                              <apex:selectOption itemValue="Poland" itemlabel="Poland"/>
+                                              <apex:selectOption itemValue="Portugal" itemlabel="Portugal"/>
+                                              <apex:selectOption itemValue="Puerto Rico" itemlabel="Puerto Rico"/>
+                                              <apex:selectOption itemValue="Qatar" itemlabel="Qatar"/>
+                                              <apex:selectOption itemValue="Réunion" itemlabel="Réunion"/>
+                                              <apex:selectOption itemValue="Romania" itemlabel="Romania"/>
+                                              <apex:selectOption itemValue="Russia" itemlabel="Russia"/>
+                                              <apex:selectOption itemValue="Rwanda" itemlabel="Rwanda"/>
+                                              <apex:selectOption itemValue="Saint Barthélemy" itemlabel="Saint Barthélemy"/>
+                                              <apex:selectOption itemValue="Saint Helena, Ascension and Tristan da Cunha" itemlabel="Saint Helena, Ascension and Tristan da Cunha"/>
+                                              <apex:selectOption itemValue="Saint Kitts and Nevis" itemlabel="Saint Kitts and Nevis"/>
+                                              <apex:selectOption itemValue="Saint Lucia" itemlabel="Saint Lucia"/>
+                                              <apex:selectOption itemValue="Saint Martin (French part)" itemlabel="Saint Martin (French part)"/>
+                                              <apex:selectOption itemValue="Saint Pierre and Miquelon" itemlabel="Saint Pierre and Miquelon"/>
+                                              <apex:selectOption itemValue="Saint Vincent and the Grenadines" itemlabel="Saint Vincent and the Grenadines"/>
+                                              <apex:selectOption itemValue="Samoa" itemlabel="Samoa"/>
+                                              <apex:selectOption itemValue="San Marino" itemlabel="San Marino"/>
+                                              <apex:selectOption itemValue="Sao Tome and Principe" itemlabel="Sao Tome and Principe"/>
+                                              <apex:selectOption itemValue="Saudi Arabia" itemlabel="Saudi Arabia"/>
+                                              <apex:selectOption itemValue="Senegal" itemlabel="Senegal"/>
+                                              <apex:selectOption itemValue="Serbia" itemlabel="Serbia"/>
+                                              <apex:selectOption itemValue="Seychelles" itemlabel="Seychelles"/>
+                                              <apex:selectOption itemValue="Sierra Leone" itemlabel="Sierra Leone"/>
+                                              <apex:selectOption itemValue="Singapore" itemlabel="Singapore"/>
+                                              <apex:selectOption itemValue="Sint Maarten (Dutch part)" itemlabel="Sint Maarten (Dutch part)"/>
+                                              <apex:selectOption itemValue="Slovakia" itemlabel="Slovakia"/>
+                                              <apex:selectOption itemValue="Slovenia" itemlabel="Slovenia"/>
+                                              <apex:selectOption itemValue="Solomon Islands" itemlabel="Solomon Islands"/>
+                                              <apex:selectOption itemValue="Somalia" itemlabel="Somalia"/>
+                                              <apex:selectOption itemValue="South Africa" itemlabel="South Africa"/>
+                                              <apex:selectOption itemValue="South Georgia and the South Sandwich Islands" itemlabel="South Georgia and the South Sandwich Islands"/>
+                                              <apex:selectOption itemValue="South Korea" itemlabel="South Korea"/>
+                                              <apex:selectOption itemValue="South Sudan" itemlabel="South Sudan"/>
+                                              <apex:selectOption itemValue="Spain" itemlabel="Spain"/>
+                                              <apex:selectOption itemValue="Sri Lanka" itemlabel="Sri Lanka"/>
+                                              <apex:selectOption itemValue="Sudan" itemlabel="Sudan"/>
+                                              <apex:selectOption itemValue="Suriname" itemlabel="Suriname"/>
+                                              <apex:selectOption itemValue="Svalbard and Jan Mayen" itemlabel="Svalbard and Jan Mayen"/>
+                                              <apex:selectOption itemValue="Swaziland" itemlabel="Swaziland"/>
+                                              <apex:selectOption itemValue="Sweden" itemlabel="Sweden"/>
+                                              <apex:selectOption itemValue="Switzerland" itemlabel="Switzerland"/>
+                                              <apex:selectOption itemValue="Syria" itemlabel="Syria"/>
+                                              <apex:selectOption itemValue="Taiwan" itemlabel="Taiwan"/>
+                                              <apex:selectOption itemValue="Tajikistan" itemlabel="Tajikistan"/>
+                                              <apex:selectOption itemValue="Tanzania" itemlabel="Tanzania"/>
+                                              <apex:selectOption itemValue="Thailand" itemlabel="Thailand"/>
+                                              <apex:selectOption itemValue="Timor-Leste" itemlabel="Timor-Leste"/>
+                                              <apex:selectOption itemValue="Togo" itemlabel="Togo"/>
+                                              <apex:selectOption itemValue="Tokelau" itemlabel="Tokelau"/>
+                                              <apex:selectOption itemValue="Tonga" itemlabel="Tonga"/>
+                                              <apex:selectOption itemValue="Trinidad and Tobago" itemlabel="Trinidad and Tobago"/>
+                                              <apex:selectOption itemValue="Tunisia" itemlabel="Tunisia"/>
+                                              <apex:selectOption itemValue="Turkey" itemlabel="Turkey"/>
+                                              <apex:selectOption itemValue="Turkmenistan" itemlabel="Turkmenistan"/>
+                                              <apex:selectOption itemValue="Turks and Caicos Islands" itemlabel="Turks and Caicos Islands"/>
+                                              <apex:selectOption itemValue="Tuvalu" itemlabel="Tuvalu"/>
+                                              <apex:selectOption itemValue="Uganda" itemlabel="Uganda"/>
+                                              <apex:selectOption itemValue="Ukraine" itemlabel="Ukraine"/>
+                                              <apex:selectOption itemValue="United Arab Emirates" itemlabel="United Arab Emirates"/>
+                                              <apex:selectOption itemValue="United Kingdom" itemlabel="United Kingdom"/>
+                                              <apex:selectOption itemValue="United States Minor Outlying Islands" itemlabel="United States Minor Outlying Islands"/>
+                                              <apex:selectOption itemValue="United States of America" itemlabel="United States of America"/>
+                                              <apex:selectOption itemValue="Uruguay" itemlabel="Uruguay"/>
+                                              <apex:selectOption itemValue="Uzbekistan" itemlabel="Uzbekistan"/>
+                                              <apex:selectOption itemValue="Vanuatu" itemlabel="Vanuatu"/>
+                                              <apex:selectOption itemValue="Venezuela" itemlabel="Venezuela"/>
+                                              <apex:selectOption itemValue="Vietnam" itemlabel="Vietnam"/>
+                                              <apex:selectOption itemValue="Virgin Islands (British)" itemlabel="Virgin Islands (British)"/>
+                                              <apex:selectOption itemValue="Virgin Islands (U.S.)" itemlabel="Virgin Islands (U.S.)"/>
+                                              <apex:selectOption itemValue="Wallis and Futuna" itemlabel="Wallis and Futuna"/>
+                                              <apex:selectOption itemValue="Western Sahara" itemlabel="Western Sahara"/>
+                                              <apex:selectOption itemValue="Yemen" itemlabel="Yemen"/>
+                                              <apex:selectOption itemValue="Zambia" itemlabel="Zambia"/>
+                                              <apex:selectOption itemValue="Zimbabwe" itemlabel="Zimbabwe"/>
+                                            </apex:selectList>-->
+                                                                               
+                                    <!--country list end-->
+                                </div>
+                             </div>
+                             
+                              <div class="form-group">
+                                <label class="control-label col-sm-4" for="Phone">Phone Number<sup class="required">*</sup>:</label>
+                                <div class="col-sm-8">
+                               <!--   <input type="text" class="form-control" id="Phone"  />  -->
+                               <apex:inputText styleclass=" form-control" value="{!CnPhone}" id="Phone" html-placeholder="Phone Number" />
+                                </div>
+                             </div>
+                             
+                             <div class="form-group">
+                                <label class="control-label col-sm-4" for="Description">Short Company Description<sup class="required">*</sup>:</label>
+                                <div class="col-sm-8">
+                                <!--    <textarea class="form-control" id="Description"></textarea> -->
+                                    <apex:inputText styleclass=" form-control" value="{!cnDesc}" id="Description" html-placeholder="Description" />
+                               
+                                </div>
+                             </div>
+                             
+                             <div class="form-group">
+                                <label class="control-label col-sm-4" for="website">Website<sup class="required">*</sup>:</label>
+                                <div class="col-sm-8">
+                              <!--    <input type="website" class="form-control" id="website"  /> -->
+                              <apex:inputText styleclass=" form-control" value="{!Web}" id="website" html-placeholder="Website" />
+                                </div>
+                             </div>
+                             
+                             <div class="form-group">
+                                <label class="control-label col-sm-4" for="job Title">Job Title<sup class="required">*</sup>:</label>
+                                <div class="col-sm-8">
+                             <!--     <input type="text" class="form-control" id="JobTitle"  /> -->
+                             <apex:inputText styleclass=" form-control" value="{!jobTtl}" id="JobTitle" html-placeholder="Job Title" />
+                                </div>
+                             </div>
+                             
+                             <div class="form-group">
+                                <label class="control-label col-sm-4" for="Business">Business area<sup class="required">*</sup>:</label>
+                                <div class="col-sm-8">
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!Hospital}" />Hospitality</label>
+                                            <!--<label><apex:inputCheckbox value="{!Hospital}" labe></apex:inputCheckbox></label>
+                                            <!-- <apex:inputCheckbox value="{!Hospital}" label="Hospitality"/>-->
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!hlthCare}" />Healthcare</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!Education}"/>Education</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!trnsprt}"/>Transport</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!game}" />Gaming</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!maritym}" />Maritime</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!bnking}"/>Banking</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!restrnt}"/>Restaurant</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!crprate}"/>Corporate</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!retail}"/>Retail</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!qService}"/>Quick Service </label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!Othr}"/>Others</label>
+                                        </div>
+                                    </div>
+                                </div>
+                             </div>
+                             
+                             <div class="form-group">
+                                <label class="control-label col-sm-4" for="Interest">Principal Interest<sup class="required">*</sup>:</label>
+                                <div class="col-sm-8">
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!sDisply}" onchange="check(this)" id="pick1"/>Signage Display</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!pTV}"  onchange="check1(this)" id="pick"/> Professional TV</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label><apex:inputCheckbox value="{!Bth}"/> Both</label>
+                                        </div>
+                                    </div>
+                                </div>
+                             </div>
+                             
+                             <div class="form-group">
+                                <div class="col-sm-9 col-md-offset-2">
+                                    <div class="checkbox">
+                                        <label><apex:inputCheckbox value="{!Agree}"/> I have read and agree to the <a href="#">Privacy Policy</a></label>
+                                    </div>
+                                </div>
+                             </div>
+                             <div class="form-group">
+                                <div class="col-sm-4 col-md-offset-8">
+                                    <apex:commandButton value="Register" styleClass="signin-button btn-primary" action="{!SavePrtnr}"/>                                   
+                                    <!--<input class="signin-button btn-primary" type="submit" onclick="actionFunction();" value="Register" />
+                                    <apex:actionFunction name="actionFunction" action="{!testCallMethod}"/>-->
+                                </div>
+                             </div>
+                        </div>
+                     <!--form section close-->
+                </div>
+            </div>
+         </div>
+         <div class="clearfix"></div>
+      </section>
+      
+      <!--2nd section start here -->
+      <!--  <section >
+             <div class="container">
+                <div class="row">
+                    <!--1st column -->
+                    
+                    <!--2nd column -->
+                   
+                    <!--3rd column -->
+                   
+                    <!--4th column -->
+                    
+        
+            <!--    </div>
+             </div>
+        <div class="clearfix"></div>
+        </section>-->
+      <!--2nd section close here -->
+      
+           
+      <!--Footer Section -->
+      <a id="back2Top" href="#" title="Go to Top">&#10148;</a>
+      <section>
+         <c:portal_footer ></c:portal_footer>
+      </section>
+   </body>
+   <!-- End Default Content REMOVE THIS -->
+   </apex:form>
+</apex:page>
+************************************************apex class ***********************************
+public class Partner_Signup {
+    
+    public Partner_Signup() {
+        
+        
+    }
+    
+    public string Fname {
+    get;
+    set;
+    }
+    public string Lname {
+    get;
+    set;
+    }
+    public string CnEmail {
+    get;
+    set;
+    }
+    public string CnCompany {
+    get;
+    set;
+    }
+    public string Cityy {
+    get;
+    set;
+    }
+    public string CnState {
+    get;
+    set;
+    }
+    public string CnPhone {
+    get;
+    set;
+    }
+    public string cnDesc {
+    get;
+    set;
+    }
+    public string Web {
+    get;
+    set;
+    }
+    public string jobTtl {
+    get;
+    set;
+    }
+   public String CountryList{
+   get; 
+   set; 
+   }
+   public boolean Hospital {
+    get;
+    set;
+   }
+   public boolean hlthCare {
+    get;
+    set;
+   }
+   public boolean Education {
+    get;
+    set;
+   }
+   public boolean trnsprt {
+    get;
+    set;
+   }
+   public boolean game {
+    get;
+    set;
+   }
+   public boolean maritym {
+    get;
+    set;
+   }
+   public boolean bnking {
+    get;
+    set;
+   }
+   public boolean restrnt {
+    get;
+    set;
+   }
+   public boolean crprate {
+    get;
+    set;
+   }
+   public boolean retail {
+    get;
+    set;
+   }
+   public boolean qService {
+    get;
+    set;
+   }
+   public boolean Othr {
+    get;
+    set;
+   }
+   public boolean sDisply {
+    get;
+    set;
+   }
+   public boolean pTV {
+    get;
+    set;
+   }
+   public boolean Bth {
+    get;
+    set;
+   }
+    public boolean Agree {
+    get;
+    set;
+   }
+   public string errormessage {
+        get;
+        set;
+   }
+   
+   Id CustomerShowId = Schema.SObjectType.Contact.RecordTypeInfosByName.get('Dealer').RecordTypeId;
+   
+    public pagereference SavePrtnr() {
+        pagereference pr = new pagereference('/apex/PartnerRegisterThankYou');
+        pr.setRedirect(true); 
+        
+        if((Lname ==null || Lname =='') || (CnEmail ==null || CnEmail =='') || (CnCompany ==null || CnCompany =='') || (Cityy ==null || Cityy =='') ||
+            (CountryList==null || CountryList=='') || (CnState ==null || CnState =='') || (CnPhone ==null || CnPhone =='') || (cnDesc ==null || cnDesc =='') || (Web ==null || Web =='') || (jobTtl ==null || jobTtl =='') || (errormessage != null && errormessage != '')){
+            ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,'* All fields are mandatory please fill all the fields');
+            ApexPages.addMessage(myMsg);
+            return null;                
+        }else{
+          
+        Contact cc = new Contact();   
+        cc.RecordTypeId = CustomerShowId;
+        cc.FirstName = Fname;
+        cc.LastName = Lname;
+        cc.Email = CnEmail;
+        cc.Company__c = CnCompany;
+        cc.MailingCity = Cityy;
+        cc.MailingState = CnState;
+        cc.MailingCountry = CountryList;
+        cc.Phone = CnPhone;
+        cc.Description = cnDesc ;
+        cc.Website__c = Web;
+        cc.Title = JobTtl;
+        system.debug('test=='+Hospital);
+        cc.Hospitality__c = boolean.valueof(Hospital);
+        cc.Healthcare__c = hlthCare;
+        cc.Education__c = Education;
+        cc.Transport__c = trnsprt;
+        cc.Gaming__c = game;
+        cc.Maritime__c = maritym;
+        cc.Banking__c = bnking;
+        cc.Restaurant__c = restrnt;
+        cc.Corporate__c = crprate;
+        cc.Retail__c = retail;
+        cc.Quick_Service__c = qService;
+        cc.Others__c = Othr;
+        cc.Signage_Display__c = sDisply;
+        cc.Professional_TV__c = pTV;
+        cc.Both__c = Bth;
+        if(Agree == true){
+        insert cc;
+        return pr;
+        }else{
+        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.Error,'* please read and agree to the Privacy Policy');
+        ApexPages.addMessage(myMsg);
+        return null;
+        }
+    }
+}
+    
+    public void checkEmail() {
+        //system.debug('===cemailaddress====' + cemailaddress);
+        if (!Pattern.matches('^[a-zA-Z0-9._|\\\\%#~`=?&/$^*!}{+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$', CnEmail)) {
+            errormessage = 'Check your email';
+        } else {
+            errormessage = '';
+        }
+    }
+
+}
